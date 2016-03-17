@@ -16,6 +16,7 @@ Route::get('/', function () {
 });
 
 Route::resource('login','logController');
+Route::resource('categoria','categoriaController');
 
 /*
 |--------------------------------------------------------------------------
