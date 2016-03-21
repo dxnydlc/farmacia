@@ -59,6 +59,8 @@
 
     {!!Html::script('js/custom.js')!!}
 
+    {!!Html::script('js/custom/addCategoria.js')!!}
+
 @endsection
 
 @stop

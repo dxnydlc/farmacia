@@ -13,6 +13,11 @@ use Redirect;
 
 class categoriaController extends Controller
 {
+    public function __construct()
+    {
+        #$this->middleware('auth' );
+        $this->middleware('categoria' , ['only' => ['create','edit'] ] );
+    }
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +25,8 @@ class categoriaController extends Controller
      */
     public function index()
     {
-        return view('categoria.homeCategoria');
+        $dataCategorias = categoria::paginate(5);
+        return view('categoria.homeCategoria',compact('dataCategorias'));
     }
 
     /**
@@ -86,8 +92,11 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id_categoria)
     {
-        //
+        categoria::find(['id_categoria' => $id_categoria]);
+        #$this->categoria->delete();
+        Session::flash('message','Categoria eliminada correctamente');
+        return redirect::to('/categoria');
     }
 }

@@ -85,6 +85,7 @@ return [
     'custom' => [
         'nombre' => [
             'required' => 'Es necesario un Nombre',
+            'unique' => 'Ese Nombre ya está registrado'
         ],
         'apellidos' => [
             'required' => 'Es necesario un Apellido',

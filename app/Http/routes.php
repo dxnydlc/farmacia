@@ -14,9 +14,8 @@
 Route::get('/', function () {
     return view('index');
 });
-
 Route::resource('login','logController');
-Route::resource('categoria','categoriaController');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,5 +29,5 @@ Route::resource('categoria','categoriaController');
 */
 
 Route::group(['middleware' => ['web']], function () {
-    //
+    Route::resource('categoria','categoriaController');
 });

@@ -3,6 +3,7 @@
 @section('content')
 
 
+<input type="hidden" id="token" value="{{ csrf_token() }}" >
     <div class="">
 
         <div class="page-title">
@@ -27,7 +28,9 @@
             </div>
         </div>
         <div class="clearfix"></div>
-	
+	   
+       @include('alertas.success')
+        @include('alertas.errors')
 		
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
@@ -54,9 +57,9 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="#">Settings 1</a>
+                                    <li><a href="#">Opción 1</a>
                                     </li>
-                                    <li><a href="#">Settings 2</a>
+                                    <li><a href="#">Opción 2</a>
                                     </li>
                                 </ul>
                             </li>
@@ -71,30 +74,22 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Username</th>
+                                    <th>Nombre</th>
+                                    <th>Creado</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($dataCategorias as $categoria)
                                 <tr>
-                                    <th scope="row">1</th>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
+                                    <th scope="row">{{$categoria->id_categoria}}</th>
+                                    <td>{{$categoria->nombre}}</td>
+                                    <td>{{$categoria->created_at}}</td>
+                                    <td>
+                                        {!!link_to_route('categoria.edit', $title  = 'Anular', $parameters =$categoria->id_categoria, $attributes = ['class'=>'btn-link delCateg ','id'=>$categoria->id_categoria] )!!}
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>Jacob</td>
-                                    <td>Thornton</td>
-                                    <td>@fat</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">3</th>
-                                    <td>Larry</td>
-                                    <td>the Bird</td>
-                                    <td>@twitter</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
 
@@ -128,6 +123,8 @@
     {!!Html::script('js/nicescroll/jquery.nicescroll.min.js')!!}
 
     {!!Html::script('js/custom.js')!!}
+
+    {!!Html::script('js/custom/categoria.js')!!}
 
 @endsection
 
