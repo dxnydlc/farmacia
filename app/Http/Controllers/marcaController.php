@@ -5,14 +5,14 @@ namespace farmacia\Http\Controllers;
 use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
-use farmacia\Http\Requests\CategoriaCreateRequest;
-use farmacia\Http\Requests\CategoriaUpdateRequest;
-use farmacia\categoria;
 
+use farmacia\Http\Requests\MarcaCreateRequest;
+use farmacia\Http\Requests\MarcaUpdateRequest;
+use farmacia\marca;
 use Session;
 use Redirect;
 
-class categoriaController extends Controller
+class marcaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,8 +21,8 @@ class categoriaController extends Controller
      */
     public function index()
     {
-        $dataCategorias = categoria::paginate(5);
-        return view('categoria.homeCategoria',compact('dataCategorias'));
+        $dataMarcas = marca::paginate(5);
+        return view('marca.homeMarca',compact('dataMarcas'));
     }
 
     /**
@@ -32,7 +32,7 @@ class categoriaController extends Controller
      */
     public function create()
     {
-        return view('categoria.addCategoria');
+        return view('marca.addMarca');
     }
 
     /**
@@ -41,11 +41,11 @@ class categoriaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoriaCreateRequest $request)
+    public function store(MarcaCreateRequest $request)
     {
-        categoria::create( $request->all() );
-        Session::flash('message','Categoria creada correctamente');
-        return redirect::to('/categoria');
+        marca::create( $request->all() );
+        Session::flash('message','Marca creada correctamente');
+        return redirect::to('/marca');
     }
 
     /**
@@ -67,8 +67,8 @@ class categoriaController extends Controller
      */
     public function edit($id)
     {
-        $categoria = categoria::find($id);
-        return view('categoria.editCategoria',["categoria" => $categoria ]);
+        $marca = marca::find($id);
+        return view('marca.editMarca',["marca" => $marca ]);
     }
 
     /**
@@ -78,14 +78,14 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoriaUpdateRequest $request, $id)
+    public function update(MarcaUpdateRequest $request, $id)
     {
-        $categoria = categoria::find( $id );
-        $categoria->fill( $request->all() );
-        $categoria->save();
+        $marca = marca::find( $id );
+        $marca->fill( $request->all() );
+        $marca->save();
 
-        session::flash('message','Categoria editada correctamente');
-        return redirect::to('/categoria');
+        session::flash('message','Marca editada correctamente');
+        return redirect::to('/marca');
     }
 
     /**
@@ -94,9 +94,9 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_categoria)
+    public function destroy($id_marca)
     {
-        $data = categoria::where(['id_categoria' => $id_categoria])->delete();
+        $data = marca::where(['id_marca' => $id_marca])->delete();
         #$this->categoria->delete();
         return $data;
     }

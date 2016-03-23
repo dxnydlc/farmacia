@@ -9,7 +9,7 @@ class clase extends Model
 {
     use SoftDeletes;
     protected $table = 'clase';
-    protected $primarykey = 'id_clase';
+    protected $primaryKey = 'id_clase';
 
     protected $fillable = ['nombre'];
     protected $dates = ['deleted_at'];

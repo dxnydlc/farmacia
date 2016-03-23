@@ -1,7 +1,11 @@
 @extends('layouts.principal')
 
-@section('content')
+@section('losCSS')
+    {!!Html::style('js/alertify/css/alertify.css')!!}
+    {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
+@endsection
 
+@section('content')
 
 <input type="hidden" id="token" value="{{ csrf_token() }}" >
     <div class="">
@@ -83,7 +87,9 @@
                                 @foreach($dataCategorias as $categoria)
                                 <tr>
                                     <th scope="row">{{$categoria->id_categoria}}</th>
-                                    <td>{{$categoria->nombre}}</td>
+                                    <td>
+                                        {!!link_to_route('categoria.edit', $title  = $categoria->nombre, $parameters =$categoria->id_categoria, $attributes = ['class'=>'btn-link '] )!!}
+                                    </td>
                                     <td>{{$categoria->created_at}}</td>
                                     <td>
                                         {!!link_to_route('categoria.edit', $title  = 'Anular', $parameters =$categoria->id_categoria, $attributes = ['class'=>'btn-link delCateg ','id'=>$categoria->id_categoria] )!!}
@@ -102,18 +108,14 @@
     </div>
 
     <!-- footer content -->
-    <footer>
-        <div class="">
-            <p class="pull-right">Gentelella Alela! a Bootstrap 3 template by <a>Kimlabs</a>. |
-                <span class="lead"> <i class="fa fa-paw"></i> Gentelella Alela!</span>
-            </p>
-        </div>
-        <div class="clearfix"></div>
-    </footer>
+    @include('layouts.footer')
     <!-- /footer content -->
 
 
 @section('scripts')
+
+    <!-- Aletify -->
+    {!!Html::script('js/alertify/alertify.js')!!}
 
 	<!-- icheck -->
     {!!Html::script('js/icheck/icheck.min.js')!!}

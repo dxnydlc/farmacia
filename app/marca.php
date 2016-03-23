@@ -9,7 +9,7 @@ class marca extends Model
 {
     use SoftDeletes;
     protected $table = 'marca';
-    protected $primarykey = 'id_marca';
+    protected $primaryKey = 'id_marca';
 
     protected $fillable = ['nombre'];
     protected $dates = ['deleted_at'];

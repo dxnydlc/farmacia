@@ -6,7 +6,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Categoria <small>Agregando una nueva categoria</small></h2>
+                    <h2>Marca <small>Agregando una nueva Marca</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                         	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -30,8 +30,8 @@
                     <br />
                     @include('alertas.userRequest')
                     
-                    {!!Form::model ($categoria , [ 'route' => ['categoria.update' , $categoria->id_categoria ], 'method' => 'PUT' ,'autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate'])!!}
-                    	@include('categoria.forms.frmcategoria')
+                    {!!Form::model ($marca , [ 'route' => ['marca.update' , $marca->id_marca ], 'method' => 'PUT' ,'autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate'])!!}
+                    	@include('marca.forms.frmMarca')
 
                     	<div class="ln_solid"></div>
                         <div class="form-group">
@@ -58,8 +58,6 @@
     {!!Html::script('js/nicescroll/jquery.nicescroll.min.js')!!}
 
     {!!Html::script('js/custom.js')!!}
-
-    {!!Html::script('js/custom/addCategoria.js')!!}
 
 @endsection
 

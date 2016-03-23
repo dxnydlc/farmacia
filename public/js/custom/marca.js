@@ -1,5 +1,5 @@
-var _servicio = 'http://localhost:8000/categoria/';
-var _objeto = 'Categoria';
+var _servicio = 'http://localhost:8000/marca/';
+var _objeto = 'Marca';
 
 //override defaults
 alertify.defaults.transition = "slide";
@@ -10,7 +10,7 @@ alertify.defaults.theme.input = "form-control";
 (function($){
 	$(document).ready(function()
 		{
-			$('.delCateg').click(function(event) {
+			$('.delItem').click(function(event) {
 				event.preventDefault();
 				var _token = $('#token').val();
 				var _DataSend = {'_method':'DELETE','_token': _token };

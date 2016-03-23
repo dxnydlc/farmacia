@@ -4,7 +4,7 @@ namespace farmacia\Http\Requests;
 
 use farmacia\Http\Requests\Request;
 
-class CategoriaUpdateRequest extends Request
+class MarcaUpdateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -9,7 +9,7 @@ class proveedor extends Model
 {
     use SoftDeletes;
     protected $table = 'proveedor';
-    protected $primarykey = 'id_proveedor';
+    protected $primaryKey = 'id_proveedor';
 
     protected $fillable = ['nombre','ruc','direccion','telefono','contacto'];
     protected $dates = ['deleted_at'];
