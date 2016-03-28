@@ -31,4 +31,7 @@ Route::resource('login','logController');
 Route::group(['middleware' => ['web']], function () {
     Route::resource('categoria','categoriaController');
     Route::resource('marca','marcaController');
+    Route::resource('clase','claseController');
+    Route::resource('proveedor','proveedorController');
 });
+

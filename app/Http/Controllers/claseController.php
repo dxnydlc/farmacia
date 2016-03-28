@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
 
-use farmacia\Http\Requests\CategoriaCreateRequest;
-use farmacia\Http\Requests\CategoriaUpdateRequest;
-use farmacia\categoria;
+use farmacia\Http\Requests\ClaseCreateRequest;
+use farmacia\Http\Requests\ClaseUpdateRequest;
+use farmacia\clase;
 use Session;
 use Redirect;
 
-class categoriaController extends Controller
+class claseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,8 +21,8 @@ class categoriaController extends Controller
      */
     public function index()
     {
-        $dataCategorias = categoria::paginate(5);
-        return view('categoria.homeCategoria',compact('dataCategorias'));
+        $dataClases = clase::paginate(5);
+        return view('clase.homeClase',compact('dataClases'));
     }
 
     /**
@@ -32,7 +32,7 @@ class categoriaController extends Controller
      */
     public function create()
     {
-        return view('categoria.addCategoria');
+        return view('clase.addClase');
     }
 
     /**
@@ -41,11 +41,11 @@ class categoriaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoriaCreateRequest $request)
+    public function store(ClaseCreateRequest $request)
     {
-        categoria::create( $request->all() );
-        Session::flash('message','Categoria creada correctamente');
-        return redirect::to('/categoria');
+        clase::create( $request->all() );
+        Session::flash('message','Clase creada correctamente');
+        return redirect::to('/clase');
     }
 
     /**
@@ -67,8 +67,8 @@ class categoriaController extends Controller
      */
     public function edit($id)
     {
-        $categoria = categoria::find($id);
-        return view('categoria.editCategoria',["categoria" => $categoria ]);
+        $clase = clase::find($id);
+        return view('clase.editClase',["clase" => $clase ]);
     }
 
     /**
@@ -78,14 +78,14 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoriaUpdateRequest $request, $id)
+    public function update(ClaseUpdateRequest $request, $id)
     {
-        $categoria = categoria::find( $id );
-        $categoria->fill( $request->all() );
-        $categoria->save();
+        $clase = clase::find( $id );
+        $clase->fill( $request->all() );
+        $clase->save();
 
-        session::flash('message','Categoria editada correctamente');
-        return redirect::to('/categoria');
+        session::flash('message','Clase editada correctamente');
+        return redirect::to('/clase');
     }
 
     /**
@@ -94,10 +94,9 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_categoria)
+    public function destroy($id_clase)
     {
-        $data = categoria::where(['id_categoria' => $id_categoria])->delete();
-        #$this->categoria->delete();
+        $data = clase::where(['id_clase' => $id_clase])->delete();
         return $data;
     }
 }

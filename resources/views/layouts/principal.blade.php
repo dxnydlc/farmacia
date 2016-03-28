@@ -92,11 +92,11 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="form.html">General Form</a>
                                         </li>
-                                        <li><a href="form_advanced.html">Proveedores</a>
+                                        <li><a href="/proveedor">Proveedores</a>
                                         </li>
                                         <li><a href="/categoria">Categorias</a>
                                         </li>
-                                        <li><a href="/clases">Clases</a>
+                                        <li><a href="/clase">Clase Producto</a>
                                         </li>
                                         <li><a href="/marca">Marca</a>
                                         </li>

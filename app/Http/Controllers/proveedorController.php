@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
 
-use farmacia\Http\Requests\CategoriaCreateRequest;
-use farmacia\Http\Requests\CategoriaUpdateRequest;
-use farmacia\categoria;
+use farmacia\Http\Requests\proveedorCreateRequest;
+use farmacia\Http\Requests\proveedorUpdateRequest;
+use farmacia\proveedores;
 use Session;
 use Redirect;
 
-class categoriaController extends Controller
+class proveedorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,8 +21,8 @@ class categoriaController extends Controller
      */
     public function index()
     {
-        $dataCategorias = categoria::paginate(5);
-        return view('categoria.homeCategoria',compact('dataCategorias'));
+        $dataProveedor = proveedores::paginate(5);
+        return view('proveedores.homeProveedores',compact('dataProveedor'));
     }
 
     /**
@@ -32,7 +32,7 @@ class categoriaController extends Controller
      */
     public function create()
     {
-        return view('categoria.addCategoria');
+        return view('proveedores.addProveedores');
     }
 
     /**
@@ -41,11 +41,11 @@ class categoriaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoriaCreateRequest $request)
+    public function store(proveedorCreateRequest $request)
     {
-        categoria::create( $request->all() );
-        Session::flash('message','Categoria creada correctamente');
-        return redirect::to('/categoria');
+        proveedores::create( $request->all() );
+        Session::flash('message','Proveedor creado correctamente');
+        return redirect::to('/proveedor');
     }
 
     /**
@@ -67,8 +67,8 @@ class categoriaController extends Controller
      */
     public function edit($id)
     {
-        $categoria = categoria::find($id);
-        return view('categoria.editCategoria',["categoria" => $categoria ]);
+        $proveedor = proveedores::find($id);
+        return view('proveedores.editProveedores',["proveedor" => $proveedor ]);
     }
 
     /**
@@ -78,14 +78,14 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoriaUpdateRequest $request, $id)
+    public function update(proveedorUpdateRequest $request, $id)
     {
-        $categoria = categoria::find( $id );
-        $categoria->fill( $request->all() );
-        $categoria->save();
+        $proveedores = proveedores::find( $id );
+        $proveedores->fill( $request->all() );
+        $proveedores->save();
 
-        session::flash('message','Categoria editada correctamente');
-        return redirect::to('/categoria');
+        session::flash('message','Proveedor editado correctamente');
+        return redirect::to('/proveedor');
     }
 
     /**
@@ -94,9 +94,9 @@ class categoriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id_categoria)
+    public function destroy($id)
     {
-        $data = categoria::where(['id_categoria' => $id_categoria])->delete();
+        $data = proveedores::where(['id_proveedor' => $id])->delete();
         #$this->categoria->delete();
         return $data;
     }
