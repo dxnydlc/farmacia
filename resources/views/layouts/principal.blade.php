@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Ziel | Farmacia</title>
+    <title>@yield('titulo')</title>
 
     <!-- Bootstrap core CSS -->
     <link href="" rel="stylesheet">
@@ -100,7 +100,7 @@
                                         </li>
                                         <li><a href="/marca">Marca</a>
                                         </li>
-                                        <li><a href="form_buttons.html">Form Buttons</a>
+                                        <li><a href="/producto">Productos</a>
                                         </li>
                                     </ul>
                                 </li>

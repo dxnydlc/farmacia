@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
 
-use farmacia\Http\Requests\proveedorCreateRequest;
-use farmacia\Http\Requests\proveedorUpdateRequest;
-use farmacia\proveedores;
+use farmacia\Http\Requests\ProductoCreateRequest;
+use farmacia\Http\Requests\ProductoUpdateRequest;
+use farmacia\productos;
 use Session;
 use Redirect;
 
-class proveedorController extends Controller
+class productoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,8 +21,8 @@ class proveedorController extends Controller
      */
     public function index()
     {
-        $dataProveedor = proveedores::paginate(5);
-        return view('proveedores.homeProveedores',compact('dataProveedor'));
+        $dataProductos = productos::paginate(5);
+        return view('producto.homeProducto',compact('dataProductos'));
     }
 
     /**
@@ -32,7 +32,7 @@ class proveedorController extends Controller
      */
     public function create()
     {
-        return view('proveedores.addProveedores');
+        return view('producto.addProducto');
     }
 
     /**
@@ -41,11 +41,11 @@ class proveedorController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(proveedorCreateRequest $request)
+    public function store(ProductoCreateRequest $request)
     {
-        proveedores::create( $request->all() );
-        Session::flash('message','Proveedor creado correctamente');
-        return redirect::to('/proveedor');
+        productos::create( $request->all() );
+        Session::flash('message','Producto creado correctamente');
+        return redirect::to('/producto');
     }
 
     /**
@@ -67,8 +67,8 @@ class proveedorController extends Controller
      */
     public function edit($id)
     {
-        $proveedor = proveedores::find($id);
-        return view('proveedores.editProveedores',["proveedor" => $proveedor ]);
+        $producto = productos::find($id);
+        return view('producto.editProducto',["producto" => $producto ]);
     }
 
     /**
@@ -78,14 +78,14 @@ class proveedorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(proveedorUpdateRequest $request, $id)
+    public function update(ProductoUpdateRequest $request, $id)
     {
-        $proveedores = proveedores::find( $id );
-        $proveedores->fill( $request->all() );
-        $proveedores->save();
+        $producto = productos::find( $id );
+        $producto->fill( $request->all() );
+        $producto->save();
 
-        session::flash('message','Proveedor editado correctamente');
-        return redirect::to('/proveedor');
+        session::flash('message','Producto editado correctamente');
+        return redirect::to('/producto');
     }
 
     /**
@@ -96,7 +96,7 @@ class proveedorController extends Controller
      */
     public function destroy($id)
     {
-        $data = proveedores::where(['id_proveedor' => $id])->delete();
+        $data = productos::where(['id_producto' => $id])->delete();
         return $data;
     }
 }

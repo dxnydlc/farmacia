@@ -1,5 +1,9 @@
 @extends('layouts.principal')
 
+@section('titulo')
+    Farmacia | Clase productos
+@stop
+
 @section('losCSS')
     {!!Html::style('js/alertify/css/alertify.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}

@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | Categoría productos
+    Farmacia | Productos
 @stop
 
 @section('losCSS')
@@ -17,9 +17,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        Categorias
+			        productos
 			        <small>
-			            Categorias para los productos
+			            productos para los productos
 			        </small>
 			    </h3>
             </div>
@@ -44,7 +44,7 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 	                <div class="x_content">
-	                	<a href="categoria/create" class="btn btn-default">Agregar Categoria</a>
+	                	<a href="producto/create" class="btn btn-default">Agregar producto</a>
 	                </div>
 	            </div>
 			</div>
@@ -58,7 +58,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Categorias <small>mostrando todos los registros activos</small></h2>
+                        <h2>productos <small>mostrando todos los registros activos</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -83,20 +83,30 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Marca</th>
+                                    <th>Clase</th>
+                                    <th>Laboratorio</th>
+                                    <th>Proveedor</th>
                                     <th>Creado</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($dataCategorias as $categoria)
+                                @foreach($dataProductos as $producto)
                                 <tr>
-                                    <th scope="row">{{$categoria->id_categoria}}</th>
+                                    <th scope="row">{{$producto->id_producto}}</th>
                                     <td>
-                                        {!!link_to_route('categoria.edit', $title  = $categoria->nombre, $parameters =$categoria->id_categoria, $attributes = ['class'=>'btn-link '] )!!}
+                                        {!!link_to_route('producto.edit', $title  = $producto->nombre, $parameters =$producto->id_producto, $attributes = ['class'=>'btn-link '] )!!}
                                     </td>
-                                    <td>{{$categoria->created_at}}</td>
+                                    <td>{{$producto->categoria}}</td>
+                                    <td>{{$producto->marca}}</td>
+                                    <td>{{$producto->clase}}</td>
+                                    <td>{{$producto->laboratorio}}</td>
+                                    <td>{{$producto->proveedor}}</td>
+                                    <td>{{$producto->created_at}}</td>
                                     <td>
-                                        {!!link_to_route('categoria.edit', $title  = 'Anular', $parameters =$categoria->id_categoria, $attributes = ['class'=>'btn-link delCateg ','id'=>$categoria->id_categoria] )!!}
+                                        {!!link_to_route('producto.edit', $title  = 'Anular', $parameters =$producto->id_producto, $attributes = ['class'=>'btn-link delCateg ','id'=>$producto->id_producto] )!!}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -130,7 +140,7 @@
 
     {!!Html::script('js/custom.js')!!}
 
-    {!!Html::script('js/custom/categoria.js')!!}
+    {!!Html::script('js/custom/producto.js')!!}
 
 @endsection
 

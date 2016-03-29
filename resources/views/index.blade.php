@@ -1,4 +1,9 @@
 @extends('layouts.principal')
+
+@section('titulo')
+    Farmacia | Inicio
+@stop
+
 @section('content')
 
 <!-- top tiles -->

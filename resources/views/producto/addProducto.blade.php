@@ -1,7 +1,7 @@
 @extends('layouts.principal')
-z
+
 @section('titulo')
-    Farmacia | add Marca
+    Farmacia | Add Producto
 @stop
 
 @section('content')
@@ -10,7 +10,7 @@ z
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Marcas <small>Agregando una nueva Marca</small></h2>
+                    <h2>Productos <small>Agregando un nuevo Producto</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                         	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -34,8 +34,8 @@ z
                     <br />
                     @include('alertas.userRequest')
                     
-                    {!!Form::open(['route'=>'marca.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
-                    	@include('marca.forms.frmMarca')
+                    {!!Form::open(['route'=>'producto.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
+                    	@include('producto.forms.frmProducto')
 
                     	<div class="ln_solid"></div>
                         <div class="form-group">

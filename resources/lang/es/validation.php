@@ -110,6 +110,25 @@ return [
             'required' => 'Es necesario un Correo',
             'unique' => 'El Correo ya existe',
         ],
+        'categoria' => [
+            'required' => 'Es necesario una Categoría',
+            'unique' => 'La Categoría ya existe',
+        ],
+        'marca' => [
+            'required' => 'Es necesario una Marca',
+            'unique' => 'La Marca ya existe',
+        ],
+        'clase' => [
+            'required' => 'Es necesario una Clase',
+            'unique' => 'La Clase ya existe',
+        ],
+        'proveedor' => [
+            'required' => 'Es necesario una Proveedor',
+            'unique' => 'El Proveedor ya existe',
+        ],
+        'destacado' => [
+            'required' => 'indique si es destacado'
+        ],
     ],
     /*
     |--------------------------------------------------------------------------
