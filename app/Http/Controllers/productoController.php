@@ -9,6 +9,11 @@ use farmacia\Http\Requests;
 use farmacia\Http\Requests\ProductoCreateRequest;
 use farmacia\Http\Requests\ProductoUpdateRequest;
 use farmacia\productos;
+use farmacia\categoria;
+use farmacia\marca;
+use farmacia\clase;
+use farmacia\proveedores;
+
 use Session;
 use Redirect;
 
@@ -32,7 +37,13 @@ class productoController extends Controller
      */
     public function create()
     {
-        return view('producto.addProducto');
+        $data = array();
+        $data['categoria'] = categoria::lists('nombre','id_categoria');
+        $data['marca']      = marca::lists('nombre','id_marca');
+        $data['clase']      = clase::lists('nombre','id_clase');
+        $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
+        #
+        return view('producto.addProducto',compact('data'));
     }
 
     /**
@@ -68,7 +79,14 @@ class productoController extends Controller
     public function edit($id)
     {
         $producto = productos::find($id);
-        return view('producto.editProducto',["producto" => $producto ]);
+        $data = array();
+        $data['categoria'] = categoria::lists('nombre','id_categoria');
+        $data['marca']      = marca::lists('nombre','id_marca');
+        $data['clase']      = clase::lists('nombre','id_clase');
+        $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
+        $data['producto']   = $producto;
+
+        return view('producto.editProducto',["data" => $data ]);
     }
 
     /**

@@ -1,16 +1,12 @@
 @extends('layouts.principal')
 
-@section('titulo')
-    Farmacia | Add Producto
-@stop
-
 @section('content')
 
 	<div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Productos <small>Agregando un nuevo Producto</small></h2>
+                    <h2>Producto <small>Agregando una nuevo Producto</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                         	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -34,13 +30,13 @@
                     <br />
                     @include('alertas.userRequest')
                     
-                    {!!Form::open(['route'=>'producto.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
+                    {!!Form::model ($data['producto'] , [ 'route' => ['producto.update' , $data['producto']->id_producto ], 'method' => 'PUT' ,'autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate'])!!}
                     	@include('producto.forms.frmProducto')
 
                     	<div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            	<a href="/categoria" class="btn btn-primary">Cancelar</a>
+                            	<a href="/producto" class="btn btn-primary">Cancelar</a>
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
                         </div>
@@ -62,8 +58,6 @@
     {!!Html::script('js/nicescroll/jquery.nicescroll.min.js')!!}
 
     {!!Html::script('js/custom.js')!!}
-
-    {!!Html::script('js/custom/addProducto.js')!!}
 
 @endsection
 
