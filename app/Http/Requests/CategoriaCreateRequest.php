@@ -24,12 +24,7 @@ class CategoriaCreateRequest extends Request
     public function rules()
     {
         return [
-            'nombre'    => 'required',
-            'categoria' => 'required',
-            'marca'     => 'required',
-            'clase'     => 'required',
-            'proveedor' => 'required',
-            'destacado' => 'required'
+            'nombre'    => 'required|unique:categoria'
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace farmacia\Http\Requests;
 
 use farmacia\Http\Requests\Request;
 
-class ProductoCreateRequest extends Request
+class peCreateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,7 @@ class ProductoCreateRequest extends Request
     public function rules()
     {
         return [
-            'nombre'    => 'required',
-            'categoria' => 'required',
-            'marca'     => 'required',
-            'clase'     => 'required',
-            'proveedor' => 'required',
-            'destacado' => 'required'
+            //
         ];
     }
 }

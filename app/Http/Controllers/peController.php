@@ -6,6 +6,16 @@ use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
 
+
+use farmacia\Http\Requests\peCreateRequest;
+use farmacia\Http\Requests\peUpdateRequest;
+use farmacia\ParteEntrada;
+use Session;
+use Redirect;
+
+use farmacia\proveedores;
+use Carbon;
+
 class peController extends Controller
 {
     /**
@@ -15,7 +25,8 @@ class peController extends Controller
      */
     public function index()
     {
-        //
+        $parteEntrada = ParteEntrada::paginate(5);
+        return view('pe.homePE',compact('parteEntrada'));
     }
 
     /**
@@ -25,7 +36,13 @@ class peController extends Controller
      */
     public function create()
     {
-        //
+        $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $data['fecha'] = $mytime->format('d/m/Y');
+        $data['token'] = $mytime->toDateTimeString();
+
+        return view('pe.addPE',compact('data'));
     }
 
     /**
