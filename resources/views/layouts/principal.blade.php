@@ -126,9 +126,9 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-table"></i> Inventario <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
-                                        <li><a href="tables.html">Tables</a>
+                                        <li><a href="/pe">Parte entrada</a>
                                         </li>
                                         <li><a href="tables_dynamic.html">Table Dynamic</a>
                                         </li>
