@@ -26,7 +26,8 @@ class productoController extends Controller
      */
     public function index()
     {
-        $dataProductos = productos::paginate(5);
+        $response = array();
+        $dataProductos = productos::paginate(8);
         return view('producto.homeProducto',compact('dataProductos'));
     }
 

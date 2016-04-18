@@ -7,6 +7,9 @@
 @section('losCSS')
     {!!Html::style('js/alertify/css/alertify.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
+    
+    {!!Html::style('https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css')!!}
+
 @endsection
 
 @section('content')
@@ -78,7 +81,7 @@
                     </div>
                     <div class="x_content">
 
-                        <table class="table">
+                        <table class="table" ng-table="vm.tableParams" show-filter="true" >
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -141,6 +144,11 @@
     {!!Html::script('js/custom.js')!!}
 
     {!!Html::script('js/custom/producto.js')!!}
+
+    {!!Html::script('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')!!}
+    
+    {!!Html::script('https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.js')!!}
+    
 
 @endsection
 
