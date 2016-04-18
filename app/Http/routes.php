@@ -33,7 +33,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('marca','marcaController');
     Route::resource('clase','claseController');
     Route::resource('proveedor','proveedorController');
+    
     Route::resource('producto','productoController');
+    Route::get('producto/{q}','productoController@buscar');
+
     Route::resource('pe','peController');
 });
 

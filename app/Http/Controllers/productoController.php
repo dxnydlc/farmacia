@@ -118,4 +118,10 @@ class productoController extends Controller
         $data = productos::where(['id_producto' => $id])->delete();
         return $data;
     }
+
+    public function buscar($q)
+    {
+        return $q;
+    }
+
 }
