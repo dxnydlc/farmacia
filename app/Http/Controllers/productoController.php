@@ -28,6 +28,7 @@ class productoController extends Controller
     {
         $response = array();
         $dataProductos = productos::paginate(8);
+    
         return view('producto.homeProducto',compact('dataProductos'));
     }
 

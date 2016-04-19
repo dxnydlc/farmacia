@@ -8,8 +8,6 @@
     {!!Html::style('js/alertify/css/alertify.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
     
-    {!!Html::style('https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.min.css')!!}
-
 @endsection
 
 @section('content')
@@ -28,12 +26,12 @@
             </div>
 
     <div class="title_right">
-        {!!Form::open(['route'=>'producto.show','method'=>'get','autocomplete'=>'off' ])!!}
+        {!!Form::open(['route'=>['producto.show', 'id' => 1],'method'=>'get','autocomplete'=>'off' ])!!}
         <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
                 <input id="q" name="q" type="text" class="form-control" placeholder="Buscar por...">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">Buscar</button>
+                    <input type="submit" class="btn btn-default" value="Buscar">
                 </span>
             </div>
         </div>
@@ -149,11 +147,8 @@
     {!!Html::script('js/custom.js')!!}
 
     {!!Html::script('js/custom/producto.js')!!}
+    
 
-    {!!Html::script('//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js')!!}
-    
-    {!!Html::script('https://cdn.rawgit.com/esvit/ng-table/v1.0.0/dist/ng-table.js')!!}
-    
 
 @endsection
 
