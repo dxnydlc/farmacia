@@ -4,6 +4,13 @@
     Farmacia | add Parte Entrada
 @stop
 
+@section('losCSS')
+    
+    {!!Html::style('js/data_table/datatables.min.css')!!}
+    {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
+
+@endsection
+
 @section('content')
 
 	<div class="row">
@@ -55,14 +62,23 @@
 
 @section('scripts')
 
-	<!-- icheck -->
+	<!-- Aletify -->
+    {!!Html::script('js/alertify/alertify.js')!!}
+
+    <!-- icheck -->
     {!!Html::script('js/icheck/icheck.min.js')!!}
 
     <!-- bootstrap progress js -->
     {!!Html::script('js/progressbar/bootstrap-progressbar.min.js')!!}
     {!!Html::script('js/nicescroll/jquery.nicescroll.min.js')!!}
 
+    {!!Html::script('js/data_table/datatables.min.js')!!}
+
     {!!Html::script('js/custom.js')!!}
+
+    {!!Html::script('js/custom/addPE.js')!!}
+
+    
 
 @endsection
 

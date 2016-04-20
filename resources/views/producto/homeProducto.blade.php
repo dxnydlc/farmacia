@@ -5,9 +5,9 @@
 @stop
 
 @section('losCSS')
+
     {!!Html::style('js/alertify/css/alertify.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
-    
 
 @endsection
 
@@ -27,11 +27,7 @@
             </div>
 
     <div class="title_right">
-<<<<<<< HEAD
-
-=======
         {!!Form::open(['route'=>'producto.index','method'=>'get' , 'autocomplete'=>'off'] )!!}
->>>>>>> origin/master
         <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
                 {!!Form::text('nombre',null,['class'=>'form-control ','autofocus'=>'true'])!!}

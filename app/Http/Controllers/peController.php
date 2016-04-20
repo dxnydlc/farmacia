@@ -16,6 +16,8 @@ use Redirect;
 use farmacia\proveedores;
 use Carbon;
 
+use farmacia\productos;
+
 class peController extends Controller
 {
     /**
@@ -36,6 +38,8 @@ class peController extends Controller
      */
     public function create()
     {
+        $data = array();
+        $data['productos']  = $dataProductos = productos::all();
         $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
         $mytime = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
