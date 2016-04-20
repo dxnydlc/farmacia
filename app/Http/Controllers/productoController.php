@@ -24,10 +24,12 @@ class productoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request )
     {
+        #dd( $request->get('nombre') );
         $response = array();
-        $dataProductos = productos::paginate(8);
+
+        $dataProductos = productos::nombre( $request->get('nombre') )->orderBy('id_producto','DESC')->paginate(10);
     
         return view('producto.homeProducto',compact('dataProductos'));
     }

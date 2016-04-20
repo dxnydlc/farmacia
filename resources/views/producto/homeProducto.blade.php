@@ -21,16 +21,20 @@
                 <h3>
 			        productos
 			        <small>
-			            productos para los productos
+			            productos activos
 			        </small>
 			    </h3>
             </div>
 
     <div class="title_right">
+<<<<<<< HEAD
 
+=======
+        {!!Form::open(['route'=>'producto.index','method'=>'get' , 'autocomplete'=>'off'] )!!}
+>>>>>>> origin/master
         <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
             <div class="input-group">
-                <input id="q" name="q" type="text" class="form-control" placeholder="Buscar por...">
+                {!!Form::text('nombre',null,['class'=>'form-control ','autofocus'=>'true'])!!}
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button">Buscar</button>
                 </span>
