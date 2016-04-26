@@ -2,6 +2,7 @@
 (function($){
 	$(document).ready(function()
 		{
+			/*--------------------------------------*/
 			$('#tblProductos').DataTable(
 				{
 					"language": {
@@ -17,8 +18,18 @@
 			$('#tblProductos_filter input[type="search"]').keydown(function(event) {
 				console.log(event.keyCode);
 			});
+			/*--------------------------------------*/
 			$('#tblProductos_filter input[type="search"]').addClass('form-control');
+			/*--------------------------------------*/
 			$('#tblProductos_length label').addClass('control-label');
+			/*--------------------------------------*/
+			$('table#tblProductos > tbody tr td').keynavigator();
+			//Rebuild
+  			//$rows.keynavigator.reBuild();
+  			/*--------------------------------------*/
+  			$(document).delegate('.odd > td','keydown',function(e){
+  				console.log(event.keyCode);
+  			});
 		});
 
 })(jQuery);

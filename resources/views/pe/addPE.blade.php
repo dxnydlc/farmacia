@@ -72,7 +72,10 @@
     {!!Html::script('js/progressbar/bootstrap-progressbar.min.js')!!}
     {!!Html::script('js/nicescroll/jquery.nicescroll.min.js')!!}
 
-    {!!Html::script('js/data_table/datatables.min.js')!!}
+    {!!Html::script('js/data_table/datatables.js')!!}
+
+    {!!Html::script('http://nekman.github.io/keynavigator/keynavigator.js')!!}
+    {!!Html::script('http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js')!!}
 
     {!!Html::script('js/custom.js')!!}
 
