@@ -23,13 +23,27 @@
 			/*--------------------------------------*/
 			$('#tblProductos_length label').addClass('control-label');
 			/*--------------------------------------*/
-			$('table#tblProductos > tbody tr td').keynavigator();
+			$('table#tblProductos > tbody tr td').keynavigator({
+				activeClass: 'alert-success',
+				keys:{
+					13:function($el, cellIndex, e){
+						console.log('pressed ENTER!', $el.attr('tdnombre') );
+					},
+				}
+			});
+			/*--------------------------------------*/
+			$('table#tblItems > tbody tr td').keynavigator({
+				activeClass: 'alert-success',
+				keys:{
+					13:function($el, cellIndex, e){
+						console.log('pressed ENTER!', $el.attr('tdnombre') );
+					},
+				}
+			});
+			/*--------------------------------------*/
 			//Rebuild
   			//$rows.keynavigator.reBuild();
   			/*--------------------------------------*/
-  			$(document).delegate('.odd > td','keydown',function(e){
-  				console.log(event.keyCode);
-  			});
 		});
 
 })(jQuery);

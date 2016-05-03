@@ -1,4 +1,4 @@
-<div class="col-md-12 col-sm-12 col-xs-12">
+<div id="frmBuscarProds" class="col-md-12 col-sm-12 col-xs-12"  >
     <div class="x_panel">
         <div class="x_title">
             <h2>Basic Tables <small>basic table subtitle</small></h2>
@@ -21,7 +21,7 @@
         </div>
         <div class="x_content">
 
-            <table class="table" id="tblProductos">
+            <table class=" table table-bordered " id="tblProductos">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -35,7 +35,7 @@
                     @foreach($data['productos'] as $producto)
                     <tr>
                         <th scope="row">{{$producto->id_producto}}</th>
-                        <td>
+                        <td class="CRUD" tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" >
                             {{$producto->nombre}}
                         </td>
                         <td>{{$producto->categoria}}</td>
