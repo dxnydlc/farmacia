@@ -9,6 +9,8 @@
     {!!Html::style('js/data_table/datatables.min.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
 
+    {!!Html::style('js/sweet-alert/dist/sweetalert.css')!!}
+
 @endsection
 
 @section('content')
@@ -47,7 +49,7 @@
                     	<div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-lg-12">
-                                <a class="btn btn-default "><i class="fa fa-plus"></i> Agregar Productos</a>
+                                <a id="addProds" class="btn btn-default "><i class="fa fa-plus"></i> Agregar Productos</a>
                             </div>
                         </div>
 
@@ -157,6 +159,7 @@
     {!!Html::script('js/nicescroll/jquery.nicescroll.min.js')!!}
 
     {!!Html::script('js/data_table/datatables.js')!!}
+    {!!Html::script('js/sweet-alert/dist/sweetalert.js')!!}
 
     {!!Html::script('http://nekman.github.io/keynavigator/keynavigator.js')!!}
     {!!Html::script('http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js')!!}
@@ -164,6 +167,8 @@
     {!!Html::script('js/custom.js')!!}
 
     {!!Html::script('js/custom/addPE.js')!!}
+
+    {!!Html::script('js/custom/funciones.js')!!}
 
     
 

@@ -40,6 +40,9 @@
 @section('losCSS')
 @show
 
+<script>
+    var _token = '{{ csrf_token() }}';
+</script>
 </head>
 
 

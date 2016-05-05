@@ -23,16 +23,28 @@
 			/*--------------------------------------*/
 			$('#tblProductos_length label').addClass('control-label');
 			/*--------------------------------------*/
-			$('table#tblProductos > tbody tr td').keynavigator({
+			$('table#tblProductos > tbody tr ').keynavigator({
 				activeClass: 'alert-success',
 				keys:{
 					13:function($el, cellIndex, e){
+						swal({
+						  title: "Agregar Producto",
+						  text: $el.attr('tdnombre'),
+						  type: "warning",
+						  showCancelButton: true,
+						  confirmButtonClass: "btn-success",
+						  confirmButtonText: "Si, agregar!",
+						  closeOnConfirm: false
+						},
+						function(){
+						  swal("Agregado!", "El producto fue agregado a la lista", "success");
+						});
 						console.log('pressed ENTER!', $el.attr('tdnombre') );
 					},
 				}
 			});
 			/*--------------------------------------*/
-			$('table#tblItems > tbody tr td').keynavigator({
+			$('table#tblItems > tbody tr ').keynavigator({
 				activeClass: 'alert-success',
 				keys:{
 					13:function($el, cellIndex, e){

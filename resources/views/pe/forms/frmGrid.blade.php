@@ -33,9 +33,9 @@
                 </thead>
                 <tbody>
                     @foreach($data['productos'] as $producto)
-                    <tr>
+                    <tr tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" >
                         <th scope="row">{{$producto->id_producto}}</th>
-                        <td class="CRUD" tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" >
+                        <td class="CRUD"  >
                             {{$producto->nombre}}
                         </td>
                         <td>{{$producto->categoria}}</td>
