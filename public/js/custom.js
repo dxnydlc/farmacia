@@ -91,7 +91,8 @@ if ($(".js-switch")[0]) {
 // Close ibox function
 $('.close-link').click(function () {
     var content = $(this).closest('div.x_panel');
-    content.remove();
+    //content.remove();
+    content.fadeOut();
 });
 
 // Collapse ibox function

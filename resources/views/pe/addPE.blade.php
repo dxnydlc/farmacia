@@ -47,11 +47,17 @@
                     	@include('pe.forms.frmHeader')
 
                     	<div class="ln_solid"></div>
+
                         <div class="form-group">
                             <div class="col-lg-12">
                                 <a id="addProds" class="btn btn-default "><i class="fa fa-plus"></i> Agregar Productos</a>
                             </div>
                         </div>
+                        <!-- /form-group -->
+
+                        <!-- Buscar producto -->
+                        @include('pe.forms.frmGrid')
+                        <!-- /Buscar producto -->
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
@@ -143,7 +149,7 @@
                 </div>
             </div>
         </div>
-        @include('pe.forms.frmGrid')
+        
     </div>
 
 @section('scripts')
