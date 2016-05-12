@@ -62,7 +62,7 @@
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <div class="x_panel">
                                 <div class="x_title">
-                                    <h2>Productos <small>Actualmente en el documento</small></h2>
+                                    <h2>Productos <small id="todoTren">Actualmente en el documento</small></h2>
                                     <ul class="nav navbar-right panel_toolbox">
                                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                                         </li>
@@ -99,7 +99,7 @@
                                         <tbody>
                                             <tr>
                                                 <th scope="row">1</th>
-                                                <td tdnombre="bla bla bla" >Mark</td>
+                                                <td id="TD1" tdnombre="bla bla bla" >Mark</td>
                                                 <td>Otto</td>
                                                 <td>@mdo</td>
                                                 <td>Mark</td>
@@ -110,7 +110,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope="row">2</th>
-                                                <td>Mark</td>
+                                                <tdid="TD2" >Mark</td>
                                                 <td>Otto</td>
                                                 <td>@mdo</td>
                                                 <td>Mark</td>
@@ -121,7 +121,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope="row">3</th>
-                                                <td>Mark</td>
+                                                <td id="TD3" >Mark</td>
                                                 <td>Otto</td>
                                                 <td>@mdo</td>
                                                 <td>Mark</td>
@@ -152,6 +152,14 @@
         
     </div>
 
+{!!Form::open(['route'=>'detpe.store','method'=>'post' ])!!}
+    <input type="text" name="producto" id="producto" value="" />
+    <input type="text" name="producto" id="producto" value="" />
+    <input type="text" name="producto" id="producto" value="" />
+    <input type="text" name="producto" id="producto" value="" />
+    <input type="text" name="producto" id="producto" value="" />
+{!!Form::close()!!}
+
 @section('scripts')
 
 	<!-- Aletify -->
@@ -167,8 +175,8 @@
     {!!Html::script('js/data_table/datatables.js')!!}
     {!!Html::script('js/sweet-alert/dist/sweetalert.js')!!}
 
-    {!!Html::script('http://nekman.github.io/keynavigator/keynavigator.js')!!}
-    {!!Html::script('http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.5/require.min.js')!!}
+    {!!Html::script('js/keynaigator/keynavigator.js')!!}
+    {!!Html::script('js/keynaigator/require.min.js')!!}
 
     {!!Html::script('js/custom.js')!!}
 

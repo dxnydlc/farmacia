@@ -51,24 +51,6 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			/*--------------------------------------*/
 			$('#frmBuscarProds').fadeOut();
 			/*--------------------------------------*/
-			$('#addProds').click(function(event) {
-				event.preventDefault();
-				$('#frmBuscarProds').fadeIn();
-				//$('#tblProductos tbody tr').focus();
-				$('#tblProductos_filter input[type="search"]').focus();
-			});
-			/*--------------------------------------*/
-			/*--------------------------------------*/
-			$('table#tblItems > tbody tr ').keynavigator({
-				activeClass: 'alert-success',
-				keys:{
-					13:function($el, cellIndex, e){
-						console.log('pressed ENTER!', $el.attr('tdnombre') );
-					}
-				},
-				parentFocusOn: 'mouseover'
-			});
-			/*--------------------------------------*/
 			$('#tblProductos_length label').addClass('control-label');
 			/*--------------------------------------*/
 			$('#tblProductos_filter input[type="search"]').addClass('form-control');
@@ -86,3 +68,16 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 
 })(jQuery);
 
+function focusTable( _tabla , _indice )
+{
+	//$('#'+_tabla+' tbody tr td').focus();
+	$('#'+_tabla+' tbody tr td#TD'+_indice).trigger('mouseover');
+	$('#'+_tabla+' tbody tr td#TD'+_indice).trigger('click');
+}
+
+function frameBuscarProducto()
+{
+	//vamos a mostrar el frame de buscar producto y hacer focus en la cajita de texto
+	$('#frmBuscarProds').fadeIn();
+	$('#tblProductos_filter input[type="search"]').focus();
+}
