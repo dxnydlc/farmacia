@@ -1,3 +1,4 @@
+
 /*--------------------------------------*/
 var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 	activeClass: 'alert-success',
@@ -13,6 +14,9 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			  closeOnConfirm: false
 			},
 			function(){
+				$.post( _servicio , {param1: 'value1'}, function(data, textStatus, xhr) {
+					console.log(data);
+				},'json');
 			  swal("Agregado!", "El producto fue agregado a la lista", "success");
 			});
 			console.log('pressed ENTER!', $el.attr('tdnombre') );
@@ -60,8 +64,9 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 				keys:{
 					13:function($el, cellIndex, e){
 						console.log('pressed ENTER!', $el.attr('tdnombre') );
-					},
-				}
+					}
+				},
+				parentFocusOn: 'mouseover'
 			});
 			/*--------------------------------------*/
 			$('#tblProductos_length label').addClass('control-label');

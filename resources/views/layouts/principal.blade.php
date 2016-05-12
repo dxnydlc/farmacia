@@ -44,6 +44,8 @@
 
 <script>
     var _token = '{{ csrf_token() }}';
+    var _url = '{{ 'http://'.$_SERVER['HTTP_HOST'] }}';
+    var _servicio = '';
 </script>
 </head>
 

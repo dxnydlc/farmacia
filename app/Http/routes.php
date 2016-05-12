@@ -37,6 +37,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('producto','productoController');
     Route::get('producto/{q}','productoController@buscar');
 
+    Route::resource('detpe','detallePEController');
+
     Route::resource('pe','peController');
 });
 
