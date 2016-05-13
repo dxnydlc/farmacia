@@ -1,6 +1,6 @@
 var _rowCount = $('#tblItems tr').length;
 /*--------------------------------------*/
-var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
+/*var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
 	activeClass: 'alert-success',
 	keys:{
 		13:function($el, cellIndex, e){
@@ -8,7 +8,7 @@ var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
 		}
 	},
 	parentFocusOn: 'mouseover'
-});
+});+/
 /*--------------------------------------*/
 
 (function($){
@@ -35,21 +35,21 @@ var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
 				var _rowHtml = '';
 				_rowHtml += '<tr>';
 					_rowHtml += '<th scope="row">#</th>';
-					_rowHtml += '<td id="TD'+_rowCount+'" >- producto -</td>';
-					_rowHtml += '<td></td>';
-					_rowHtml += '<td></td>';
-					_rowHtml += '<td></td>';
-					_rowHtml += '<td></td>';
-					_rowHtml += '<td></td>';
-					_rowHtml += '<td></td>';
+					_rowHtml += '<td id="TD'+_rowCount+'" >- Producto -</td>';
+					_rowHtml += '<td>- Laboratorio -</td>';
+					_rowHtml += '<td>- Lote -</td>';
+					_rowHtml += '<td>- Vencimiento -</td>';
+					_rowHtml += '<td>0</td>';
+					_rowHtml += '<td>0</td>';
+					_rowHtml += '<td>0</td>';
+					_rowHtml += '<td>0</td>';
 				_rowHtml += '</tr>';
-				_rowItems.parent().append( _rowHtml );
-				_rowItems.keynavigator.reBuild();
-				//$(this).fadeOut();
+				$('#tblItems').append( _rowHtml );
+				buildTabla();
+				focusTable( 'tblItems' , _rowCount -1 );
 			});
 			/*--------------------------------------*/
-			//Rebuild
-  			//$rows.keynavigator.reBuild();
+			buildTabla();
   			/*--------------------------------------*/
   			/*--------------------------------------*/
   			/*--------------------------------------*/
@@ -59,3 +59,15 @@ var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
 
 })(jQuery);
 
+function buildTabla()
+{
+	$('table#tblItems > tbody tr td').keynavigator({
+		activeClass: 'alert-success',
+		keys:{
+			13:function($el, cellIndex, e){
+				console.log('pressed ENTER!', $el.attr('tdnombre') );
+			}
+		},
+		parentFocusOn: 'mouseover'
+	});
+}

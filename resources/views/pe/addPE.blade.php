@@ -118,6 +118,7 @@
                                                 <td>@mdo</td>
                                                 <td>Otto</td>
                                                 <td>24</td>
+                                                <td>24</td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">3</th>
