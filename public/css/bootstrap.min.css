@@ -16,3 +16,6 @@ body, label, td, th, input[type='text'], select, option, h1, h2, h3, h4, h5, a{
 .control-label{
 	font-weight: 900;
 }
+#newRow{
+	display: none;
+}

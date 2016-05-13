@@ -110,26 +110,25 @@
                                             </tr>
                                             <tr>
                                                 <th scope="row">2</th>
-                                                <tdid="TD2" >Mark</td>
+                                                <td id="TD2" >Mark</td>
                                                 <td>Otto</td>
                                                 <td>@mdo</td>
                                                 <td>Mark</td>
                                                 <td>Otto</td>
                                                 <td>@mdo</td>
                                                 <td>Otto</td>
-                                                <td>24</td>
                                                 <td>24</td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row">3</th>
-                                                <td id="TD3" >Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                                <td>Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                                <td>Otto</td>
-                                                <td>24</td>
+                                            <tr id="newRow" >
+                                                <th scope="row">#</th>
+                                                <td id="TD3" >- Producto -</td>
+                                                <td>- Laboratorio -</td>
+                                                <td>- Lote -</td>
+                                                <td>- Vencimiento -</td>
+                                                <td>- Cantidad -</td>
+                                                <td>- Compra -</td>
+                                                <td>- Venta -</td>
+                                                <td>- % -</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -154,11 +153,17 @@
     </div>
 
 {!!Form::open(['route'=>'detpe.store','method'=>'post' ])!!}
-    <input type="text" name="producto" id="producto" value="" />
-    <input type="text" name="producto" id="producto" value="" />
-    <input type="text" name="producto" id="producto" value="" />
-    <input type="text" name="producto" id="producto" value="" />
-    <input type="text" name="producto" id="producto" value="" />
+    <input type="text" name="producto" id="producto" value="" placeholder="producto" />
+    <input type="text" name="id_producto" id="id_producto" value="" placeholder="id_producto" />
+    <input type="text" name="laboratorio" id="laboratorio" value="" placeholder="laboratorio" />
+    <input type="text" name="vencimiento" id="vencimiento" value="" placeholder="vencimiento" />
+    <input type="text" name="lote" id="lote" value="" placeholder="lote" />
+    <input type="text" name="cantidad" id="cantidad" value="" placeholder="cantidad" />
+    <input type="text" name="compra" id="compra" value="" placeholder="compra" />
+    <input type="text" name="venta" id="venta" value="" placeholder="venta" />
+    <input type="text" name="porcentaje" id="porcentaje" value="" placeholder="porcentaje" />
+    <input type="text" name="fraccion" id="fraccion" value="" placeholder="fraccion" />
+    <input type="text" name="token" id="token" value="" placeholder="token" />
 {!!Form::close()!!}
 
 @section('scripts')
