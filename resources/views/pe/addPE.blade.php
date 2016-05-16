@@ -11,6 +11,8 @@
 
     {!!Html::style('js/sweet-alert/dist/sweetalert.css')!!}
 
+    {!!Html::style('js/datepicker/css/bootstrap-datepicker.css')!!}
+
 @endsection
 
 @section('content')
@@ -94,6 +96,7 @@
                                                 <th>Compra</th>
                                                 <th>Venta</th>
                                                 <th>%</th>
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -107,6 +110,7 @@
                                                 <td>@mdo</td>
                                                 <td>Otto</td>
                                                 <td>24</td>
+                                                <td></td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">2</th>
@@ -118,17 +122,21 @@
                                                 <td>@mdo</td>
                                                 <td>Otto</td>
                                                 <td>24</td>
+                                                <td></td>
                                             </tr>
                                             <tr id="newRow" >
                                                 <th scope="row">#</th>
-                                                <td id="TD3" >- Producto -</td>
-                                                <td>- Laboratorio -</td>
-                                                <td>- Lote -</td>
-                                                <td>- Vencimiento -</td>
-                                                <td>- Cantidad -</td>
-                                                <td>- Compra -</td>
-                                                <td>- Venta -</td>
-                                                <td>- % -</td>
+                                                <td callback="prod" id="TD3" class="" >- Producto -</td>
+                                                <td id="nwlaboratorio" callback="lab" >- Laboratorio -</td>
+                                                <td id="nwLote" callback="lote" >- Lote -</td>
+                                                <td id="nwVcto" callback="vcto" >- Vencimiento -</td>
+                                                <td id="nwCant" callback="cant" >- Cantidad -</td>
+                                                <td id="nwCompra" callback="comp" >- Compra -</td>
+                                                <td id="nwVenta" callback="vta" >- Venta -</td>
+                                                <td id="nwUtil" callback="%" >0</td>
+                                                <td callback="ok">
+                                                    <a href="#" class="btn btn-success" ><span class="glyphicon glyphicon-ok" ></span></a>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -161,10 +169,33 @@
     <input type="text" name="cantidad" id="cantidad" value="" placeholder="cantidad" />
     <input type="text" name="compra" id="compra" value="" placeholder="compra" />
     <input type="text" name="venta" id="venta" value="" placeholder="venta" />
-    <input type="text" name="porcentaje" id="porcentaje" value="" placeholder="porcentaje" />
+    <input type="text" name="utilidad" id="utilidad" value="0" placeholder="utilidad" />
     <input type="text" name="fraccion" id="fraccion" value="" placeholder="fraccion" />
     <input type="text" name="token" id="token" value="" placeholder="token" />
 {!!Form::close()!!}
+
+
+<!-- Datepicker -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Seleccione Fecha</h4>
+      </div>
+      <div class="modal-body">
+        <div id="datePicker" ></div>
+        <input type="hidden" id="vencimientoFecha" >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button id="addFecha" type="button" class="btn btn-primary">Agregar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 @section('scripts')
 
@@ -182,7 +213,10 @@
     {!!Html::script('js/sweet-alert/dist/sweetalert.js')!!}
 
     {!!Html::script('js/keynaigator/keynavigator.js')!!}
-    {!!Html::script('js/keynaigator/require.min.js')!!}
+    <!--{!!Html::script('js/keynaigator/require.min.js')!!}-->
+
+    {!!Html::script('js/datepicker/js/bootstrap-datepicker.js')!!}
+    {!!Html::script('js/datepicker/locales/bootstrap-datepicker.es.min.js')!!}
 
     {!!Html::script('js/custom.js')!!}
 

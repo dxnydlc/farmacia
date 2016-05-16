@@ -14,12 +14,18 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			  closeOnConfirm: false
 			},
 			function(){
+				var _texto = $el.attr('tdnombre');
+				/*
 				$.post( _servicio , {param1: 'value1'}, function(data, textStatus, xhr) {
 					console.log(data);
 				},'json');
+				/**/
+				$('#'+_objProdBD).html( _texto );
+				hideBucarProducto();
+				focusTable( 'tblItems' , _rowCount -1 );
 			  swal("Agregado!", "El producto fue agregado a la lista", "success");
 			});
-			console.log('pressed ENTER!', $el.attr('tdnombre') );
+			console.log('pressed ENTER!', $el.attr('tdnombre') +' > '+_objProdBD);
 		},
 	}
 });
@@ -55,7 +61,20 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			/*--------------------------------------*/
 			$('#tblProductos_filter input[type="search"]').addClass('form-control');
 			/*--------------------------------------*/
+			$('#datePicker').datepicker({
+			    startView: 1,
+			    language: "es",
+			    todayHighlight: true
+			}).on('changeDate', function(e){
+				$('#vencimientoFecha').val(e.format('yyyy-mm-dd'))
+			});
 			/*--------------------------------------*/
+			$('#addFecha').click(function(event) {
+				event.preventDefault();
+				var _fecha = $('#vencimientoFecha').val();
+				$('#myModal').modal('hide');
+				//focusTable( 'tblItems' , _rowCount -1 );
+			});
 			/*--------------------------------------*/
 			/*--------------------------------------*/
 			/*--------------------------------------*/
@@ -70,9 +89,14 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 
 function focusTable( _tabla , _indice )
 {
-	//$('#'+_tabla+' tbody tr td').focus();
 	$('#'+_tabla+' tbody tr td#TD'+_indice).trigger('mouseover');
 	$('#'+_tabla+' tbody tr td#TD'+_indice).trigger('click');
+}
+
+function focusTableTD( _tabla , _obj )
+{
+	$('#'+_tabla+' tbody tr td#'+_obj).trigger('mouseover');
+	$('#'+_tabla+' tbody tr td#'+_obj).trigger('click');
 }
 
 function frameBuscarProducto()
@@ -80,4 +104,8 @@ function frameBuscarProducto()
 	//vamos a mostrar el frame de buscar producto y hacer focus en la cajita de texto
 	$('#frmBuscarProds').fadeIn();
 	$('#tblProductos_filter input[type="search"]').focus();
+}
+function hideBucarProducto()
+{
+	$('#frmBuscarProds').fadeOut();
 }
