@@ -1,8 +1,9 @@
 var _rowCount = $('#tblItems tr').length;
 var _objProdTabla 	= '';
 var _idOtro 		= _rowCount - 1;
-var _objProdBD 		= 'TD'+_idOtro;
-var _objProdidBD	= '';
+var _objProdhtml 	= 'TD'+_idOtro;
+var _objProdBD 		= 'producto';
+var _objProdidBD	= 'id_producto';
 /*--------------------------------------*/
 /*var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
 	activeClass: 'alert-success',
@@ -35,21 +36,7 @@ var _objProdidBD	= '';
 			/*--------------------------------------*/
 			$('#addProds').click(function(event) {
 				event.preventDefault();
-				//Agregar una celda vacia a la tabla actual
-				var _rowHtml = '';
-				_rowHtml += '<tr>';
-					_rowHtml += '<th scope="row">#</th>';
-					_rowHtml += '<td id="TD'+_rowCount+'" >- Producto -</td>';
-					_rowHtml += '<td>- Laboratorio -</td>';
-					_rowHtml += '<td>- Lote -</td>';
-					_rowHtml += '<td>- Vencimiento -</td>';
-					_rowHtml += '<td>- Cantidad -</td>';
-					_rowHtml += '<td>- Compra -</td>';
-					_rowHtml += '<td>- Venta -</td>';
-					_rowHtml += '<td>- % -</td>';
-				_rowHtml += '</tr>';
-				//$('#tblItems').append( _rowHtml );
-				//buildTabla();
+				//Agregar una celda vacia a la tabla actual, la que esta oculta
 				$('#newRow').fadeIn();
 				focusTable( 'tblItems' , _rowCount-1 );
 			});
@@ -64,7 +51,29 @@ var _objProdidBD	= '';
 		});
 
 })(jQuery);
-
+/* ---------------------------------------------------------- */
+function savePE(){
+	swal({
+	  title: "Confirme guardar detalle",
+	  text: "Se agregará el registro a la base de datos",
+	  type: "success",
+	  showCancelButton: true,
+	  confirmButtonClass: "btn-success",
+	  confirmButtonText: "Si, Agregarlo",
+	  closeOnConfirm: false,
+	  showLoaderOnConfirm: true
+	},
+	function(){
+		/**/
+		var _data = $('#frmPE').serialize();
+		$.post( _servicio , _data , function(data, textStatus, xhr) {
+			swal("Agregado!", "Espere a que la página se cargue", "success");
+		},'json');
+		/**/
+	});
+		
+}
+/* ---------------------------------------------------------- */
 function buildTabla()
 {
 	$('table#tblItems > tbody tr td').keynavigator({
@@ -82,6 +91,7 @@ function buildTabla()
 					break;
 					case 'ok':
 						//Agregar el registro a la base de datos
+						savePE();
 					break;
 					default:
 						callPromt( _callback );
@@ -92,7 +102,7 @@ function buildTabla()
 		parentFocusOn: 'mouseover'
 	});
 }
-
+/* ---------------------------------------------------------- */
 function callPromt( _callback )
 {
 	var _titulo = '', _caption = '', _placeHolder = '', _obj = '', _txtObj = '';
@@ -167,7 +177,6 @@ function callPromt( _callback )
 	  swal("Nice!", "You wrote: " + inputValue, "success");
 	});
 }
-
 /* ---------------------------------------------------------- */
 function calcularUT(){
 	var _elpc = $('#compra').val();

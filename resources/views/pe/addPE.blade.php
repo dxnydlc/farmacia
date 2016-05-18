@@ -160,7 +160,7 @@
         
     </div>
 
-{!!Form::open(['route'=>'detpe.store','method'=>'post' ])!!}
+{!!Form::open(['route'=>'detpe.store','method'=>'post','id'=>'frmPE' ])!!}
     <input type="text" name="producto" id="producto" value="" placeholder="producto" />
     <input type="text" name="id_producto" id="id_producto" value="" placeholder="id_producto" />
     <input type="text" name="laboratorio" id="laboratorio" value="" placeholder="laboratorio" />

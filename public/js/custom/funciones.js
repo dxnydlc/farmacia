@@ -14,13 +14,10 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			  closeOnConfirm: false
 			},
 			function(){
-				var _texto = $el.attr('tdnombre');
-				/*
-				$.post( _servicio , {param1: 'value1'}, function(data, textStatus, xhr) {
-					console.log(data);
-				},'json');
-				/**/
-				$('#'+_objProdBD).html( _texto );
+				var _texto = $el.attr('tdnombre'), _deaID = $el.attr('tdid');
+				$('#'+_objProdhtml).html( _texto );
+				$('#'+_objProdidBD).val( _deaID );
+				$('#'+_objProdBD).val( _texto );
 				hideBucarProducto();
 				focusTable( 'tblItems' , _rowCount -1 );
 			  swal("Agregado!", "El producto fue agregado a la lista", "success");
@@ -66,12 +63,14 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			    language: "es",
 			    todayHighlight: true
 			}).on('changeDate', function(e){
-				$('#vencimientoFecha').val(e.format('yyyy-mm-dd'))
+				$('#vencimientoFecha').val(e.format('yyyy-mm-dd'));
 			});
 			/*--------------------------------------*/
 			$('#addFecha').click(function(event) {
 				event.preventDefault();
 				var _fecha = $('#vencimientoFecha').val();
+				$('#vencimiento').val( _fecha );
+				$('#nwVcto').html( formatoFeha( _fecha ) );
 				$('#myModal').modal('hide');
 				//focusTable( 'tblItems' , _rowCount -1 );
 			});
@@ -86,6 +85,13 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 		});
 
 })(jQuery);
+
+function formatoFeha( _fechaMySQL )
+{
+	//devuelve un formato de fecha latina dd/mm/yyyy
+	var _arFecha = _fechaMySQL.split('-');
+	return _arFecha[2]+'/'+_arFecha[1]+'/'+_arFecha[0];
+}
 
 function focusTable( _tabla , _indice )
 {
