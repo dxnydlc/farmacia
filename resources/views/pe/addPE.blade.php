@@ -100,30 +100,20 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        @foreach($data['items'] as $items)
                                             <tr>
                                                 <th scope="row">1</th>
-                                                <td id="TD1" tdnombre="bla bla bla" >Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                                <td>Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                                <td>Otto</td>
-                                                <td>24</td>
+                                                <td id="TD1" tdnombre="bla bla bla" tdidProd="{{$items->id_producto}}" >{{$items->producto}}</td>
+                                                <td>{{$items->laboratorio}}</td>
+                                                <td>{{$items->lote}}</td>
+                                                <td>{{$items->vencimiento}}</td>
+                                                <td>{{$items->cantidad}}</td>
+                                                <td>{{$items->compra}}</td>
+                                                <td>{{$items->venta}}</td>
+                                                <td>{{$items->utilidad.'%'}}</td>
                                                 <td></td>
                                             </tr>
-                                            <tr>
-                                                <th scope="row">2</th>
-                                                <td id="TD2" >Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                                <td>Mark</td>
-                                                <td>Otto</td>
-                                                <td>@mdo</td>
-                                                <td>Otto</td>
-                                                <td>24</td>
-                                                <td></td>
-                                            </tr>
+                                        @endforeach
                                             <tr id="newRow" >
                                                 <th scope="row">#</th>
                                                 <td callback="prod" id="TD3" class="" >- Producto -</td>

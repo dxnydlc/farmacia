@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use farmacia\Http\Requests;
 
 use farmacia\parte_entrada_detalle;
+use DB;
 
 
 use Session;
@@ -42,8 +43,17 @@ class detallePEController extends Controller
      */
     public function store(Request $request)
     {
-        parte_entrada_detalle::create( $request->all() );
-        return "ok";
+        DB::enableQueryLog();
+        $response       = array();
+        $id_return      = 0;
+        $token          = $request->token;
+        #$response['data'] = $request->all();
+        $id_return = parte_entrada_detalle::create( $request->all() );
+        $response['id']     = $id_return->id_detalle_pe;
+        $response['token']  = $token;
+        #$response['query'] = DB::getQueryLog();
+        $response['items'] = DB::table('parte_entrada_detalle')->where( "token" , $token )->get();
+        return $response;
     }
 
     /**

@@ -15,6 +15,7 @@ use Redirect;
 
 use farmacia\proveedores;
 use Carbon;
+use DB;
 
 use farmacia\productos;
 
@@ -38,13 +39,17 @@ class peController extends Controller
      */
     public function create()
     {
-        $data = array();
+        $data               = array();
+        $token              = csrf_token();#\Hash::make( $mytime->toDateTimeString() );
         $data['productos']  = $dataProductos = productos::all();
         $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
+        #
         $mytime = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
         $data['fecha'] = $mytime->format('d/m/Y');
-        $data['token'] = $mytime->toDateTimeString();
+        $data['token'] = $token;
+        #csrf_token()
+        $data['items'] = DB::table('parte_entrada_detalle')->where( "token" , $token )->get();
 
         return view('pe.addPE',compact('data'));
     }
