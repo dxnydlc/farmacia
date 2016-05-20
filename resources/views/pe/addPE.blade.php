@@ -170,7 +170,7 @@
     <input type="text" name="compra" id="compra" value="" placeholder="compra" />
     <input type="text" name="venta" id="venta" value="" placeholder="venta" />
     <input type="text" name="utilidad" id="utilidad" value="0" placeholder="utilidad" />
-    <input type="text" name="fraccion" id="fraccion" value="" placeholder="fraccion" />
+    <input type="text" name="fraccion" id="fraccion" value="1" placeholder="fraccion" />
     <input type="text" name="token" id="token" value="" placeholder="token" />
 {!!Form::close()!!}
 

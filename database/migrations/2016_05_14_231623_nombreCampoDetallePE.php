@@ -13,7 +13,7 @@ class NombreCampoDetallePE extends Migration
     public function up()
     {
         Schema::table('parte_entrada_detalle', function (Blueprint $table) {
-            //
+            $table->renameColumn('porcentaje', 'utilidad');
         });
     }
 
@@ -25,7 +25,7 @@ class NombreCampoDetallePE extends Migration
     public function down()
     {
         Schema::table('parte_entrada_detalle', function (Blueprint $table) {
-            $table->renameColumn('porcentaje', 'utilidad');
+            //
         });
     }
 }

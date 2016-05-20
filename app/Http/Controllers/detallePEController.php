@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
 
+use farmacia\parte_entrada_detalle;
+
+
+use Session;
+use Redirect;
+
 class detallePEController extends Controller
 {
     /**
@@ -36,7 +42,8 @@ class detallePEController extends Controller
      */
     public function store(Request $request)
     {
-        return 'Hola';
+        parte_entrada_detalle::create( $request->all() );
+        return "ok";
     }
 
     /**
