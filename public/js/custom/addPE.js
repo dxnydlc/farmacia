@@ -1,10 +1,11 @@
-var _rowCount = $('#tblItems tr').length;
+var _rowCount = $('#tblItems tbody tr').length;
 var _objProdTabla 	= '';
-var _idOtro 		= _rowCount - 1;
+var _idOtro 		= _rowCount;
 var _objProdhtml 	= 'TD'+_idOtro;
 var _objProdBD 		= 'producto';
 var _objProdidBD	= 'id_producto';
 /*--------------------------------------*/
+console.log(_rowCount);
 /*var _rowItems = $('table#tblItems > tbody tr td').keynavigator({
 	activeClass: 'alert-success',
 	keys:{
@@ -30,7 +31,7 @@ var _objProdidBD	= 'id_producto';
 			$(document).keydown(function(tecla){
 			    if (tecla.keyCode == 113 ) { 
 			    	//F2
-			        focusTable( 'tblItems' , _rowCount -1 );
+			        focusTable( 'tblItems' , _rowCount );
 			    }
 			});
 			/*--------------------------------------*/
@@ -38,7 +39,7 @@ var _objProdidBD	= 'id_producto';
 				event.preventDefault();
 				//Agregar una celda vacia a la tabla actual, la que esta oculta
 				$('#newRow').fadeIn();
-				focusTable( 'tblItems' , _rowCount-1 );
+				focusTable( 'tblItems' , _rowCount );
 			});
 			/*--------------------------------------*/
 			buildTabla();
@@ -68,6 +69,7 @@ function savePE(){
 		var _data = $('#frmPE').serialize();
 		$.post( _servicio , _data , function(data, textStatus, xhr) {
 			swal("Agregado!", "Espere a que la página se cargue", "success");
+			document.location.reload();
 		},'json');
 		/**/
 	});

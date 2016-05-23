@@ -39,13 +39,24 @@ class peController extends Controller
      */
     public function create()
     {
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        #
         $data               = array();
-        $token              = csrf_token();#\Hash::make( $mytime->toDateTimeString() );
+        $token              = '';
+        #Colocando variable de session con el token
+        if(! Session::has('token_new_pe') )
+        {
+            #$token              = csrf_token();
+            $token              = \Hash::make( $mytime->toDateTimeString() );
+            Session::put( 'token_new_pe' , $token );
+        }else{
+            $token = Session::get('token_new_pe');
+        }
+        #
         $data['productos']  = $dataProductos = productos::all();
         $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
         #
-        $mytime = Carbon\Carbon::now('America/Lima');
-        $mytime->toDateString();
         $data['fecha'] = $mytime->format('d/m/Y');
         $data['token'] = $token;
         #csrf_token()
@@ -63,6 +74,8 @@ class peController extends Controller
     public function store(Request $request)
     {
         //
+        #Borramos la session para que se genere un nuevo Token
+        Session::forget( 'token_new_pe' );
     }
 
     /**

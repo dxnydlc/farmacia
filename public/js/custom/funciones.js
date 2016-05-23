@@ -2,6 +2,7 @@
 /*--------------------------------------*/
 var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 	activeClass: 'alert-success',
+	parentFocusOn: 'mouseover',
 	keys:{
 		13:function($el, cellIndex, e){
 			swal({
@@ -19,7 +20,7 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 				$('#'+_objProdidBD).val( _deaID );
 				$('#'+_objProdBD).val( _texto );
 				hideBucarProducto();
-				focusTable( 'tblItems' , _rowCount -1 );
+				focusTable( 'tblItems' , _rowCount );
 			  swal("Agregado!", "El producto fue agregado a la lista", "success");
 			});
 			console.log('pressed ENTER!', $el.attr('tdnombre') +' > '+_objProdBD);

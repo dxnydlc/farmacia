@@ -100,10 +100,11 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                        <?php $o = 1; ?>
                                         @foreach($data['items'] as $items)
                                             <tr>
                                                 <th scope="row">1</th>
-                                                <td id="TD1" tdnombre="bla bla bla" tdidProd="{{$items->id_producto}}" >{{$items->producto}}</td>
+                                                <td id="TD{{$o}}" tdnombre="bla bla bla" tdidProd="{{$items->id_producto}}" >{{$items->producto}}</td>
                                                 <td>{{$items->laboratorio}}</td>
                                                 <td>{{$items->lote}}</td>
                                                 <td>{{$items->vencimiento}}</td>
@@ -113,10 +114,11 @@
                                                 <td>{{$items->utilidad.'%'}}</td>
                                                 <td></td>
                                             </tr>
+                                            <?php $o++; ?>
                                         @endforeach
                                             <tr id="newRow" >
                                                 <th scope="row">#</th>
-                                                <td callback="prod" id="TD3" class="" >- Producto -</td>
+                                                <td callback="prod" id="TD{{$o}}" class="" >- Producto -</td>
                                                 <td id="nwlaboratorio" callback="lab" >- Laboratorio -</td>
                                                 <td id="nwLote" callback="lote" >- Lote -</td>
                                                 <td id="nwVcto" callback="vcto" >- Vencimiento -</td>
@@ -136,9 +138,11 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                <a href="/categoria" class="btn btn-primary">Cancelar</a>
-                                <button type="submit" class="btn btn-success">Guardar</button>
+                            <div class="col-md-6 col-sm-6 col-xs-12 ">
+                                <a href="/categoria" class="btn btn-default">Cancelar</a>
+                                <?php if( count($data['items']) > 0 ){ ?>
+                                <button type="submit" class="btn btn-success btn-lg ">Guardar</button>
+                                <?php } ?>
                             </div>
                         </div>
 

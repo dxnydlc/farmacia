@@ -43,7 +43,7 @@
 @show
 
 <script>
-    var _token = '{{ $data['token'] }}';
+    var _token = '<?php if( isset($data['token']) ){ echo $data['token']; } ?>';
     var _url = '{{ 'http://'.$_SERVER['HTTP_HOST'] }}';
     var _servicio = '';
 </script>
