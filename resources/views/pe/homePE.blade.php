@@ -92,15 +92,15 @@
                             <tbody>
                                 @foreach($parteEntrada as $pe)
                                 <tr>
-                                    <th scope="row">{{$pe->id_pe}}</th>
+                                    <th scope="row">{{$pe->id}}</th>
                                     <td>
-                                        {!!link_to_route('marca.edit', $title  = $pe->proveedor, $parameters = $pe->id_pe, $attributes = ['class'=>'btn-link '] )!!}
+                                        {!!link_to_route('pe.edit', $title  = $pe->proveedor, $parameters = $pe->id, $attributes = ['class'=>'btn-link '] )!!}
                                     </td>
                                     <td>{{$pe->fecha}}</td>
                                     <td>{{$pe->estado}}</td>
                                     <td>{{$pe->user}}</td>
                                     <td>
-                                        {!!link_to_route('marca.edit', $title  = 'Anular', $parameters = $pe->id_pe, $attributes = ['class'=>'btn-link delItem ','id'=>$pe->id_pe] )!!}
+                                        {!!link_to_route('pe.edit', $title  = 'Anular', $parameters = $pe->id, $attributes = ['class'=>'btn-link delItem ','id'=>$pe->id] )!!}
                                     </td>
                                 </tr>
                                 @endforeach

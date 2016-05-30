@@ -18,6 +18,8 @@ D:\xampp\htdocs\hotel1>php artisan make:migration create_prfile_table --create=p
 -- migrar
 php artisan migrate
 
+php artisan migrate:rollback
+
 -- crear modelo
 php artisan make:controller controlador
 

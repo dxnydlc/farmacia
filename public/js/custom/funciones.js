@@ -76,6 +76,10 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 				//focusTable( 'tblItems' , _rowCount -1 );
 			});
 			/*--------------------------------------*/
+			$('#id_proveedor').click(function(event) {
+				var _valor = $('#id_proveedor option:selected').text();
+				$('#proveedor').val( _valor );
+			});
 			/*--------------------------------------*/
 			/*--------------------------------------*/
 			/*--------------------------------------*/

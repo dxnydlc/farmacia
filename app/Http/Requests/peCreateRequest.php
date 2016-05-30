@@ -24,7 +24,7 @@ class peCreateRequest extends Request
     public function rules()
     {
         return [
-            //
+            'id_proveedor' => 'required'
         ];
     }
 }

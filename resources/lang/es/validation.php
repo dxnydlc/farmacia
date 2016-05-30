@@ -129,6 +129,12 @@ return [
         'destacado' => [
             'required' => 'indique si es destacado'
         ],
+        'id_proveedor' => [
+            'required' => 'Es necesario un Proveedor'
+        ],
+        'fecha' => [
+            'required' => 'Es necesario una Fecha'
+        ],
     ],
     /*
     |--------------------------------------------------------------------------

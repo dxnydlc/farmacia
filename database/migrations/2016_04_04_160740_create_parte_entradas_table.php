@@ -13,7 +13,7 @@ class CreateParteEntradasTable extends Migration
     public function up()
     {
         Schema::create('parte_entrada', function (Blueprint $table) {
-            $table->increments('id_pe');
+            $table->increments('id');
             $table->integer('id_proveedor')->nullable();
             $table->string('proveedor', 200)->nullable();
             $table->date('fecha')->nullable();
