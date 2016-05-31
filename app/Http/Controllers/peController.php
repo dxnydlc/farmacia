@@ -28,7 +28,7 @@ class peController extends Controller
      */
     public function index()
     {
-        $parteEntrada = ParteEntrada::paginate(5);
+        $parteEntrada = ParteEntrada::paginate(10);
         return view('pe.homePE',compact('parteEntrada'));
     }
 
@@ -73,6 +73,7 @@ class peController extends Controller
      */
     public function store(peCreateRequest $request)
     {
+        DB::enableQueryLog();
         $response = array();
         $data = array();
         $mytime = Carbon\Carbon::now('America/Lima');
@@ -83,21 +84,21 @@ class peController extends Controller
         $pe = ParteEntrada::create([
             'id_proveedor'  => $request['id_proveedor'],
             'proveedor'     => $request['proveedor'],
-            'fecha'         => $anio.'-'.$mes.'-'.$dia,
+            'fecha'         => $request['fecha'],#$anio.'-'.$mes.'-'.$dia,
             'token'         => $dea_token,
             'id_user'       => 1,
             'user'          => 'DDELACRUZ',
             'estado'        => 'ACT'
         ]);
-        //
+        #Borramos la session para que se genere un nuevo Token
+        Session::forget( 'token_new_pe' );
+        #
         $id_pe = $pe->id;
         #uniendo con el detalle de parte de entrada
         DB::table('parte_entrada_detalle')
             ->where('token', $dea_token)
             ->update(['id_pe' => $id_pe]);
         $response['id_pe'] = $id_pe;
-        #Borramos la session para que se genere un nuevo Token
-        Session::forget( 'token_new_pe' );
         #
         $data['proveedor']  = proveedores::lists('nombre','id_proveedor');
         #$data['pe']         = DB::table('parte_entrada')->where('id_pe','=',$id)->first();
@@ -161,11 +162,14 @@ class peController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(peCreateRequest $request, $id)
     {
-        if( isset($request['estado'] ) ){
-            return $request->all();
-        }
+        $pe = ParteEntrada::find( $id );
+        $pe->fill( $request->all );
+        $pe->save();
+        #
+        Session::flash('message','Habitacion actualizada correctamente');
+        return redirect::to('/pe');
     }
 
     /**

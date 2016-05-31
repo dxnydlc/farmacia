@@ -30,7 +30,7 @@ class ParteEntrada extends Model
         {
             list($dia,$mes,$anio) = explode('/', $valor );
             $fecha = $anio.'-'.$mes.'-'.$dia;
-            return $fecha;
+            $this->attributes['fecha'] = $fecha;
         }
     }
 
