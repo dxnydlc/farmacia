@@ -152,6 +152,7 @@ class peController extends Controller
         $data['token']      = $data['pe']->token;
         $data['fecha']      = $data['pe']->fecha;
         #
+        #return $data['pe'];
         return view('pe.updatePE', ['data' => $data] );
     }
 
@@ -164,11 +165,15 @@ class peController extends Controller
      */
     public function update(peCreateRequest $request, $id)
     {
+        #DB::enableQueryLog();
         $pe = ParteEntrada::find( $id );
-        $pe->fill( $request->all );
+        $pe->fill( $request->all() );
         $pe->save();
         #
-        Session::flash('message','Habitacion actualizada correctamente');
+        #return DB::getQueryLog();
+        #Movimiento de Kadex en almacen
+        #
+        Session::flash('message','Parte de entada cerrado correctamente');
         return redirect::to('/pe');
     }
 

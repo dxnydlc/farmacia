@@ -14,7 +14,7 @@ class ParteEntrada extends Model
     protected $fillable = ['id_proveedor','proveedor','fecha','token','id_user','user','estado'];
     protected $dates = ['deleted_at'];
 
-    public function getfechaAttribute($valor)
+    public function getFechaAttribute($valor)
     {
     	if( $valor != '' )
     	{
@@ -24,7 +24,41 @@ class ParteEntrada extends Model
     	}
     }
 
-    public function setfechaAttribute($valor)
+    public function getCreatedatAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            $ar = explode(' ', $valor );
+            list($anio,$mes,$dia) = explode('-', $ar[0] );
+            $fecha = $dia.'/'.$mes.'/'.$anio;
+            return $fecha.' '.$ar[1];
+        }
+    }
+
+    public function getUpdatedatAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            $ar = explode(' ', $valor );
+            list($anio,$mes,$dia) = explode('-', $ar[0] );
+            $fecha = $dia.'/'.$mes.'/'.$anio;
+            return $fecha.' '.$ar[1];
+        }
+    }
+
+    public function getEstadoAttribute($valor)
+    {
+        switch ($valor) {
+            case 'ACT':
+                return 'Activo';
+                break;
+            case 'CER':
+                return 'Cerrado';
+                break;
+        }
+    }
+
+    public function setFechaAttribute($valor)
     {
         if( $valor != '' )
         {

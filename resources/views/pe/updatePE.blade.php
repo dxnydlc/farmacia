@@ -18,6 +18,7 @@
 @section('content')
 
 	<div class="row">
+        
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
@@ -45,16 +46,17 @@
                     <br />
                     @include('alertas.userRequest')
                     
-                    {!!Form::model( $data['pe'] , ['route'=>['pe.update', $data['pe']->id ],'method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
+                    {!!Form::model( $data['pe'] , ['route'=>['pe.update', $data['pe']->id ],'method'=>'PUT','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
                     	@include('pe.forms.frmHeaderUpdate')
 
                     	<div class="ln_solid"></div>
-
+                        <?php if( $data['pe']->estado != 'Cerrado' ){ ?>
                         <div class="form-group">
                             <div class="col-lg-12">
                                 <a id="addProds" class="btn btn-default "><i class="fa fa-plus"></i> Agregar Productos</a>
                             </div>
                         </div>
+                        <?php } ?>
                         <!-- /form-group -->
 
                         <!-- Buscar producto -->
@@ -139,16 +141,21 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                <a href="/pe" class="btn btn-default">Cancelar</a>
-                                <?php if( count($data['items']) > 0 ){ ?>
-                                <button type="submit" class="btn btn-success btn-lg ">Guardar</button>
+                                <a href="/pe" class="btn btn-default">Regresar</a>
+                                <?php if( $data['pe']->estado != 'Cerrado' ){ ?>
+                                <button type="submit" class="btn btn-success btn-lg ">Cerrar documento y mover stock</button>
                                 <?php } ?>
                             </div>
                         </div>
 
                     {!!Form::close()!!}
 
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+                        Documento: <strong><?php echo $data['pe']->estado; ?></strong>, creado por <?php echo $data['pe']->user.' - '.$data['pe']->created_at; ?>.
+                    </div>
+
                 </div>
+
             </div>
         </div>
         
