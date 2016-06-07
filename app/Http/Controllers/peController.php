@@ -190,9 +190,12 @@ class peController extends Controller
 
     public function invoice($id)
     {
+        #DB::enableQueryLog();
         $data = array();
         $data['pe']         = ParteEntrada::find( $id );
         $data['items']      = DB::table('parte_entrada_detalle')->where( "id_pe" , $id )->get();
+        #
+        #return DB::getQueryLog();
         #
         #return $data;
         return view('pe.invoice', ['data' => $data] );

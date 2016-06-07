@@ -28,7 +28,7 @@ Route::resource('login','logController');
 |
 */
 
-Route::get('pe/{id}','peController@invoice');
+Route::get('invoice_pe/{id}','peController@invoice');
 
 Route::group(['middleware' => ['web']], function () {
     Route::resource('categoria','categoriaController');

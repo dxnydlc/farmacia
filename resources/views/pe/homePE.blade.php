@@ -95,7 +95,7 @@
                                     <th scope="row">{{$pe->id}}</th>
                                     <td>
                                         <?php if( $pe->estado == 'Cerrado' ){ 
-                                            echo '<a href="pe/2" >'.$pe->proveedor.'</a>';
+                                            echo '<a href="invoice_pe/'.$pe->id.'" >'.$pe->proveedor.'</a>';
                                         }else{ ?>
                                         {!!link_to_route('pe.edit', $title  = $pe->proveedor, $parameters = $pe->id, $attributes = ['class'=>'btn-link '] )!!}
                                         <?php } ?>
