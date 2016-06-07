@@ -13,4 +13,15 @@ class parte_entrada_detalle extends Model
 
     protected $fillable = ['producto','id_producto','laboratorio','vencimiento','lote','cantidad','compra','venta','utilidad','fraccion','token'];
     protected $dates = ['deleted_at'];
+
+    public function getVencimientoAttribute($valor)
+    {
+    	if( $valor != '' )
+    	{
+    		list($anio,$mes,$dia) = explode('-', $valor );
+    		$fecha = $dia.'/'.$mes.'/'.$anio;
+    		return $fecha;
+    	}
+    }
+
 }

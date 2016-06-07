@@ -28,6 +28,8 @@ Route::resource('login','logController');
 |
 */
 
+Route::get('pe/{id}','peController@invoice');
+
 Route::group(['middleware' => ['web']], function () {
     Route::resource('categoria','categoriaController');
     Route::resource('marca','marcaController');
@@ -40,5 +42,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('detpe','detallePEController');
 
     Route::resource('pe','peController');
+
 });
 
