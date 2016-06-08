@@ -17,6 +17,8 @@ use farmacia\proveedores;
 use Carbon;
 use DB;
 
+use farmacia\kardex;
+
 use farmacia\productos;
 
 class peController extends Controller
@@ -166,15 +168,48 @@ class peController extends Controller
     public function update(peCreateRequest $request, $id)
     {
         #DB::enableQueryLog();
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $fecha_mysql = $mytime->toDateString();
+        #
         $pe = ParteEntrada::find( $id );
         $pe->fill( $request->all() );
         $pe->save();
         #
         #return DB::getQueryLog();
         #Movimiento de Kadex en almacen
+        $productos      = DB::table('parte_entrada_detalle')->where( "id_pe" , $id )->get();
+        $parte_entrada  = ParteEntrada::find( $id );
+        if( count($productos) > 0 )
+        {
+            foreach ($productos as $key => $rs) {
+                $Kardex = kardex::create([
+                    'movimiento'    => 'E',
+                    'fecha'         => $fecha_mysql,
+                    'id_producto'   => $rs->id_producto,
+                    'producto'      => $rs->producto,
+                    'id_persona'    => $parte_entrada->id_proveedor,
+                    'persona'       => $parte_entrada->proveedor,
+                    'documento'     => 'PE',
+                    'numero_doc'    => $parte_entrada->id,
+                    'cantidad_e'    => $rs->cantidad,
+                    'precio_e'      => $rs->compra,
+                    'valor_e'       => $rs->cantidad * $rs->compra,
+                    'cantidad_s'    => 0,
+                    'precio_s'      => 0,
+                    'valor_s'       => 0,
+                    'cantidad_f'    => $rs->proveedor,
+                    'precio_f'      => $rs->proveedor,
+                    'valor_f'       => $rs->proveedor,
+                    'id_user'       => $rs->proveedor,
+                    'usuario'       => $rs->proveedor
+                ]);
+            }
+            unset($rs);
+        }
+                
         #
-        Session::flash('message','Parte de entada cerrado correctamente');
-        return redirect::to('/pe');
+        #Session::flash('message','Parte de entada cerrado correctamente');
+        return redirect::to('/invoice_pe/'.$id);
     }
 
     /**
@@ -199,5 +234,10 @@ class peController extends Controller
         #
         #return $data;
         return view('pe.invoice', ['data' => $data] );
+    }
+
+    public function get_lastkardex($id_prod)
+    {
+        $data = DB::table('files')->where('id_prod','=',$id_prod)->orderBy('upload_time', 'desc')->first();
     }
 }
