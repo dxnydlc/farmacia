@@ -169,7 +169,8 @@ class peController extends Controller
     {
         #DB::enableQueryLog();
         $mytime = Carbon\Carbon::now('America/Lima');
-        $fecha_mysql = $mytime->toDateString();
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y');
         #
         $pe = ParteEntrada::find( $id );
         $pe->fill( $request->all() );
@@ -182,7 +183,23 @@ class peController extends Controller
         if( count($productos) > 0 )
         {
             foreach ($productos as $key => $rs) {
-                $Kardex = kardex::create([
+                $data_last = array();
+                $data_last  = $this->get_lastkardex( $rs->id_producto );
+                if( $data_last != 'no' ){
+                    $saldo_cant       = $data_last['cant'] + $rs->cantidad;
+                    $saldo_precio     = $data_last['precio'];
+                    $saldo_valor_f    = $data_last['valor'];
+                }else{
+                    $saldo_cant       = $rs->cantidad;
+                    $saldo_precio     = $rs->compra;
+                    $saldo_valor_f    = $rs->cantidad * $rs->compra;
+                }
+                #return $data_last;
+                $cant       = $rs->cantidad;
+                $precio     = $rs->compra;
+                $valor_f    = $rs->cantidad * $rs->compra;
+                #Valores Kardex anterior
+                $data_insert = [
                     'movimiento'    => 'E',
                     'fecha'         => $fecha_mysql,
                     'id_producto'   => $rs->id_producto,
@@ -191,18 +208,19 @@ class peController extends Controller
                     'persona'       => $parte_entrada->proveedor,
                     'documento'     => 'PE',
                     'numero_doc'    => $parte_entrada->id,
-                    'cantidad_e'    => $rs->cantidad,
-                    'precio_e'      => $rs->compra,
-                    'valor_e'       => $rs->cantidad * $rs->compra,
+                    'cantidad_e'    => $cant,
+                    'precio_e'      => $precio,
+                    'valor_e'       => $valor_f,
                     'cantidad_s'    => 0,
                     'precio_s'      => 0,
                     'valor_s'       => 0,
-                    'cantidad_f'    => $rs->proveedor,
-                    'precio_f'      => $rs->proveedor,
-                    'valor_f'       => $rs->proveedor,
-                    'id_user'       => $rs->proveedor,
-                    'usuario'       => $rs->proveedor
-                ]);
+                    'cantidad_f'    => $saldo_cant,
+                    'precio_f'      => $saldo_precio,
+                    'valor_f'       => $saldo_valor_f,
+                    'id_user'       => '1',
+                    'usuario'       => 'DDELACRUZ'
+                ];
+                $Kardex = kardex::create($data_insert);
             }
             unset($rs);
         }
@@ -238,6 +256,18 @@ class peController extends Controller
 
     public function get_lastkardex($id_prod)
     {
-        $data = DB::table('files')->where('id_prod','=',$id_prod)->orderBy('upload_time', 'desc')->first();
+        $response = array();
+        $data = DB::table('kardex')->where('id_producto','=',$id_prod)->orderBy('id', 'desc')->first();
+        if( count($data) > 0 ){
+            #foreach ($data as $key => $rs) {
+                $response['cant']   = $data->cantidad_f;
+                $response['precio'] = $data->precio_f;
+                $response['valor']  = $data->valor_f;
+            #}
+            #unset($rs);
+            return $response;
+        }else{
+            return 'no';
+        }
     }
 }
