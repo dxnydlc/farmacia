@@ -46,6 +46,7 @@
     var _token = '<?php if( isset($data['token']) ){ echo $data['token']; } ?>';
     var _url = '{{ 'http://'.$_SERVER['HTTP_HOST'] }}';
     var _servicio = '';
+    var _csrf_token = '{{ csrf_token() }}';
 </script>
 </head>
 
@@ -97,23 +98,18 @@
                                 </li>
                                 <li><a><i class="fa fa-edit"></i> Mantenimiento <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
-                                        <li><a href="form.html">General Form</a>
                                         </li>
-                                        <li><a href="/proveedor">Proveedores</a>
-                                        </li>
-                                        <li><a href="/categoria">Categorias</a>
-                                        </li>
-                                        <li><a href="/clase">Clase Producto</a>
-                                        </li>
-                                        <li><a href="/marca">Marca</a>
-                                        </li>
-                                        <li><a href="/producto">Productos</a>
-                                        </li>
+                                        <li><a href="/proveedor">Proveedores</a></li>
+                                        <li><a href="/cliente">Clientes</a></li>
+                                        <li><a href="/categoria">Categorias</a></li>
+                                        <li><a href="/clase">Clase Producto</a></li>
+                                        <li><a href="/marca">Marca</a></li>
+                                        <li><a href="/producto">Productos</a></li>
                                     </ul>
                                 </li>
-                                <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
+                                <li><a><i class="fa fa-desktop"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
-                                        <li><a href="general_elements.html">General Elements</a>
+                                        <li><a href="/ventas">Todas las ventas</a>
                                         </li>
                                         <li><a href="media_gallery.html">Media Gallery</a>
                                         </li>
@@ -137,7 +133,7 @@
                                     <ul class="nav child_menu" style="display: none">
                                         <li><a href="/pe">Parte entrada</a>
                                         </li>
-                                        <li><a href="tables_dynamic.html">Table Dynamic</a>
+                                        <li><a href="/kardex">Kardex</a>
                                         </li>
                                     </ul>
                                 </li>

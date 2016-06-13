@@ -1,20 +1,25 @@
 <?php
 
 namespace farmacia\Http\Controllers;
-
 use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
 
-use farmacia\parte_entrada_detalle;
+
+use farmacia\Http\Requests\ventaCreateRequest;
+use farmacia\Http\Requests\ventaUpdateRequest;
+use farmacia\venta;
 use farmacia\logs;
-use DB;
-use Carbon;
+use farmacia\clientes;
+use farmacia\kardex;
+use farmacia\productos;
 
 use Session;
 use Redirect;
+use Carbon;
+use DB;
 
-class detallePEController extends Controller
+class ventasController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +28,9 @@ class detallePEController extends Controller
      */
     public function index()
     {
-        //
+        Session::forget( 'token_new_venta' );
+        $parteEntrada = venta::paginate(10);
+        return view('venta.homeVenta',compact('parteEntrada'));
     }
 
     /**
@@ -33,7 +40,35 @@ class detallePEController extends Controller
      */
     public function create()
     {
-        //
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        #
+        $data               = array();
+        $token              = '';
+        #Colocando variable de session con el token
+        if(! Session::has('token_new_venta') )
+        {
+            #$token              = csrf_token();
+            $token              = \Hash::make( $mytime->toDateTimeString() );
+            #$token              = $mytime->toDateTimeString();
+            Session::put( 'token_new_venta' , $token );
+        }else{
+            $token = Session::get('token_new_venta');
+        }
+        #
+        $data['productos']  = $dataProductos = productos::all();
+        $data['clientes']   = clientes::lists('nombre','id');
+        #
+        $data['fecha'] = $mytime->format('d/m/Y');
+        $data['token'] = $token;
+        $data['items'] = DB::table('detalle_venta')->where( "token" , $token )->get();
+
+        $data['serie']          = 1;
+        $data['correlativo']    = 100;
+        $data['efectivo']       = '';
+        $data['vuelto']         = '';
+
+        return view('venta.addVenta',compact('data'));
     }
 
     /**
@@ -44,20 +79,7 @@ class detallePEController extends Controller
      */
     public function store(Request $request)
     {
-        DB::enableQueryLog();
-        $response       = array();
-        $id_return      = 0;
-        $token          = $request->token;
-        #return $request->all();
-        $id_return = parte_entrada_detalle::create( $request->all() );
-        $response['id']     = $id_return->id_detalle_pe;
-        $response['token']  = $token;
-        #$response['query'] = DB::getQueryLog();
-        $response['items'] = DB::table('parte_entrada_detalle')->where( "token" , $token )->get();
-
-        #logs
-        $this->set_logs(['tipo'=>'log_doc','tipo_doc'=>'PE','key'=>$token,'evento'=>'add.Prod','content'=>$request['producto'],'res'=>'Agregado']);
-        return $response;
+        //
     }
 
     /**
@@ -106,6 +128,7 @@ class detallePEController extends Controller
     }
 
 
+
     public function set_logs($param)
     {
         $mytime = Carbon\Carbon::now('America/Lima');
@@ -125,5 +148,12 @@ class detallePEController extends Controller
         ];
         logs::create($data_insert);
     }
+
+    public function get_logs( $key )
+    {
+        $data      = DB::table('logs')->where( "key" , $key )->get();
+        return $data;
+    }
+
 
 }

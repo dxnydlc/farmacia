@@ -10,7 +10,7 @@
 }
 #frmBuscarProds{
 }
-body, label, td, th, input[type='text'], select, option, h1, h2, h3, h4, h5, a{
+body, label, td, th, input[type='text'], select, option, h1, h2, h3, h4, h5, a, strong, i{
 	font-family: 'Roboto', sans-serif;
 }
 .control-label{
@@ -18,4 +18,21 @@ body, label, td, th, input[type='text'], select, option, h1, h2, h3, h4, h5, a{
 }
 #newRow{
 	display: none;
+}
+
+.forum.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+.forum .fa {
+    width: 1em;
+    text-align: center;
+}
+
+.forum.table th.cell-stat {
+    width: 6em;
+}
+
+.forum.table th.cell-stat-2x {
+    width: 14em;
 }

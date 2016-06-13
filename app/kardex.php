@@ -25,6 +25,30 @@ class kardex extends Model
     	}
     }
 
+    public function getMovimientoAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            switch ($valor) {
+                case 'E':
+                    return 'Entradas';
+                    break;
+            }
+        }
+    }
+
+    public function getDocumentoAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            switch ($valor) {
+                case 'PE':
+                    return 'Part.Ent';
+                    break;
+            }
+        }
+    }
+
     public function setFechaAttribute($valor)
     {
         if( $valor != '' )

@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | Parte de Entrada
+    Farmacia | Clientes
 @stop
 
 @section('losCSS')
@@ -17,9 +17,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        Parte Entrada
+			        Clientes
 			        <small>
-			            Ingreso de productos al stock del almacen
+			            Clientes actuales
 			        </small>
 			    </h3>
             </div>
@@ -37,14 +37,15 @@
         </div>
         <div class="clearfix"></div>
 	   
-       @include('alertas.success')
+        @include('alertas.success')
         @include('alertas.errors')
+        @include('alertas.mensaje')
 		
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 	                <div class="x_content">
-	                	<a href="pe/create" class="btn btn-default">Nuevo Parte Entrada</a>
+	                	<a href="cliente/create" class="btn btn-default">Nuevo Cliente</a>
 	                </div>
 	            </div>
 			</div>
@@ -58,7 +59,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>PE <small>mostrando todos los registros activos</small></h2>
+                        <h2>Clientes <small>mostrando todos los registros activos</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -82,29 +83,27 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Proveedor</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
-                                    <th>Usuario</th>
+                                    <th>Nombre</th>
+                                    <th>RUC</th>
+                                    <th>Teléfono</th>
+                                    <th>Contacto</th>
+                                    <th>Creado</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($parteEntrada as $pe)
-                                <tr id="fila_{{$pe->id}}" >
-                                    <th scope="row">{{$pe->id}}</th>
+                                @foreach($dataClientes as $cliente)
+                                <tr>
+                                    <th scope="row">{{$cliente->id}}</th>
                                     <td>
-                                        <?php if( $pe->estado == 'Cerrado' ){ 
-                                            echo '<a href="invoice_pe/'.$pe->id.'" >'.$pe->proveedor.'</a>';
-                                        }else{ ?>
-                                        {!!link_to_route('pe.edit', $title  = $pe->proveedor, $parameters = $pe->id, $attributes = ['class'=>'btn-link '] )!!}
-                                        <?php } ?>
+                                        {!!link_to_route('cliente.edit', $title  = $cliente->nombre, $parameters =$cliente->id, $attributes = ['class'=>'btn-link '] )!!}
                                     </td>
-                                    <td>{{$pe->fecha}}</td>
-                                    <td>{{$pe->estado}}</td>
-                                    <td>{{$pe->user}}</td>
+                                    <td>{{$cliente->ruc}}</td>
+                                    <td>{{$cliente->telefono}}</td>
+                                    <td>{{$cliente->contacto}}</td>
+                                    <td>{{$cliente->created_at}}</td>
                                     <td>
-                                        {!!link_to_route('pe.edit', $title  = 'Anular', $parameters = $pe->id, $attributes = ['class'=>'btn-link delItem ','id'=>$pe->id] )!!}
+                                        {!!link_to_route('cliente.edit', $title  = 'Anular', $parameters =$cliente->id, $attributes = ['class'=>'btn-link delCateg ','id'=>$cliente->id] )!!}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -138,7 +137,7 @@
 
     {!!Html::script('js/custom.js')!!}
 
-    {!!Html::script('js/custom/pe.js')!!}
+    {!!Html::script('js/custom/clientes.js')!!}
 
 @endsection
 

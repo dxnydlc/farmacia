@@ -1,12 +1,21 @@
 @extends('layouts.principal')
 
+@section('titulo')
+    Farmacia | add Clientes
+@stop
+
+@section('losCSS')
+    {!!Html::style('js/alertify/css/alertify.css')!!}
+    {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
+@endsection
+
 @section('content')
 
 	<div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Producto <small>Agregando una nuevo Producto</small></h2>
+                    <h2>Clientes <small>Editar un cliente</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                         	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -29,16 +38,14 @@
                 <div class="x_content">
                     <br />
                     @include('alertas.userRequest')
-                    @include('alertas.success')
-                    @include('alertas.mensaje')
                     
-                    {!!Form::model ($data['producto'] , [ 'route' => ['producto.update' , $data['producto']->id_producto ], 'method' => 'PUT' ,'autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate'])!!}
-                    	@include('producto.forms.frmProducto')
+                    {!!Form::model ($cliente , [ 'route' => ['cliente.update' , $cliente->id ], 'method' => 'PUT' ,'autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate'])!!}
+                    	@include('proveedores.forms.frmProveedores')
 
                     	<div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            	<a href="/producto" class="btn btn-primary">Cancelar</a>
+                            	<a href="/categoria" class="btn btn-primary">Cancelar</a>
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
                         </div>

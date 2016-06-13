@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | Parte de Entrada
+    Farmacia | Kardex
 @stop
 
 @section('losCSS')
@@ -17,9 +17,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        Parte Entrada
+			        Kardex
 			        <small>
-			            Ingreso de productos al stock del almacen
+			            Movimiento de productos del almacen
 			        </small>
 			    </h3>
             </div>
@@ -37,19 +37,9 @@
         </div>
         <div class="clearfix"></div>
 	   
-       @include('alertas.success')
+        @include('alertas.success')
         @include('alertas.errors')
 		
-		<div class="row">
-			<div class="col-md-12 col-sm-12 col-xs-12">
-				<div class="x_panel">
-	                <div class="x_content">
-	                	<a href="pe/create" class="btn btn-default">Nuevo Parte Entrada</a>
-	                </div>
-	            </div>
-			</div>
-		</div>
-		<!-- row -->
 
 		<div class="clearfix"></div>
 
@@ -58,7 +48,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>PE <small>mostrando todos los registros activos</small></h2>
+                        <h2>Kardex <small>mostrando todos los registros activos</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -81,31 +71,45 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>Proveedor</th>
-                                    <th>Fecha</th>
-                                    <th>Estado</th>
-                                    <th>Usuario</th>
-                                    <th></th>
+                                    <th colspan="5" class="text-primary text-center" >Detalle</th>
+                                    <th colspan="3" class="text-success text-center" >Entrada</th>
+                                    <th colspan="3" class="text-muted text-center" >Salida</th>
+                                    <th colspan="3" class="text-info text-center" >Saldos</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-primary" >#</th>
+                                    <th class="text-primary" >M</th>
+                                    <th class="text-primary" >Fecha</th>
+                                    <th class="text-primary" >Producto</th>
+                                    <th class="text-primary" >Documento</th>
+                                    <th class="text-success" >Cantidad</th>
+                                    <th class="text-success" >Precio</th>
+                                    <th class="text-success" >Total</th>
+                                    <th class="text-muted" >Cantidad</th>
+                                    <th class="text-muted" >Precio</th>
+                                    <th class="text-muted" >Total</th>
+                                    <th class="text-info" >Cantidad</th>
+                                    <th class="text-info" >Precio</th>
+                                    <th class="text-info" >Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($parteEntrada as $pe)
-                                <tr id="fila_{{$pe->id}}" >
-                                    <th scope="row">{{$pe->id}}</th>
-                                    <td>
-                                        <?php if( $pe->estado == 'Cerrado' ){ 
-                                            echo '<a href="invoice_pe/'.$pe->id.'" >'.$pe->proveedor.'</a>';
-                                        }else{ ?>
-                                        {!!link_to_route('pe.edit', $title  = $pe->proveedor, $parameters = $pe->id, $attributes = ['class'=>'btn-link '] )!!}
-                                        <?php } ?>
-                                    </td>
-                                    <td>{{$pe->fecha}}</td>
-                                    <td>{{$pe->estado}}</td>
-                                    <td>{{$pe->user}}</td>
-                                    <td>
-                                        {!!link_to_route('pe.edit', $title  = 'Anular', $parameters = $pe->id, $attributes = ['class'=>'btn-link delItem ','id'=>$pe->id] )!!}
-                                    </td>
+                                @foreach($dataKarex as $kdx)
+                                <tr id="fila_{{$kdx->id}}" >
+                                    <th class="text-primary"  scope="row">{{$kdx->id}}</th>
+                                    <td class="text-primary" >{{$kdx->movimiento}}</td>
+                                    <td class="text-primary" >{{$kdx->fecha}}</td>
+                                    <td class="text-primary" >{{$kdx->producto}}</td>
+                                    <td class="text-primary" >{{$kdx->documento.' '.$kdx->numero_doc}}</td>
+                                    <td class="text-success" >{{$kdx->cantidad_e}}</td>
+                                    <td class="text-success" >{{$kdx->precio_e}}</td>
+                                    <td class="text-success" >{{$kdx->valor_e}}</td>
+                                    <td class="text-muted" >{{$kdx->cantidad_s}}</td>
+                                    <td class="text-muted" >{{$kdx->precio_s}}</td>
+                                    <td class="text-muted" >{{$kdx->valor_s}}</td>
+                                    <td class="text-info" >{{$kdx->cantidad_f}}</td>
+                                    <td class="text-info" >{{$kdx->precio_f}}</td>
+                                    <td class="text-info" >{{$kdx->valor_f}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

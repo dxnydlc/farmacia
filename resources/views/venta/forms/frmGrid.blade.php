@@ -29,20 +29,22 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nombre</th>
-                                <th>Categoría</th>
-                                <th>Marca</th>
-                                <th>Clase</th>
+                                <th>Precio</th>
+                                <th>Vencimiento</th>
+                                <th>Stock</th>
+                                <th>Tipo</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($data['productos'] as $producto)
-                            <tr tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" >
+                            <tr tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" tdprecio="2.5" >
                                 <th scope="row">{{$producto->id_producto}}</th>
                                 <td class="CRUD"  >
                                     {{$producto->nombre}}
                                 </td>
-                                <td>{{$producto->categoria}}</td>
-                                <td>{{$producto->marca}}</td>
+                                <td>2.50</td>
+                                <td>30/12/2016</td>
+                                <td>25</td>
                                 <td>{{$producto->clase}}</td>
                             </tr>
                             @endforeach

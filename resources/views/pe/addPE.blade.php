@@ -45,7 +45,7 @@
                     <br />
                     @include('alertas.userRequest')
                     
-                    {!!Form::open(['route'=>'pe.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
+                    {!!Form::open(['route'=>'pe.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate', 'id' => 'frmHeader' ])!!}
                     	@include('pe.forms.frmHeader')
 
                     	<div class="ln_solid"></div>
@@ -103,7 +103,7 @@
                                         <?php $o = 1; ?>
                                         @foreach($data['items'] as $items)
                                             <tr>
-                                                <th scope="row">1</th>
+                                                <th scope="row">{{$o}}</th>
                                                 <td id="TD{{$o}}" tdnombre="bla bla bla" tdidProd="{{$items->id_producto}}" >{{$items->producto}}</td>
                                                 <td>{{$items->laboratorio}}</td>
                                                 <td>{{$items->lote}}</td>
@@ -141,7 +141,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-12 ">
                                 <a href="/pe" class="btn btn-default">Cancelar</a>
                                 <?php if( count($data['items']) > 0 ){ ?>
-                                <button type="submit" class="btn btn-success btn-lg ">Guardar</button>
+                                <button id="saveFormEEEEEE" type="submit" class="btn btn-success btn-lg ">Guardar</button>
                                 <?php } ?>
                             </div>
                         </div>
@@ -154,6 +154,7 @@
         
     </div>
 
+<div class="hidden">
 {!!Form::open(['route'=>'detpe.store','method'=>'post','id'=>'frmPE' ])!!}
     <input type="text" name="producto" id="producto" value="" placeholder="producto" />
     <input type="text" name="id_producto" id="id_producto" value="" placeholder="id_producto" />
@@ -167,7 +168,7 @@
     <input type="text" name="fraccion" id="fraccion" value="1" placeholder="fraccion" />
     <input type="text" name="token" id="token" value="" placeholder="token" />
 {!!Form::close()!!}
-
+</div>
 
 <!-- Datepicker -->
 <!-- Modal -->

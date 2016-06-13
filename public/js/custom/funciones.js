@@ -16,14 +16,14 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 			},
 			function(){
 				var _texto = $el.attr('tdnombre'), _deaID = $el.attr('tdid');
-				$('#'+_objProdhtml).html( _texto );
+				$('#'+_objProdhtml).html( _texto );//objeto html de la tabla
 				$('#'+_objProdidBD).val( _deaID );
 				$('#'+_objProdBD).val( _texto );
 				hideBucarProducto();
 				focusTable( 'tblItems' , _rowCount );
 			  swal("Agregado!", "El producto fue agregado a la lista", "success");
 			});
-			console.log('pressed ENTER!', $el.attr('tdnombre') +' > '+_objProdBD);
+			//console.log('pressed ENTER!', $el.attr('tdnombre') +' > '+_objProdBD);
 		},
 	}
 });
@@ -40,7 +40,8 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 		            "infoEmpty": "No records available",
 		            "infoFiltered": "(filtered from _MAX_ total records)",
 		            "search":"Buscar"
-		        }
+		        },
+		        'order':[[1,'asc']]
 			});
 			/*--------------------------------------*/
 			$('#tblProductos_filter input[type="search"]').keydown(function(event) {

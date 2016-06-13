@@ -5,16 +5,15 @@ namespace farmacia\Http\Controllers;
 use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
-
-use farmacia\parte_entrada_detalle;
+use farmacia\Http\detalle_venta;
 use farmacia\logs;
+
 use DB;
 use Carbon;
-
 use Session;
 use Redirect;
 
-class detallePEController extends Controller
+class detalle_ventaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -44,19 +43,29 @@ class detallePEController extends Controller
      */
     public function store(Request $request)
     {
-        DB::enableQueryLog();
+        #DB::enableQueryLog();
         $response       = array();
         $id_return      = 0;
         $token          = $request->token;
-        #return $request->all();
-        $id_return = parte_entrada_detalle::create( $request->all() );
-        $response['id']     = $id_return->id_detalle_pe;
+        $data_insert = [
+            'producto'  => $request['producto'],
+            'id_producto' => $request['id_producto'],
+            'cantidad'  => $request['cantidad'],
+            'precio'    => $request['precio'],
+            'total'     => $request['total'],
+            'descuento' => $request['descuento'],
+            'id_user'   => 1,
+            'usuario'   => 'DDELACRUZ',
+            'token'     => $request['token']
+        ];
+        $id_return = detalle_venta::create( $data_insert );
+        $response['id']     = $id_return->id;
         $response['token']  = $token;
         #$response['query'] = DB::getQueryLog();
-        $response['items'] = DB::table('parte_entrada_detalle')->where( "token" , $token )->get();
+        $response['items'] = DB::table('detalle_venta')->where( "token" , $token )->get();
 
         #logs
-        $this->set_logs(['tipo'=>'log_doc','tipo_doc'=>'PE','key'=>$token,'evento'=>'add.Prod','content'=>$request['producto'],'res'=>'Agregado']);
+        $this->set_logs(['tipo'=>'log_doc','tipo_doc'=>'VE','key'=>$token,'evento'=>'add.Prod','content'=>$request['producto'],'res'=>'Agregado']);
         return $response;
     }
 
@@ -104,7 +113,6 @@ class detallePEController extends Controller
     {
         //
     }
-
 
     public function set_logs($param)
     {

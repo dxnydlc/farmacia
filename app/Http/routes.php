@@ -42,6 +42,10 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('detpe','detallePEController');
 
     Route::resource('pe','peController');
+    Route::resource('kardex','kardexController');
+    Route::resource('ventas','ventasController');
+    Route::resource('cliente','clientesController');
+    Route::resource('detventa','detalle_ventaController');
 
 });
 

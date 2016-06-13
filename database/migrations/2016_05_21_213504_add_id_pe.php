@@ -13,7 +13,7 @@ class AddIdPe extends Migration
     public function up()
     {
         Schema::table('parte_entrada_detalle', function (Blueprint $table) {
-            $table->integer('id_pe')->after('id_detalle_pe')->nullable();
+            $table->integer('id_pe')->after('id')->nullable();
         });
     }
 

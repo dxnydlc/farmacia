@@ -1,15 +1,24 @@
 @extends('layouts.principal')
 
+@section('titulo')
+    Farmacia | add Clientes
+@stop
+
+@section('losCSS')
+    {!!Html::style('js/alertify/css/alertify.css')!!}
+    {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
+@endsection
+
 @section('content')
 
-	<div class="row">
+    <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Producto <small>Agregando una nuevo Producto</small></h2>
+                    <h2>Clientes <small>Agregando una nuevo cliente</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
-                        	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            <a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                         </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
@@ -29,16 +38,16 @@
                 <div class="x_content">
                     <br />
                     @include('alertas.userRequest')
-                    @include('alertas.success')
                     @include('alertas.mensaje')
+                    @include('alertas.errors')
                     
-                    {!!Form::model ($data['producto'] , [ 'route' => ['producto.update' , $data['producto']->id_producto ], 'method' => 'PUT' ,'autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate'])!!}
-                    	@include('producto.forms.frmProducto')
+                    {!!Form::open(['route'=>'cliente.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
+                        @include('clientes.forms.form')
 
-                    	<div class="ln_solid"></div>
+                        <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                            	<a href="/producto" class="btn btn-primary">Cancelar</a>
+                                <a href="/proveedor" class="btn btn-primary">Cancelar</a>
                                 <button type="submit" class="btn btn-success">Guardar</button>
                             </div>
                         </div>
@@ -52,7 +61,7 @@
 
 @section('scripts')
 
-	<!-- icheck -->
+    <!-- icheck -->
     {!!Html::script('js/icheck/icheck.min.js')!!}
 
     <!-- bootstrap progress js -->

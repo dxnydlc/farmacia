@@ -5,13 +5,13 @@ namespace farmacia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class parte_entrada_detalle extends Model
+class detalle_venta extends Model
 {
     use SoftDeletes;
-    protected $table = 'parte_entrada_detalle';
+    protected $table = 'detalle_venta';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['producto','id_producto','laboratorio','vencimiento','lote','cantidad','compra','venta','utilidad','fraccion','token'];
+    protected $fillable = ['producto','id_producto','cantidad','precio','total','descuento','id_user','usuario','token'];
     protected $dates = ['deleted_at'];
 
     public function getVencimientoAttribute($valor)
@@ -23,5 +23,4 @@ class parte_entrada_detalle extends Model
     		return $fecha;
     	}
     }
-
 }

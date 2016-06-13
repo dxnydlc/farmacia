@@ -5,16 +5,12 @@ namespace farmacia\Http\Controllers;
 use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
-
-use farmacia\parte_entrada_detalle;
-use farmacia\logs;
-use DB;
-use Carbon;
+use farmacia\kardex;
 
 use Session;
 use Redirect;
 
-class detallePEController extends Controller
+class kardexController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,7 +19,8 @@ class detallePEController extends Controller
      */
     public function index()
     {
-        //
+        $dataKarex = kardex::paginate(5);
+        return view('kardex.homeKardex',compact('dataKarex'));
     }
 
     /**
@@ -44,20 +41,7 @@ class detallePEController extends Controller
      */
     public function store(Request $request)
     {
-        DB::enableQueryLog();
-        $response       = array();
-        $id_return      = 0;
-        $token          = $request->token;
-        #return $request->all();
-        $id_return = parte_entrada_detalle::create( $request->all() );
-        $response['id']     = $id_return->id_detalle_pe;
-        $response['token']  = $token;
-        #$response['query'] = DB::getQueryLog();
-        $response['items'] = DB::table('parte_entrada_detalle')->where( "token" , $token )->get();
-
-        #logs
-        $this->set_logs(['tipo'=>'log_doc','tipo_doc'=>'PE','key'=>$token,'evento'=>'add.Prod','content'=>$request['producto'],'res'=>'Agregado']);
-        return $response;
+        //
     }
 
     /**
@@ -104,26 +88,4 @@ class detallePEController extends Controller
     {
         //
     }
-
-
-    public function set_logs($param)
-    {
-        $mytime = Carbon\Carbon::now('America/Lima');
-        $mytime->toDateString();
-        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
-        #
-        $data_insert = [
-            'tipo'          => $param['tipo'],
-            'tipo_doc'      => $param['tipo_doc'],
-            'key'           => $param['key'],
-            'evento'        => $param['evento'],
-            'contenido'     => $param['content'],
-            'resultado'     => $param['res'],
-            'fecha'         => $fecha_mysql,
-            'id_user'       => 1,
-            'usuario'       => 'DDELACRUZ'
-        ];
-        logs::create($data_insert);
-    }
-
 }

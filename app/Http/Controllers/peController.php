@@ -10,6 +10,7 @@ use farmacia\Http\Requests;
 use farmacia\Http\Requests\peCreateRequest;
 use farmacia\Http\Requests\peUpdateRequest;
 use farmacia\ParteEntrada;
+use farmacia\logs;
 use Session;
 use Redirect;
 
@@ -30,6 +31,7 @@ class peController extends Controller
      */
     public function index()
     {
+        Session::forget( 'token_new_pe' );
         $parteEntrada = ParteEntrada::paginate(10);
         return view('pe.homePE',compact('parteEntrada'));
     }
@@ -51,6 +53,7 @@ class peController extends Controller
         {
             #$token              = csrf_token();
             $token              = \Hash::make( $mytime->toDateTimeString() );
+            #$token              = $mytime->toDateTimeString();
             Session::put( 'token_new_pe' , $token );
         }else{
             $token = Session::get('token_new_pe');
@@ -92,10 +95,12 @@ class peController extends Controller
             'user'          => 'DDELACRUZ',
             'estado'        => 'ACT'
         ]);
+        $token = Session::get('token_new_pe');
         #Borramos la session para que se genere un nuevo Token
         Session::forget( 'token_new_pe' );
         #
         $id_pe = $pe->id;
+        $response['id_pe'] = $id_pe;
         #uniendo con el detalle de parte de entrada
         DB::table('parte_entrada_detalle')
             ->where('token', $dea_token)
@@ -110,7 +115,12 @@ class peController extends Controller
         $data['token']      = $data['pe']->token;
         $data['fecha']      = $data['pe']->fecha;
         #
-        return view('pe.updatePE', ['data' => $data] );
+        #Logs
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'PE','key'=>$token,'evento'=>'save.PE','content'=>'Guardar','res'=>'Guardado']);
+        #
+        #Session::flash('estado','Parte de entrada guardado');
+        return redirect('pe/'.$id_pe.'/edit')->with('estado', 'Parte de entrada guardado');
+        #return $response;
     }
 
     /**
@@ -154,7 +164,7 @@ class peController extends Controller
         $data['token']      = $data['pe']->token;
         $data['fecha']      = $data['pe']->fecha;
         #
-        #return $data['pe'];
+        #logs
         return view('pe.updatePE', ['data' => $data] );
     }
 
@@ -224,9 +234,11 @@ class peController extends Controller
             }
             unset($rs);
         }
-                
+        #/Movimiento de Kadex en almacen
         #
         #Session::flash('message','Parte de entada cerrado correctamente');
+        #logs
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'PE','key'=>$request['tokenDoc'],'evento'=>'cerrar.PE','content'=>'Cerrar PE','res'=>'Cerrado']);
         return redirect::to('/invoice_pe/'.$id);
     }
 
@@ -238,7 +250,63 @@ class peController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y');
+        $parte_entrada  = ParteEntrada::find( $id );#lo pongo aqui por que mas abajo anulo este doc y ya no ser a visible en "find"
+        #
+        $data = ParteEntrada::where(['id' => $id])->delete();
+        #ParteEntrada::delete();
+        #Ahora vamos a mover el stock de almacen...
+        #Movimiento de Kadex en almacen
+        $productos      = DB::table('parte_entrada_detalle')->where( "id_pe" , $id )->get();
+        #$parte_entrada  = ParteEntrada::find( $id );
+        if( count($productos) > 0 )
+        {
+            foreach ($productos as $key => $rs) {
+                $data_last = array();
+                $data_last  = $this->get_lastkardex( $rs->id_producto );
+                if( $data_last != 'no' ){
+                    $saldo_cant       = $data_last['cant'] - $rs->cantidad;
+                    $saldo_precio     = $data_last['precio'];
+                    $saldo_valor_f    = $data_last['valor'];
+                }else{
+                    $saldo_cant       = $rs->cantidad;
+                    $saldo_precio     = $rs->compra;
+                    $saldo_valor_f    = $rs->cantidad * $rs->compra;
+                }
+                #return $data_last;
+                $cant       = $rs->cantidad;
+                $precio     = $rs->compra;
+                $valor_f    = $rs->cantidad * $rs->compra;
+                #Valores Kardex anterior
+                $data_insert = [
+                    'movimiento'    => 'IA',
+                    'fecha'         => $fecha_mysql,
+                    'id_producto'   => $rs->id_producto,
+                    'producto'      => $rs->producto,
+                    'id_persona'    => $parte_entrada->id_proveedor,
+                    'persona'       => $parte_entrada->proveedor,
+                    'documento'     => 'PE',
+                    'numero_doc'    => $parte_entrada->id,
+                    'cantidad_e'    => 0,
+                    'precio_e'      => 0,
+                    'valor_e'       => 0,
+                    'cantidad_s'    => $cant,
+                    'precio_s'      => $precio,
+                    'valor_s'       => $valor_f,
+                    'cantidad_f'    => $saldo_cant,
+                    'precio_f'      => $saldo_precio,
+                    'valor_f'       => $saldo_valor_f,
+                    'id_user'       => '1',
+                    'usuario'       => 'DDELACRUZ'
+                ];
+                $Kardex = kardex::create($data_insert);
+            }
+            unset($rs);
+        }
+        #/Movimiento de Kadex en almacen
+        return $data;
     }
 
     public function invoice($id)
@@ -247,10 +315,11 @@ class peController extends Controller
         $data = array();
         $data['pe']         = ParteEntrada::find( $id );
         $data['items']      = DB::table('parte_entrada_detalle')->where( "id_pe" , $id )->get();
+        $data['logs']       = $this->get_logs( $data['pe']->token );
         #
         #return DB::getQueryLog();
         #
-        #return $data;
+        #return $data['logs'];
         return view('pe.invoice', ['data' => $data] );
     }
 
@@ -270,4 +339,31 @@ class peController extends Controller
             return 'no';
         }
     }
+
+    public function set_logs($param)
+    {
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        #
+        $data_insert = [
+            'tipo'          => $param['tipo'],
+            'tipo_doc'      => $param['tipo_doc'],
+            'key'           => $param['key'],
+            'evento'        => $param['evento'],
+            'contenido'     => $param['content'],
+            'resultado'     => $param['res'],
+            'fecha'         => $fecha_mysql,
+            'id_user'       => 1,
+            'usuario'       => 'DDELACRUZ'
+        ];
+        logs::create($data_insert);
+    }
+
+    public function get_logs( $key )
+    {
+        $data      = DB::table('logs')->where( "key" , $key )->get();
+        return $data;
+    }
+
 }

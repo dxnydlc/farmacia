@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | add Parte Entrada
+    Farmacia | add Venta
 @stop
 
 @section('losCSS')
@@ -18,11 +18,10 @@
 @section('content')
 
 	<div class="row">
-        
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Parte Entrada <small>Actualizar documento</small></h2>
+                    <h2>Ventas <small>Agregando un nuevo documento</small></h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                         	<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
@@ -45,24 +44,21 @@
                 <div class="x_content">
                     <br />
                     @include('alertas.userRequest')
-                    @include('alertas.success')
-                    @include('alertas.mensaje')
                     
-                    {!!Form::model( $data['pe'] , ['route'=>['pe.update', $data['pe']->id ],'method'=>'PUT','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate' ])!!}
-                    	@include('pe.forms.frmHeaderUpdate')
+                    {!!Form::open(['route'=>'ventas.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate', 'id' => 'frmHeader' ])!!}
+                    	@include('venta.forms.frmHeader')
 
                     	<div class="ln_solid"></div>
-                        <?php if( $data['pe']->estado != 'Cerrado' ){ ?>
+
                         <div class="form-group">
                             <div class="col-lg-12">
                                 <a id="addProds" class="btn btn-default "><i class="fa fa-plus"></i> Agregar Productos</a>
                             </div>
                         </div>
-                        <?php } ?>
                         <!-- /form-group -->
 
                         <!-- Buscar producto -->
-                        @include('pe.forms.frmGrid')
+                        @include('venta.forms.frmGrid')
                         <!-- /Buscar producto -->
 
                         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -88,18 +84,14 @@
                                 </div>
                                 <div class="x_content">
 
-                                    <table class="table" id="tblItems" >
+                                    <table class="table table-condensed" id="tblItems" >
                                         <thead>
                                             <tr>
                                                 <th>#</th>
                                                 <th>Producto</th>
-                                                <th>Laboratorio</th>
-                                                <th>Lote</th>
-                                                <th>Vencimiento</th>
+                                                <th>Precio</th>
                                                 <th>Cantidad</th>
-                                                <th>Compra</th>
-                                                <th>Venta</th>
-                                                <th>%</th>
+                                                <th  style="text-align:right" >Total</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -107,15 +99,12 @@
                                         <?php $o = 1; ?>
                                         @foreach($data['items'] as $items)
                                             <tr>
-                                                <th scope="row">1</th>
-                                                <td id="TD{{$o}}" tdnombre="bla bla bla" tdidProd="{{$items->id_producto}}" >{{$items->producto}}</td>
-                                                <td>{{$items->laboratorio}}</td>
-                                                <td>{{$items->lote}}</td>
-                                                <td>{{$items->vencimiento}}</td>
+                                                <th scope="row">{{$o}}</th>
+                                                <td id="TD{{$o}}" tdnombre="bla bla bla" tdidProd="{{$items->id}}" >{{$items->id}}</td>
+                                                <td>{{$items->producto}}</td>
+                                                <td>{{$items->precio}}</td>
                                                 <td>{{$items->cantidad}}</td>
-                                                <td>{{$items->compra}}</td>
-                                                <td>{{$items->venta}}</td>
-                                                <td>{{$items->utilidad.'%'}}</td>
+                                                <td  style="text-align:right"  >{{$items->total}}</td>
                                                 <td></td>
                                             </tr>
                                             <?php $o++; ?>
@@ -123,58 +112,68 @@
                                             <tr id="newRow" >
                                                 <th scope="row">#</th>
                                                 <td callback="prod" id="TD{{$o}}" class="" >- Producto -</td>
-                                                <td id="nwlaboratorio" callback="lab" >- Laboratorio -</td>
-                                                <td id="nwLote" callback="lote" >- Lote -</td>
-                                                <td id="nwVcto" callback="vcto" >- Vencimiento -</td>
-                                                <td id="nwCant" callback="cant" >- Cantidad -</td>
-                                                <td id="nwCompra" callback="comp" >- Compra -</td>
-                                                <td id="nwVenta" callback="vta" >- Venta -</td>
-                                                <td id="nwUtil" callback="%" >0</td>
+                                                <th id="nwprecio" callback="lab" >- Precio -</th>
+                                                <td id="nwCant" callback="lote" >- Cantidad -</td>
+                                                <th id="nwTotal" callback="total" >- Cantidad -</th>
                                                 <td callback="ok">
                                                     <a href="#" class="btn btn-success" ><span class="glyphicon glyphicon-ok" ></span></a>
                                                 </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    
+                                    <table class="table table-condensed" >
+                                        <tbody>
+                                            <tr>
+                                                <th colspan="4" style="text-align:right" >Sub Total</th>
+                                                <th style="text-align:right" >80.00</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="4" style="text-align:right" >IGV</th>
+                                                <th style="text-align:right" >18.00</th>
+                                                <th></th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="4" style="text-align:right" >Total</th>
+                                                <th style="text-align:right" >100.00</th>
+                                                <th></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
 
                                 </div>
                             </div>
                         </div>
 
+                        @include('venta.forms.frmPago')
+
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                <a href="/pe" class="btn btn-default">Regresar</a>
-                                <?php if( $data['pe']->estado != 'Cerrado' ){ ?>
-                                <button type="submit" class="btn btn-success btn-lg ">Cerrar documento y mover stock</button>
+                                <a href="/pe" class="btn btn-default">Cancelar</a>
+                                <?php if( count($data['items']) > 0 ){ ?>
+                                <button  type="submit" class="btn btn-success btn-lg ">Guardar</button>
                                 <?php } ?>
                             </div>
                         </div>
 
                     {!!Form::close()!!}
 
-                    <div class="alert alert-success alert-dismissible fade in" role="alert">
-                        Documento: <strong><?php echo $data['pe']->estado; ?></strong>, creado por <?php echo $data['pe']->user.' - '.$data['pe']->created_at; ?>.
-                    </div>
-
                 </div>
-
             </div>
         </div>
         
     </div>
 
 <div class="hidden">
-{!!Form::open(['route'=>'detpe.store','method'=>'post','id'=>'frmPE' ])!!}
+{!!Form::open(['route'=>'detventa.store','method'=>'post','id'=>'frmPE' ])!!}
     <input type="text" name="producto" id="producto" value="" placeholder="producto" />
     <input type="text" name="id_producto" id="id_producto" value="" placeholder="id_producto" />
-    <input type="text" name="laboratorio" id="laboratorio" value="" placeholder="laboratorio" />
-    <input type="text" name="vencimiento" id="vencimiento" value="" placeholder="vencimiento" />
-    <input type="text" name="lote" id="lote" value="" placeholder="lote" />
     <input type="text" name="cantidad" id="cantidad" value="" placeholder="cantidad" />
-    <input type="text" name="compra" id="compra" value="" placeholder="compra" />
-    <input type="text" name="venta" id="venta" value="" placeholder="venta" />
-    <input type="text" name="utilidad" id="utilidad" value="0" placeholder="utilidad" />
-    <input type="text" name="fraccion" id="fraccion" value="1" placeholder="fraccion" />
+    <input type="text" name="precio" id="precio" value="" placeholder="precio" />
+    <input type="text" name="total" id="total" value="" placeholder="total" />
+    <input type="text" name="descuento" id="descuento" value="" placeholder="descuento" />
     <input type="text" name="token" id="token" value="" placeholder="token" />
 {!!Form::close()!!}
 </div>
@@ -224,7 +223,7 @@
 
     {!!Html::script('js/custom.js')!!}
 
-    {!!Html::script('js/custom/addPE.js')!!}
+    {!!Html::script('js/custom/addVenta.js')!!}
 
     {!!Html::script('js/custom/funciones.js')!!}
 

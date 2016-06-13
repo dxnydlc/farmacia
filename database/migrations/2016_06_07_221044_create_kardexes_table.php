@@ -37,6 +37,7 @@ class CreateKardexesTable extends Migration
             #
             $table->integer('id_user')->nullable();
             $table->string('usuario', 200)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | Parte de Entrada
+    Farmacia | Ventas
 @stop
 
 @section('losCSS')
@@ -17,9 +17,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        Parte Entrada
+			        Ventas
 			        <small>
-			            Ingreso de productos al stock del almacen
+			            Todas las ventas hasta el momento
 			        </small>
 			    </h3>
             </div>
@@ -39,12 +39,13 @@
 	   
        @include('alertas.success')
         @include('alertas.errors')
+        @include('alertas.mensaje')
 		
 		<div class="row">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 	                <div class="x_content">
-	                	<a href="pe/create" class="btn btn-default">Nuevo Parte Entrada</a>
+	                	<a href="ventas/create" class="btn btn-default">Nueva Venta</a>
 	                </div>
 	            </div>
 			</div>
@@ -58,7 +59,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>PE <small>mostrando todos los registros activos</small></h2>
+                        <h2>Ventas <small>mostrando todos los registros activos</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
