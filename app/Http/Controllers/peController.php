@@ -11,6 +11,7 @@ use farmacia\Http\Requests\peCreateRequest;
 use farmacia\Http\Requests\peUpdateRequest;
 use farmacia\ParteEntrada;
 use farmacia\logs;
+use farmacia\producto_lote;
 use Session;
 use Redirect;
 
@@ -231,6 +232,16 @@ class peController extends Controller
                     'usuario'       => 'DDELACRUZ'
                 ];
                 $Kardex = kardex::create($data_insert);
+                $data_lote = [
+                    'id_producto'   => $rs->id_producto,
+                    'producto'      => $rs->producto,
+                    'lote'          => $rs->lote,
+                    'laboratorio'   => $rs->laboratorio,
+                    'vencimiento'   => $rs->vencimiento,
+                    'precio'        => $rs->venta,
+                    'precio_old'    => 0
+                ];
+                $this->make_lote( $data_lote );
             }
             unset($rs);
         }
@@ -364,6 +375,11 @@ class peController extends Controller
     {
         $data      = DB::table('logs')->where( "key" , $key )->get();
         return $data;
+    }
+
+    public function make_lote( $data )
+    {
+        producto_lote::create($data);
     }
 
 }
