@@ -55,8 +55,8 @@ class ventasController extends Controller
         }else{
             $token = Session::get('token_new_venta');
         }
-        #
-        $data['productos']  = $dataProductos = productos::all();
+        #Productos con lote
+        $data['productos']  = DB::table('productos')->join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->get();
         $data['clientes']   = clientes::lists('nombre','id');
         #
         $data['fecha'] = $mytime->format('d/m/Y');

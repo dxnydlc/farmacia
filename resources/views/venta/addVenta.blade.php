@@ -200,6 +200,48 @@
 </div>
 
 
+
+<!-- Modal -->
+<div class="modal fade" id="frmNuevoProd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Agregar producto no existente</h4>
+      </div>
+      <div class="modal-body">
+        <form class=" form-horizontal form-label-left ">
+          <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
+            <label for="producto">Producto</label>
+            <input type="text" class="form-control" id="producto" name="producto" >
+          </div><!-- /form-group -->
+          <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
+            <label for="laboratorio">Laboratorio</label>
+            <input type="text" class="form-control" id="laboratorio" name="laboratorio" >
+          </div><!-- /form-group -->
+          <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
+            <label for="lote">Lote</label>
+            <input type="text" class="form-control" id="lote" name="lote" >
+          </div><!-- /form-group -->
+          <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
+            <label for="vencimiento">Vencimiento</label>
+            <input type="text" class="form-control" id="vencimiento" name="vencimiento" >
+          </div><!-- /form-group -->
+          <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
+            <label for="precio">Precio</label>
+            <input type="text" class="form-control" id="precio" name="precio" >
+          </div><!-- /form-group -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @section('scripts')
 
 	<!-- Aletify -->
