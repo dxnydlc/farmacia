@@ -16,6 +16,8 @@ use farmacia\proveedores;
 
 use Session;
 use Redirect;
+use Carbon;
+use DB;
 
 class productoController extends Controller
 {

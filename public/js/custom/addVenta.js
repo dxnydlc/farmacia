@@ -49,8 +49,10 @@ var _frmProdsOpen 	= false;
   			/*--------------------------------------*/
   			$('#tokenDoc').val( _token );
   			/*--------------------------------------*/
+  			$('#tokenPL').val( _token );
+  			/*--------------------------------------*/
   			$('.delItem').click(function(event) {
-  				e.preventDefault();
+  				event.preventDefault();
   				var _id = $(this).attr('id');
   				console.log( _id );
   				$.ajax({
@@ -78,6 +80,39 @@ var _frmProdsOpen 	= false;
   					_frmProdsOpen = false;
   				}
   			});
+  			/*--------------------------------------*/
+  			$('#vencimiento').datepicker({
+			    startView: 1,
+			    autoclose: true,
+			    language: "es",
+			    todayHighlight: true
+			});
+  			/*--------------------------------------*/
+  			$('#addProdLote').click(function(event) {
+  				event.preventDefault();
+  				var _data = $('#frmProductoLote').serializeArray();
+  				$.ajax({
+  					url 	: _url+'/addProLot',
+  					type 	: 'POST',
+  					dataType: 'json',
+  					headers : {'X-CSRF-TOKEN':_csrf_token},
+  					data 	: _data
+  				})
+  				.done(function() {
+  					console.log("success");
+  				})
+  				.fail(function() {
+  					console.log("error");
+  				})
+  				.always(function() {
+  					console.log("complete");
+  				});
+  				
+  			});
+  			/*--------------------------------------*/
+  			/*--------------------------------------*/
+  			/*--------------------------------------*/
+  			/*--------------------------------------*/
   			/*--------------------------------------*/
   			/*--------------------------------------*/
 		});
