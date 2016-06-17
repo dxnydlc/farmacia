@@ -239,7 +239,9 @@ class peController extends Controller
                     'laboratorio'   => $rs->laboratorio,
                     'vencimiento'   => $rs->vencimiento,
                     'precio'        => $rs->venta,
-                    'precio_old'    => 0
+                    'precio_old'    => 0,
+                    'id_proveedor'  => $parte_entrada->id_proveedor,
+                    'proveedor'     => $parte_entrada->proveedor
                 ];
                 $this->make_lote( $data_lote );
             }

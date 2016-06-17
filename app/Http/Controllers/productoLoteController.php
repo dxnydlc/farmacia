@@ -70,7 +70,9 @@ class productoLoteController extends Controller
             'laboratorio'   => $request['laboratorio'],
             'vencimiento'   => $request['vencimiento'],
             'precio'        => $request['precio'],
-            'precio_old'    => 0
+            'precio_old'    => 0,
+            'id_proveedor'  => 1,
+            'proveedor'     => 'Ninguno'
         ];
         #Log de prodcuto
         $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'V','key'=>$token,'evento'=>'add.ProdLote','content'=>'Nuevo Producto: '.$request['producto'],'res'=>'Agregado']);
