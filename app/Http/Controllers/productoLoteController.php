@@ -7,10 +7,13 @@ use Illuminate\Http\Request;
 use farmacia\Http\Requests;
 
 use farmacia\productos;
-
+use farmacia\logs;
+use farmacia\producto_lote;
 
 use Session;
 use Redirect;
+use Carbon;
+use DB;
 
 
 class productoLoteController extends Controller

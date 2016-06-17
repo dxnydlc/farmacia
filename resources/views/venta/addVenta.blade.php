@@ -213,24 +213,24 @@
         {!!Form::open(['route'=>'detventa.store','method'=>'post','id'=>'frmProductoLote' ])!!}
             <input type="hidden" name="tokenPL" id="tokenPL" />
             <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
-                <label for="producto">Producto</label>
-                <input type="text" class="form-control" id="producto" name="producto" >
+                {!!Form::label('producto','Producto:' , ['class' => 'control-label ' ] )!!}
+                {!!Form::text('producto','',['class'=>'form-control ','id'=>'producto'])!!}
             </div><!-- /form-group -->
             <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
-                <label for="laboratorio">Laboratorio</label>
-                <input type="text" class="form-control" id="laboratorio" name="laboratorio" >
+                {!!Form::label('laboratorio','Laboratorio:' , ['class' => 'control-label ' ] )!!}
+                {!!Form::text('laboratorio','',['class'=>'form-control ','id'=>'laboratorio'])!!}
             </div><!-- /form-group -->
             <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
-                <label for="lote">Lote</label>
-                <input type="text" class="form-control" id="lote" name="lote" >
+                {!!Form::label('lote','Lote:' , ['class' => 'control-label ' ] )!!}
+                {!!Form::text('lote','',['class'=>'form-control ','id'=>'lote'])!!}
             </div><!-- /form-group -->
             <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
-                <label for="vencimiento">Vencimiento</label>
-                <input type="text" class="form-control" id="vencimiento" name="vencimiento" >
+                {!!Form::label('vencimiento','Vencimiento:' , ['class' => 'control-label ' ] )!!}
+                {!!Form::text('vencimiento','',['class'=>'form-control ','id'=>'vencimiento'])!!}
             </div><!-- /form-group -->
             <div class="col-md-4 col-sm-3 col-xs-12 form-group has-feedback">
-                <label for="precio">Precio</label>
-                <input type="text" class="form-control" id="precio" name="precio" >
+                {!!Form::label('precio','Precio:' , ['class' => 'control-label ' ] )!!}
+                {!!Form::text('precio','',['class'=>'form-control ','id'=>'precio'])!!}
             </div><!-- /form-group -->
         {!!Form::close()!!}
       </div>

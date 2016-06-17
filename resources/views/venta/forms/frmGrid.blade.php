@@ -12,7 +12,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="#" data-toggle="modal" data-target="#frmNuevoProd" >Agregar nuevo producto</a>
+                                    <a href="#" data-toggle="modal" data-target="#frmNuevoProd" ><span class="glyphicon glyphicon-plus" ></span> Agregar nuevo producto</a>
                                 </li>
                             </ul>
                         </li>

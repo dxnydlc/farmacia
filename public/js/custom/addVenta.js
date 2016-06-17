@@ -95,11 +95,12 @@ var _frmProdsOpen 	= false;
   					url 	: _url+'/addProLot',
   					type 	: 'POST',
   					dataType: 'json',
-  					headers : {'X-CSRF-TOKEN':_csrf_token},
   					data 	: _data
   				})
   				.done(function() {
   					console.log("success");
+  					swal("Agregado!", "Producto añadido, espere a que se cargue la pagina", "success");
+  					document.location.reload();
   				})
   				.fail(function() {
   					console.log("error");
