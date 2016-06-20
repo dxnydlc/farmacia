@@ -122,6 +122,7 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
   				})
   				.done(function() {
   					console.log("success");
+  					$('#frmProductoLote')[0].reset();
   					swal("Agregado!", "Producto añadido, espere a que se cargue la pagina", "success");
   					document.location.reload();
   				})
@@ -188,7 +189,7 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
 				function(isConfirm) {
 				  if (isConfirm) {
 				    swal("Cerrado!", "Se cerró el documento y se movió stock.", "success");
-				    //$('#frmHeader').submit();
+				    $('#frmHeader').submit();
 				  } else {
 				    //swal("Cancelled", "Your imaginary file is safe :)", "error");
 				  }
@@ -306,6 +307,7 @@ function saveDetalle(){
 		/**/
 		var _data = $('#frmDetalle').serialize();
 		$.post( _servicio , _data , function(data, textStatus, xhr) {
+			$('#frmDetalle')[0].reset();
 			swal("Agregado!", "Espere a que la página se cargue", "success");
 			document.location.reload();
 		},'json');

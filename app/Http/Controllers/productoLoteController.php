@@ -49,7 +49,7 @@ class productoLoteController extends Controller
         #Primero creamos el producto y luego el Lote
         $token = $request['tokenPL'];
         $data_prod = [
-            'nombre'        => $request['producto'],
+            'nombre'        => $request['lt_producto'],
             'descripcion'   => '',
             'id_categoria'  => 1,
             'categoria'     => 'Ninguno',

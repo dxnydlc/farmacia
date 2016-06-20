@@ -46,6 +46,7 @@ class ventasController extends Controller
         #
         $data               = array();
         $token              = '';
+        $config             = $this->get_config();
         #Colocando variable de session con el token
         if(! Session::has('token_new_venta') )
         {
@@ -64,12 +65,15 @@ class ventasController extends Controller
         $data['token'] = $token;
         $data['items'] = DB::table('detalle_venta')->where( "token" , $token )->whereNull('deleted_at')->get();
 
-        $data['serie']          = 1;
-        $data['correlativo']    = 100;
+        $data['serie']          = $config->serie_boleta;
+        $data['correlativo']    = $config->correlativo_boleta;
         $data['efectivo']       = '';
         $data['vuelto']         = '';
         $data['ruc']            = '';
         $data['razon_social']   = '';
+        $data['forma_pago']     = '';
+        $data['pago_efectivo']  = '';
+        $data['vuelto']         = '';
 
         return view('venta.addVenta',compact('data'));
     }
@@ -215,10 +219,14 @@ class ventasController extends Controller
      */
     public function update(ventaUpdateRequest $request, $id)
     {
+        $config                 = $this->get_config();
+        $request['serie']       = $config->serie_boleta;
+        $request['correlativo'] = $config->correlativo_boleta;
+        #
         $venta = venta::find( $id );
         $venta->fill( $request->all() );
         $venta->save();
-        $config     = $this->get_config();
+        #Aumentando el correlativo en la serie
         #Movimiento de Kadex en almacen
         $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
         $venta          = venta::find( $id );
@@ -328,8 +336,13 @@ class ventasController extends Controller
 
     public function get_config()
     {
-        $data      = DB::table('config')->get();
+        $data      = DB::table('config')->first();
         return $data;
+    }
+
+    public function set_correlativo()
+    {
+        //
     }
 
 }
