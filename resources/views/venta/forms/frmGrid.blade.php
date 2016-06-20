@@ -28,22 +28,30 @@
                             <tr>
                                 <th>#</th>
                                 <th>Nombre</th>
-                                <th>Precio</th>
+                                <th>Lote</th>
+                                <th>Lab.</th>
                                 <th>Vencimiento</th>
+                                <th>Precio</th>
                                 <th>Stock</th>
                                 <th>Tipo</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($data['productos'] as $producto)
-                            <tr tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" tdprecio="2.5" >
+                            <?php
+                            list($anio,$mes,$dia) = explode('-', $producto->vencimiento );
+                            $fecha = $dia.'/'.$mes.'/'.$anio;
+                            ?>
+                            <tr tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" tdlab="{{$producto->laboratorio}}" tdfecha="{{$fecha}}" tdprecio="{{$producto->precio}}" tdlote="{{$producto->lote}}" class=" deaPrecio " >
                                 <th scope="row">{{$producto->id_producto}}</th>
                                 <td class="CRUD"  >
                                     {{$producto->nombre}}
                                 </td>
-                                <td>2.50</td>
-                                <td>30/12/2016</td>
-                                <td>25</td>
+                                <td>{{$producto->lote}}</td>
+                                <td>{{$producto->laboratorio}}</td>
+                                <td>{{$fecha}}</td>
+                                <td class="text-right" >{{$producto->precio}}</td>
+                                <td class="text-right" >{{$producto->stock}}</td>
                                 <td>{{$producto->clase}}</td>
                             </tr>
                             @endforeach

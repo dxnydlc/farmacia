@@ -13,6 +13,7 @@ use farmacia\logs;
 use farmacia\clientes;
 use farmacia\kardex;
 use farmacia\productos;
+use \farmacia\config;
 
 use Session;
 use Redirect;
@@ -61,12 +62,14 @@ class ventasController extends Controller
         #
         $data['fecha'] = $mytime->format('d/m/Y');
         $data['token'] = $token;
-        $data['items'] = DB::table('detalle_venta')->where( "token" , $token )->get();
+        $data['items'] = DB::table('detalle_venta')->where( "token" , $token )->whereNull('deleted_at')->get();
 
         $data['serie']          = 1;
         $data['correlativo']    = 100;
         $data['efectivo']       = '';
         $data['vuelto']         = '';
+        $data['ruc']            = '';
+        $data['razon_social']   = '';
 
         return view('venta.addVenta',compact('data'));
     }
@@ -77,9 +80,79 @@ class ventasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ventaCreateRequest $request)
     {
-        //
+        DB::enableQueryLog();
+        $response   = array();
+        $data       = array();
+        $config     = $this->get_config();
+        #fecha
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $dea_token = $request['tokenDoc'];
+        list($dia,$mes,$anio) = explode('/', $request['fecha'] );
+        #
+        switch ($request['tipo_doc']) {
+            case 'B':
+                $serie          = $config->serie_boleta;
+                $correlativo    = $config->correlativo_boleta;
+            break;
+            case 'F':
+                $serie          = $config->serie_factura;
+                $correlativo    = $config->correlativo_factura;
+            break;
+        }
+        #
+        $venta = venta::create([
+            'tipo_doc'      => $request['tipo_doc'],
+            'serie'         => $serie,
+            'correlativo'   => $correlativo,
+            'id_cliente'    => $request['id_cliente'],
+            'cliente'       => $request['cliente'],
+            'fecha'         => $request['fecha'],
+            'total'         => $request['totalDoc'],
+            'ruc'           => $request['ruc'],
+            'razon_social'  => $request['razon_social'],
+            'forma_pago'    => $request['forma_pago'],
+            'pago_efectivo' => $request['pago_efectivo'],
+            'vuelto'        => $request['vuelto'],
+            'token'         => $dea_token,
+            'id_user_creado'=> 1,
+            'user_creado'   => 'DDELACRUZ',
+            'estado'        => 'ACT'
+        ]);
+        $token = Session::get('token_new_venta');
+        Session::forget( 'token_new_venta' );
+        $id_venta = $venta->id;
+        #
+        $response['id_venta'] = $id_venta;
+        #uniendo con el detalle de venta
+        DB::table('detalle_venta')
+            ->where('token', $dea_token)
+            ->update(['id_venta' => $id_venta]);
+        #
+        #Productos con lote
+        $data['productos']      = DB::table('productos')->join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->get();
+        $data['venta']          = venta::find( $id_venta );
+        #
+        $data['clientes']       = clientes::lists('nombre','id');
+        #
+        $data['fecha']          = $data['venta']->fecha;
+        $data['token']          = $token;
+        $data['items']          = DB::table('detalle_venta')->where( "id_venta" , $id_venta )->get();
+
+        $data['serie']          = $data['venta']->serie;
+        $data['correlativo']    = $data['venta']->correlativo;
+        $data['efectivo']       = $data['venta']->efectivo;
+        $data['vuelto']         = $data['venta']->vuelto;
+        $data['ruc']            = $data['venta']->ruc;
+        $data['razon_social']   = $data['venta']->razon_social;
+        #Logs
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$token,'evento'=>'save.VE','content'=>'Guardar','res'=>'Guardado']);
+        #
+        #Session::flash('estado','Parte de entrada guardado');
+        return redirect('ventas/'.$id_venta.'/edit')->with('estado', 'Documento de ventas guardado');
+
     }
 
     /**
@@ -101,7 +174,36 @@ class ventasController extends Controller
      */
     public function edit($id)
     {
-        //
+        #DB::enableQueryLog();
+        $id_venta = $id;
+        $response = array();
+        $data = array();
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        #
+        #Productos con lote
+        $data['productos']      = DB::table('productos')->join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->get();
+        $data['venta']          = venta::find( $id_venta );
+        #
+        $data['clientes']       = clientes::lists('nombre','id');
+        #
+        list($anio,$mes,$dia) = explode('-', $data['venta']->fecha );
+        $fecha = $dia.'/'.$mes.'/'.$anio;
+        #
+        $data['fecha']          = $fecha;
+        $data['token']          = $data['venta']->token;
+        $data['items']          = DB::table('detalle_venta')->where( "id_venta" , $id_venta )->get();
+
+        $data['serie']          = $data['venta']->serie;
+        $data['correlativo']    = $data['venta']->correlativo;
+        $data['pago_efectivo']  = $data['venta']->pago_efectivo;
+        $data['vuelto']         = $data['venta']->vuelto;
+        $data['ruc']            = $data['venta']->ruc;
+        $data['razon_social']   = $data['venta']->razon_social;
+        $data['forma_pago']     = $data['venta']->forma_pago;
+        #
+        #return $data;
+        return view('venta.updateVenta', ['data' => $data] );
     }
 
     /**
@@ -111,9 +213,64 @@ class ventasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ventaUpdateRequest $request, $id)
     {
-        //
+        $venta = venta::find( $id );
+        $venta->fill( $request->all() );
+        $venta->save();
+        $config     = $this->get_config();
+        #Movimiento de Kadex en almacen
+        $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
+        $venta          = venta::find( $id );
+        #
+        if( count($productos) > 0 )
+        {
+            foreach ($productos as $key => $rs) {
+                $data_last = array();
+                $data_last  = $this->get_lastkardex( $rs->id_producto );
+                if( $data_last != 'no' ){
+                    $saldo_cant       = $data_last['cant'] + $rs->cantidad;
+                    $saldo_precio     = $data_last['precio'];
+                    $saldo_valor_f    = $data_last['valor'];
+                }else{
+                    $saldo_cant       = $rs->cantidad;
+                    $saldo_precio     = $rs->precio;
+                    $saldo_valor_f    = $rs->cantidad * $rs->precio;
+                }
+                #return $data_last;
+                $cant       = $rs->cantidad;
+                $precio     = $rs->precio;
+                $valor_f    = $rs->cantidad * $rs->precio;
+                #Valores Kardex anterior
+                $data_insert = [
+                    'movimiento'    => 'S',
+                    'fecha'         => $fecha_mysql,
+                    'id_producto'   => $rs->id_producto,
+                    'producto'      => $rs->producto,
+                    'id_persona'    => $venta->id_cliente,
+                    'persona'       => $venta->cliente,
+                    'documento'     => 'VE',
+                    'numero_doc'    => $venta->serie.'-'.$venta->correlativo,
+                    'cantidad_e'    => $cant,
+                    'precio_e'      => $precio,
+                    'valor_e'       => $valor_f,
+                    'cantidad_s'    => 0,
+                    'precio_s'      => 0,
+                    'valor_s'       => 0,
+                    'cantidad_f'    => $saldo_cant,
+                    'precio_f'      => $saldo_precio,
+                    'valor_f'       => $saldo_valor_f,
+                    'id_user'       => '1',
+                    'usuario'       => 'DDELACRUZ'
+                ];
+                $Kardex = kardex::create($data_insert);
+            }
+            unset($rs);
+        }
+        #/Movimiento de Kadex en almacen
+        #logs
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'PE','key'=>$request['tokenDoc'],'evento'=>'cerrar.PE','content'=>'Cerrar PE','res'=>'Cerrado']);
+        return redirect::to('/invoice_venta/'.$id);
     }
 
     /**
@@ -127,6 +284,20 @@ class ventasController extends Controller
         //
     }
 
+
+    public function invoice($id)
+    {
+        #DB::enableQueryLog();
+        $data = array();
+        $data['venta']      = venta::find( $id );
+        $data['items']      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
+        $data['logs']       = $this->get_logs( $data['venta']->token );
+        #
+        #return DB::getQueryLog();
+        #
+        #return $data['logs'];
+        return view('venta.invoice', ['data' => $data] );
+    }
 
 
     public function set_logs($param)
@@ -155,5 +326,10 @@ class ventasController extends Controller
         return $data;
     }
 
+    public function get_config()
+    {
+        $data      = DB::table('config')->get();
+        return $data;
+    }
 
 }

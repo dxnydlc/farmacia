@@ -48,6 +48,10 @@
     var _servicio = '';
     var _csrf_token = '{{ csrf_token() }}';
 </script>
+
+@section('jsHeader')
+@show
+
 </head>
 
 

@@ -24,8 +24,16 @@ class ventaCreateRequest extends Request
     public function rules()
     {
         return [
-            'id_cliente' => 'required',
-            'fecha' => 'required'
+            'id_cliente'    => 'required',
+            'fecha'         => 'required',
+            'tipo_doc'      => 'required',
+            'serie'         => 'required',
+            'correlativo'   => 'required',
+            'id_cliente'    => 'required',
+            'fecha'         => 'required',
+            'id_cliente'    => 'required',
+            'id_cliente'    => 'required',
+            'forma_pago'    => 'required'
         ];
     }
 }

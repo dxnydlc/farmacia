@@ -11,10 +11,10 @@ class producto_lote extends Model
     protected $table = 'producto_lote';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['id_producto','producto','lote','laboratorio','vencimiento','precio','precio_old'];
+    protected $fillable = ['id_producto','producto','lote','laboratorio','vencimiento','precio','precio_old','id_proveedor','proveedor','stock'];
     protected $dates = ['deleted_at'];
 
-    public function getFechaAttribute($valor)
+    public function getVencimientoAttribute($valor)
     {
     	if( $valor != '' )
     	{
@@ -24,13 +24,13 @@ class producto_lote extends Model
     	}
     }
 
-    public function setFechaAttribute($valor)
+    public function setVencimientoAttribute($valor)
     {
         if( $valor != '' )
         {
             list($dia,$mes,$anio) = explode('/', $valor );
             $fecha = $anio.'-'.$mes.'-'.$dia;
-            $this->attributes['fecha'] = $fecha;
+            $this->attributes['vencimiento'] = $fecha;
         }
     }
 

@@ -125,7 +125,7 @@
                                                 <td id="nwCant" callback="cant" >- Cantidad -</td>
                                                 <td id="nwCompra" callback="comp" >- Compra -</td>
                                                 <td id="nwVenta" callback="vta" >- Venta -</td>
-                                                <td id="nwUtil" callback="%" >0</td>
+                                                <th id="nwUtil" callback="%" >0</th>
                                                 <td callback="ok">
                                                     <a href="#" class="btn btn-success" ><span class="glyphicon glyphicon-ok" ></span></a>
                                                 </td>

@@ -65,17 +65,17 @@ class productoLoteController extends Controller
         #Ahora creamos el lote
         $data_lote = [
             'id_producto'   => $prod->id_producto,
-            'producto'      => $request['producto'],
-            'lote'          => $request['lote'],
-            'laboratorio'   => $request['laboratorio'],
-            'vencimiento'   => $request['vencimiento'],
-            'precio'        => $request['precio'],
+            'producto'      => $request['lt_producto'],
+            'lote'          => $request['lt_lote'],
+            'laboratorio'   => $request['lt_laboratorio'],
+            'vencimiento'   => $request['lt_vencimiento'],
+            'precio'        => $request['lt_precio'],
             'precio_old'    => 0,
             'id_proveedor'  => 1,
             'proveedor'     => 'Ninguno'
         ];
         #Log de prodcuto
-        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'V','key'=>$token,'evento'=>'add.ProdLote','content'=>'Nuevo Producto: '.$request['producto'],'res'=>'Agregado']);
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'V','key'=>$token,'evento'=>'add.ProdLote','content'=>'Nuevo Producto: '.$request['lt_producto'],'res'=>'Agregado']);
         $this->make_lote( $data_lote );
         return $request->all();
     }

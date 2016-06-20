@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | add Venta
+    Farmacia | update Venta
 @stop
 
 @section('losCSS')
@@ -53,7 +53,7 @@
                     <br />
                     @include('alertas.userRequest')
                     
-                    {!!Form::open(['route'=>'ventas.store','method'=>'post','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate', 'id' => 'frmHeader' ])!!}
+                    {!!Form::model($data['venta'],['route'=>['ventas.update',$data['venta']->id],'method'=>'PUT','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate', 'id' => 'frmHeader' ])!!}
                     	@include('venta.forms.frmHeader')
 
                     	<div class="ln_solid"></div>
@@ -172,7 +172,7 @@
                             <div class="col-md-6 col-sm-6 col-xs-12 ">
                                 <a href="/pe" class="btn btn-default">Cancelar</a>
                                 <?php if( count($data['items']) > 0 ){ ?>
-                                <button  type="submit" class="btn btn-success btn-lg ">Guardar</button>
+                                <button id="btnCerrarDoc" type="submit" class="btn btn-success btn-lg ">Cerrar Documento</button>
                                 <?php } ?>
                             </div>
                         </div>
@@ -187,7 +187,7 @@
 
 <div class="">
 {!!Form::open(['route'=>'detventa.store','method'=>'post','id'=>'frmDetalle' ])!!}
-    <input type="text" name="id_venta" id="id_venta" value="0" placeholder="id_venta" />
+    <input type="text" name="id_venta" id="id_venta" value="<?php echo $data["venta"]->id; ?>" placeholder="id_venta" />
     <input type="text" name="producto" id="producto" value="" placeholder="producto" />
     <input type="text" name="id_producto" id="id_producto" value="" placeholder="id_producto" />
     <input type="text" name="cantidad" id="cantidad" value="" placeholder="cantidad" />

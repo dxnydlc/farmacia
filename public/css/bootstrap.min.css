@@ -36,3 +36,9 @@ body, label, td, th, input[type='text'], select, option, h1, h2, h3, h4, h5, a, 
 .forum.table th.cell-stat-2x {
     width: 14em;
 }
+.tdTabla{
+	font-weight: 400;
+}
+.fuente-r{
+	text-align:right
+}

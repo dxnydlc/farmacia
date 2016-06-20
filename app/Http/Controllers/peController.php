@@ -189,7 +189,7 @@ class peController extends Controller
         #
         #return DB::getQueryLog();
         #Movimiento de Kadex en almacen
-        $productos      = DB::table('parte_entrada_detalle')->where( "id_pe" , $id )->get();
+        $productos      = DB::table('parte_entrada_detalle')->where( "id_pe" , $id )->whereNull('deleted_at')->get();
         $parte_entrada  = ParteEntrada::find( $id );
         if( count($productos) > 0 )
         {
@@ -232,16 +232,20 @@ class peController extends Controller
                     'usuario'       => 'DDELACRUZ'
                 ];
                 $Kardex = kardex::create($data_insert);
+                #Fecha de vencimiento
+                list($anio,$mes,$dia) = explode('-', $rs->vencimiento );
+                $fecha_vence = $dia.'/'.$mes.'/'.$anio;
                 $data_lote = [
                     'id_producto'   => $rs->id_producto,
                     'producto'      => $rs->producto,
                     'lote'          => $rs->lote,
                     'laboratorio'   => $rs->laboratorio,
-                    'vencimiento'   => $rs->vencimiento,
+                    'vencimiento'   => $fecha_vence,
                     'precio'        => $rs->venta,
                     'precio_old'    => 0,
                     'id_proveedor'  => $parte_entrada->id_proveedor,
-                    'proveedor'     => $parte_entrada->proveedor
+                    'proveedor'     => $parte_entrada->proveedor,
+                    'stock'         => $rs->cantidad
                 ];
                 $this->make_lote( $data_lote );
             }

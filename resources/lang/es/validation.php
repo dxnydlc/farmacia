@@ -135,6 +135,16 @@ return [
         'fecha' => [
             'required' => 'Es necesario una Fecha'
         ],
+        'id_cliente' => [
+            'required' => 'Es necesario una Cliente'
+        ],
+        'tipo_doc' => [
+            'required' => 'Es necesario un tipo de documento'
+        ],
+        'forma_pago' => [
+            'required' => 'Indique una forma de pago'
+        ],
+        
     ],
     /*
     |--------------------------------------------------------------------------

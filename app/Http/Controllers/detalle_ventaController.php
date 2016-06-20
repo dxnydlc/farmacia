@@ -5,7 +5,7 @@ namespace farmacia\Http\Controllers;
 use Illuminate\Http\Request;
 
 use farmacia\Http\Requests;
-use farmacia\Http\detalle_venta;
+use farmacia\detalle_venta;
 use farmacia\logs;
 
 use DB;
@@ -48,15 +48,19 @@ class detalle_ventaController extends Controller
         $id_return      = 0;
         $token          = $request->token;
         $data_insert = [
-            'producto'  => $request['producto'],
-            'id_producto' => $request['id_producto'],
-            'cantidad'  => $request['cantidad'],
-            'precio'    => $request['precio'],
-            'total'     => $request['total'],
-            'descuento' => $request['descuento'],
-            'id_user'   => 1,
-            'usuario'   => 'DDELACRUZ',
-            'token'     => $request['token']
+            'id_venta'      => $request['id_venta'],
+            'producto'      => $request['producto'],
+            'id_producto'   => $request['id_producto'],
+            'lote'          => $request['lote'],
+            'laboratorio'   => $request['laboratorio'],
+            'vencimiento'   => $request['vencimiento'],
+            'cantidad'      => $request['cantidad'],
+            'precio'        => $request['precio'],
+            'total'         => $request['total'],
+            'descuento'     => $request['descuento'],
+            'id_user'       => 1,
+            'usuario'       => 'DDELACRUZ',
+            'token'         => $request['token']
         ];
         $id_return = detalle_venta::create( $data_insert );
         $response['id']     = $id_return->id;
@@ -65,7 +69,7 @@ class detalle_ventaController extends Controller
         $response['items'] = DB::table('detalle_venta')->where( "token" , $token )->get();
 
         #logs
-        $this->set_logs(['tipo'=>'log_doc','tipo_doc'=>'VE','key'=>$token,'evento'=>'add.Prod','content'=>$request['producto'],'res'=>'Agregado']);
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$token,'evento'=>'add.Prod','content'=>$request['producto'],'res'=>'Agregado']);
         return $response;
     }
 
@@ -111,7 +115,12 @@ class detalle_ventaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $token = Session::get('token_new_pe');
+        $detalle = detalle_venta::find($id);
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$token,'evento'=>'del.Prod','content'=>$detalle->producto,'res'=>'Eliminado']);
+        #detalle_venta::delete();
+        detalle_venta::where('id','=',$id)->delete(); 
+        return $detalle;
     }
 
     public function set_logs($param)

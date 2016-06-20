@@ -1,6 +1,6 @@
 <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
 	{!!Form::label('tipo_doc','Tipo Documento')!!}
-	{!!Form::select('tipo_doc',[ 'B'=>'Boleta' , 'F'=>'Factura' ],null,['placeholder'=>'Seleccione tipo','class'=>'form-control'])!!}
+	{!!Form::select('tipo_doc',[ 'B'=>'Boleta' , 'F'=>'Factura' ],null,['placeholder'=>'Seleccione tipo','class'=>'form-control','id'=>'tipo_doc'])!!}
 </div>
 
 <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
@@ -22,9 +22,21 @@
     {!!Form::hidden('tokenDoc',null,['id' => 'tokenDoc'])!!}
 </div>
 
-
 <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
     {!!Form::label('fecha','Fecha (*):' , ['class' => 'control-label ' ] )!!}
     {!!Form::text('fecha',$data["fecha"],['class'=>'form-control '])!!}
     <i class="glyphicon glyphicon-calendar form-control-feedback"></i>
+</div>
+
+<div class="hidden" id="frameFactura">
+    <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+        {!!Form::label('ruc','RUC:' , ['class' => 'control-label ' ] )!!}
+        {!!Form::text('ruc',$data["ruc"],['class'=>'form-control '])!!}
+        <i class="glyphicon glyphicon-console form-control-feedback"></i>
+    </div>
+    <div class="col-md-3 col-sm-3 col-xs-12 form-group has-feedback">
+        {!!Form::label('razon_social','Razón social:' , ['class' => 'control-label ' ] )!!}
+        {!!Form::text('razon_social',$data["razon_social"],['class'=>'form-control '])!!}
+        <i class="glyphicon glyphicon-user form-control-feedback"></i>
+    </div>
 </div>
