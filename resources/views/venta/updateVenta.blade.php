@@ -171,7 +171,7 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                <a href="/pe" class="btn btn-default">Cancelar</a>
+                                <a href="/ventas" class="btn btn-default">Cancelar</a>
                                 <?php if( count($data['items']) > 0 ){ ?>
                                 <button id="btnCerrarDoc" type="submit" class="btn btn-success btn-lg ">Cerrar Documento</button>
                                 <?php } ?>

@@ -191,10 +191,10 @@ class ventasController extends Controller
         #
         $data['clientes']       = clientes::lists('nombre','id');
         #
-        list($anio,$mes,$dia) = explode('-', $data['venta']->fecha );
-        $fecha = $dia.'/'.$mes.'/'.$anio;
+        list($dia,$mes,$anio) = explode('/', $data['venta']->fecha );
+        $fecha = $anio.'-'.$mes.'-'.$dia;
         #
-        $data['fecha']          = $fecha;
+        $data['fecha']          = $data['venta']->fecha;
         $data['token']          = $data['venta']->token;
         $data['items']          = DB::table('detalle_venta')->where( "id_venta" , $id_venta )->get();
 
@@ -302,7 +302,6 @@ class ventasController extends Controller
         $data           = venta::where(['id' => $id])->delete();
         #Movimiento de Kadex en almacen
         $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
-        $venta          = venta::find( $id );
         #
         if( count($productos) > 0 )
         {

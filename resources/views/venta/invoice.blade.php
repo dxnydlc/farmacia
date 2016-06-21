@@ -68,8 +68,7 @@
                         <div class="panel-body">
                             {{ $data['venta']->cliente }}
                             <br/>
-                            <?php list($anio,$mes,$dia) = explode('-', $data['venta']->fecha ); $fecha = $dia.'/'.$mes.'/'.$anio; ?>
-                            {{ $fecha }}
+                            {{ $data['venta']->fecha }}
                         </div>
                     </div>
                     
@@ -242,7 +241,7 @@ switch ($data['venta']->forma_pago) {
 
 <div class="row">
     <div class="col-lg-2 col-lg-offset-1 " >
-        <a href="/pe" class="btn btn-default btn-lg btn-block" >Regresar</a>
+        <a href="/ventas" class="btn btn-default btn-lg btn-block" >Regresar</a>
     </div>
     <!--<div class="col-lg-2 col-lg-offset-1 " >
         <a href="#" class="btn btn-primary btn-lg btn-block" >Imprimir</a>
