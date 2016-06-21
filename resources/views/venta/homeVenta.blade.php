@@ -83,7 +83,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Proveedor</th>
+                                    <th>Documento</th>
+                                    <th>Cliente</th>
                                     <th>Fecha</th>
                                     <th>Estado</th>
                                     <th>Usuario</th>
@@ -91,21 +92,32 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($parteEntrada as $pe)
-                                <tr id="fila_{{$pe->id}}" >
-                                    <th scope="row">{{$pe->id}}</th>
+                                @foreach($venta as $ve)
+                                <?php
+                                switch ($ve->tipo_doc) {
+                                    case 'B':
+                                        $tipo_doc = 'Boleta';
+                                    break;
+                                    case 'F':
+                                        $tipo_doc = 'Factura';
+                                    break;
+                                }
+                                ?>
+                                <tr id="fila_{{$ve->id}}" >
+                                    <th scope="row">{{$ve->id}}</th>
                                     <td>
-                                        <?php if( $pe->estado == 'Cerrado' ){ 
-                                            echo '<a href="invoice_pe/'.$pe->id.'" >'.$pe->proveedor.'</a>';
+                                        <?php if( $ve->estado == 'Cerrado' ){ 
+                                            echo '<a href="invoice_pe/'.$ve->id.'" >'.$ve->cliente.'</a>';
                                         }else{ ?>
-                                        {!!link_to_route('pe.edit', $title  = $pe->proveedor, $parameters = $pe->id, $attributes = ['class'=>'btn-link '] )!!}
+                                        {!!link_to_route('pe.edit', $title  = $tipo_doc.' '.$ve->serie.' - '.$ve->correlativo, $parameters = $ve->id, $attributes = ['class'=>'btn-link '] )!!}
                                         <?php } ?>
                                     </td>
-                                    <td>{{$pe->fecha}}</td>
-                                    <td>{{$pe->estado}}</td>
-                                    <td>{{$pe->user}}</td>
+                                    <td>{{$ve->cliente}}</td>
+                                    <td>{{$ve->fecha}}</td>
+                                    <td>{{$ve->estado}}</td>
+                                    <td>{{$ve->user}}</td>
                                     <td>
-                                        {!!link_to_route('pe.edit', $title  = 'Anular', $parameters = $pe->id, $attributes = ['class'=>'btn-link delItem ','id'=>$pe->id] )!!}
+                                        {!!link_to_route('pe.edit', $title  = 'Anular', $parameters = $ve->id, $attributes = ['class'=>'btn-link delItem ','id'=>$ve->id] )!!}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -139,7 +151,7 @@
 
     {!!Html::script('js/custom.js')!!}
 
-    {!!Html::script('js/custom/pe.js')!!}
+    {!!Html::script('js/custom/ventas.js')!!}
 
 @endsection
 

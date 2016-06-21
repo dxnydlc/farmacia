@@ -48,42 +48,59 @@
         <div class="col-xs-12">
             <div class="text-center">
                 <i class="fa fa-search-plus pull-left icon"></i>
-                <h2>Invoice Parte Entrada #{{ $data['pe']->id }}</h2>
+                <?php switch ($data['venta']->tipo_doc) {
+                    case 'B':
+                        $tipo_doc = 'Boleta';
+                        $cols = 4;
+                    break;
+                    case 'F':
+                        $tipo_doc = 'Factura';
+                        $cols = 3;
+                    break;
+                } ?>
+                <h2>Invoice {{$tipo_doc}} #{{ $data['venta']->serie.' - '.$data['venta']->correlativo }}</h2>
             </div>
             <hr>
             <div class="row">
-                <div class="col-xs-12 col-md-3 col-lg-3 pull-left">
+                <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}} pull-left">
                     <div class="panel panel-default height">
-                        <div class="panel-heading">Proveedor</div>
+                        <div class="panel-heading">Cliente</div>
                         <div class="panel-body">
-                            {{ $data['pe']->proveedor }}
+                            {{ $data['venta']->cliente }}
+                            <br/>
+                            <?php list($anio,$mes,$dia) = explode('-', $data['venta']->fecha ); $fecha = $dia.'/'.$mes.'/'.$anio; ?>
+                            {{ $fecha }}
                         </div>
                     </div>
                     
                 </div>
-                <div class="col-xs-12 col-md-3 col-lg-3">
+                <?php if( $data['venta']->tipo_doc == 'F' ){ ?>
+                <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}}">
                     <div class="panel panel-default height">
-                        <div class="panel-heading">Fecha</div>
+                        <div class="panel-heading">Empresa</div>
                         <div class="panel-body">
-                            {{ $data['pe']->fecha }}
+                            {{ $data['venta']->razon_social }}
+                            <br/>
+                            {{ $data['venta']->ruc }}
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-3 col-lg-3">
+                <?php } ?>
+                <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}}">
                     <div class="panel panel-default height">
                         <div class="panel-heading">Creado por</div>
                         <div class="panel-body">
-                            <strong>{{ $data['pe']->user }}</strong><br>
-                            {{ $data['pe']->created_at }}
+                            <strong>{{ $data['venta']->user_creado }}</strong><br>
+                            {{ $data['venta']->created_at }}
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-3 col-lg-3 pull-right">
+                <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}} pull-right">
                     <div class="panel panel-default height">
                         <div class="panel-heading">Cerrado por</div>
                         <div class="panel-body">
-                            <strong>{{ $data['pe']->user }}</strong><br>
-                            {{ $data['pe']->updated_at }}
+                            <strong>{{ $data['venta']->user }}</strong><br>
+                            {{ $data['venta']->updated_at }}
                         </div>
                     </div>
                 </div>
@@ -101,38 +118,87 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Producto</th>
-                                    <th>Laboratorio</th>
-                                    <th>Lote</th>
-                                    <th>Vencimiento</th>
+                                    <th>Precio</th>
                                     <th>Cantidad</th>
-                                    <th>Compra</th>
-                                    <th>Venta</th>
-                                    <th>%</th>
+                                    <th class="fuente-r" >Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $o = 1; ?>
+                                <?php $o = 1; $totalDoc = 0; ?>
                                 @foreach($data['items'] as $items)
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td id="TD{{$o}}" tdnombre="bla bla bla" tdidProd="{{$items->id_producto}}" >{{$items->producto}}</td>
-                                        <td>{{$items->laboratorio}}</td>
-                                        <td>{{$items->lote}}</td>
-                                        <td>{{$items->vencimiento}}</td>
-                                        <td>{{$items->cantidad}}</td>
-                                        <td>{{$items->compra}}</td>
-                                        <td>{{$items->venta}}</td>
-                                        <td>{{$items->utilidad.'%'}}</td>
-                                        <td></td>
+                                <?php
+                                list($anio,$mes,$dia) = explode('-', $items->vencimiento );
+                                $fecha = $dia.'/'.$mes.'/'.$anio;
+                                ?>
+                                    <tr >
+                                        <th scope="row">{{$o}}</th>
+                                        <th class="fuente-l tdTabla" id="TD{{$o}}" tdnombre="{{$items->producto}}" tdidProd="{{$items->id}}" >{{$items->producto}}<br><small>Lote:{{$items->lote}}, Vence: {{$fecha}}</small></th>
+                                        <th class="fuente-r tdTabla" >{{$items->precio}}</th>
+                                        <th class="fuente-r tdTabla" >{{$items->cantidad}}</th>
+                                        <th class="fuente-r tdTabla" >{{$items->total}}</th>
                                     </tr>
-                                    <?php $o++; ?>
+                                    <?php $o++; $totalDoc = $totalDoc + $items->total;?>
                                 @endforeach
+                                    <?php 
+                                    #Calculando montos
+                                    $totalDoc = number_format($totalDoc,2); $igv = ($totalDoc * 18) / 100;
+                                    $subtotal = $totalDoc - $igv; 
+                                    ?>
+                                    <tr>
+                                        <th colspan="4" class="fuente-r" >Sub Total</th>
+                                        <th class="fuente-r" >{{$subtotal}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4" class="fuente-r" >IGV</th>
+                                        <th class="fuente-r" >{{$igv}}</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4" class="fuente-r" >Total</th>
+                                        <th class="fuente-r" >{{$totalDoc}}</th>
+                                    </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+        </div>
+    </div>
+
+<?php
+switch ($data['venta']->forma_pago) {
+    case 'E':
+        $forma_pago = 'Efectivo';
+    break;
+}
+?>
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
+            <div class="panel panel-default height">
+                <div class="panel-heading">Forma de Pago</div>
+                <div class="panel-body">
+                    {{ $forma_pago }}
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
+            <div class="panel panel-default height">
+                <div class="panel-heading">Pago</div>
+                <div class="panel-body">
+                    {{ $data['venta']->pago_efectivo }}
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
+            <div class="panel panel-default height">
+                <div class="panel-heading">Vuelto</div>
+                <div class="panel-body">
+                    {{ $data['venta']->vuelto }}
+                    <br/>
+                </div>
+            </div>
         </div>
     </div>
 

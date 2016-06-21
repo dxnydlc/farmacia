@@ -23,5 +23,37 @@ class venta extends Model
             $this->attributes['fecha'] = $fecha;
         }
     }
+
+    public function getFechaAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            list($anio,$mes,$dia) = explode('-', $valor );
+            $fecha = $dia.'/'.$mes.'/'.$anio;
+            return $fecha;
+        }
+    }
+
+    public function getCreatedatAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            $ar = explode(' ', $valor );
+            list($anio,$mes,$dia) = explode('-', $ar[0] );
+            $fecha = $dia.'/'.$mes.'/'.$anio;
+            return $fecha.' '.$ar[1];
+        }
+    }
+
+    public function getUpdatedatAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            $ar = explode(' ', $valor );
+            list($anio,$mes,$dia) = explode('-', $ar[0] );
+            $fecha = $dia.'/'.$mes.'/'.$anio;
+            return $fecha.' '.$ar[1];
+        }
+    }
     
 }

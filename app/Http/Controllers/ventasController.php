@@ -30,8 +30,8 @@ class ventasController extends Controller
     public function index()
     {
         Session::forget( 'token_new_venta' );
-        $parteEntrada = venta::paginate(10);
-        return view('venta.homeVenta',compact('parteEntrada'));
+        $venta = venta::paginate(10);
+        return view('venta.homeVenta',compact('venta'));
     }
 
     /**
@@ -219,6 +219,10 @@ class ventasController extends Controller
      */
     public function update(ventaUpdateRequest $request, $id)
     {
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        #
         $config                 = $this->get_config();
         $request['serie']       = $config->serie_boleta;
         $request['correlativo'] = $config->correlativo_boleta;
@@ -227,6 +231,7 @@ class ventasController extends Controller
         $venta->fill( $request->all() );
         $venta->save();
         #Aumentando el correlativo en la serie
+        $this->set_correlativo(['tipo'=>$request['tipo_doc'],'corr'=>$request['correlativo']+1]);
         #Movimiento de Kadex en almacen
         $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
         $venta          = venta::find( $id );
@@ -277,7 +282,7 @@ class ventasController extends Controller
         }
         #/Movimiento de Kadex en almacen
         #logs
-        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'PE','key'=>$request['tokenDoc'],'evento'=>'cerrar.PE','content'=>'Cerrar PE','res'=>'Cerrado']);
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$request['tokenDoc'],'evento'=>'cerrar.VE','content'=>'Cerrar venta','res'=>'Cerrado']);
         return redirect::to('/invoice_venta/'.$id);
     }
 
@@ -289,7 +294,61 @@ class ventasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $mytime         = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql    = $mytime->format('d/m/Y');
+        $venta          = venta::find( $id );#lo pongo aqui por que mas abajo anulo este doc y ya no ser a visible en "find"
+        #
+        $data           = venta::where(['id' => $id])->delete();
+        #Movimiento de Kadex en almacen
+        $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
+        $venta          = venta::find( $id );
+        #
+        if( count($productos) > 0 )
+        {
+            foreach ($productos as $key => $rs) {
+                $data_last = array();
+                $data_last  = $this->get_lastkardex( $rs->id_producto );
+                if( $data_last != 'no' ){
+                    $saldo_cant       = $data_last['cant'] - $rs->cantidad;
+                    $saldo_precio     = $data_last['precio'];
+                    $saldo_valor_f    = $data_last['valor'];
+                }else{
+                    $saldo_cant       = $rs->cantidad;
+                    $saldo_precio     = $rs->precio;
+                    $saldo_valor_f    = $rs->cantidad * $rs->precio;
+                }
+                #return $data_last;
+                $cant       = $rs->cantidad;
+                $precio     = $rs->precio;
+                $valor_f    = $rs->cantidad * $rs->precio;
+                #Valores Kardex anterior
+                $data_insert = [
+                    'movimiento'    => 'E',
+                    'fecha'         => $fecha_mysql,
+                    'id_producto'   => $rs->id_producto,
+                    'producto'      => $rs->producto,
+                    'id_persona'    => $venta->id_cliente,
+                    'persona'       => $venta->cliente,
+                    'documento'     => 'VE',
+                    'numero_doc'    => $venta->serie.'-'.$venta->correlativo,
+                    'cantidad_e'    => $cant,
+                    'precio_e'      => $precio,
+                    'valor_e'       => $valor_f,
+                    'cantidad_s'    => 0,
+                    'precio_s'      => 0,
+                    'valor_s'       => 0,
+                    'cantidad_f'    => $saldo_cant,
+                    'precio_f'      => $saldo_precio,
+                    'valor_f'       => $saldo_valor_f,
+                    'id_user'       => '1',
+                    'usuario'       => 'DDELACRUZ'
+                ];
+                $Kardex = kardex::create($data_insert);
+            }
+            unset($rs);
+        }
+        #/Movimiento de Kadex en almacen
     }
 
 
@@ -340,9 +399,43 @@ class ventasController extends Controller
         return $data;
     }
 
-    public function set_correlativo()
+    public function set_correlativo( $param )
     {
-        //
+        /*
+        [ 'tipo' => 'F,B' , 'corr' => int ]
+        */
+        #uniendo con el detalle de venta
+        $corr = 0;
+        $data_update = array();
+        switch ($param['tipo']) {
+            case 'F':
+                $data_update['correlativo_factura'] = $param['corr'];
+            break;
+            case 'B':
+                $data_update['correlativo_boleta'] = $param['corr'];
+            break;
+        }
+        DB::table('config')
+            ->where('id', 1)
+            ->update( $data_update );
+        #
+    }
+
+    public function get_lastkardex($id_prod)
+    {
+        $response = array();
+        $data = DB::table('kardex')->where('id_producto','=',$id_prod)->orderBy('id', 'desc')->first();
+        if( count($data) > 0 ){
+            #foreach ($data as $key => $rs) {
+                $response['cant']   = $data->cantidad_f;
+                $response['precio'] = $data->precio_f;
+                $response['valor']  = $data->valor_f;
+            #}
+            #unset($rs);
+            return $response;
+        }else{
+            return 'no';
+        }
     }
 
 }

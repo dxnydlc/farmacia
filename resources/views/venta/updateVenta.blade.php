@@ -54,6 +54,7 @@
                     @include('alertas.userRequest')
                     
                     {!!Form::model($data['venta'],['route'=>['ventas.update',$data['venta']->id],'method'=>'PUT','autocomplete'=>'off', 'class' => 'form-horizontal form-label-left' ,'data-parsley-validate', 'id' => 'frmHeader' ])!!}
+                    <input type="hidden" name="estado" id="estado" value="CER" >
                     	@include('venta.forms.frmHeader')
 
                     	<div class="ln_solid"></div>

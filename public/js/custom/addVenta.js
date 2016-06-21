@@ -175,6 +175,12 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
   			/*--------------------------------------*/
   			$('#btnCerrarDoc').click(function(event) {
   				event.preventDefault();
+  				var _efectivo = $('#pago_efectivo').val();
+  				if( _totalDoc > _efectivo && $('#forma_pago').val() == 'E' )
+  				{
+  					swal("Pago Efectivo", "El monto de pago es menor al total", "warning");
+  					return true;
+  				}
 				swal({
 				  title: "Confirme Cerrar Documento?",
 				  text: "Esto moverá stock",
