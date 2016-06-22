@@ -113,9 +113,9 @@
                                 </li>
                                 <li><a><i class="fa fa-desktop"></i> Ventas <span class="fa fa-chevron-down"></span></a>
                                     <ul class="nav child_menu" style="display: none">
-                                        <li><a href="/ventas">Todas las ventas</a>
+                                        <li><a href="/ventas">Ventas Usuarios</a>
                                         </li>
-                                        <li><a href="media_gallery.html">Media Gallery</a>
+                                        <li><a href="/allventas">Todas las Ventas</a>
                                         </li>
                                         <li><a href="typography.html">Typography</a>
                                         </li>

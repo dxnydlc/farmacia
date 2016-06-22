@@ -1,11 +1,6 @@
 var _servicio = 'http://localhost:8000/ventas/';
+var _servDel = 'http://localhost:8000/delventa/';
 var _objeto = 'Doc. Ventas';
-
-//override defaults
-alertify.defaults.transition = "slide";
-alertify.defaults.theme.ok = "btn btn-primary";
-alertify.defaults.theme.cancel = "btn btn-danger";
-alertify.defaults.theme.input = "form-control";
 
 (function($){
 	$(document).ready(function()
@@ -13,24 +8,34 @@ alertify.defaults.theme.input = "form-control";
 			$('.delItem').click(function(event) {
 				event.preventDefault();
 				var _token = $('#token').val();
-				var _DataSend = {'_method':'DELETE','_token': _token };
+				var _DataSend = {'_method':'POST','_token': _token };
 				var _id = $(this).attr('id');
 				//
 				$('#fila_'+_id).removeClass().addClass('danger');
-				alertify.confirm("Confirme anular "+_objeto,
-					function()
-					{
-						//Ok
-						$.post(_servicio+_id, _DataSend , function(data, textStatus, xhr) {
-							console.log('correcto');
-							document.location.reload();
-						},'json');
-					},
-					function()
-					{
-						//Cancel
-						$('#fila_'+_id).removeClass();
-					});
+
+				swal({
+					title: "Anular Doc. Ventas",
+					text: "Escriba un motivo para anular:",
+					type: "input",
+					showCancelButton: true,
+					closeOnConfirm: false,
+					inputPlaceholder: "Motivo"
+				}, function (inputValue) {
+					if (inputValue === false) return false;
+					if (inputValue === "") {
+					swal.showInputError("Escriba un motivo de anular");
+						return false
+					}
+					//Ok
+					$('#id').val( _id );
+					$('#motivo_anular').val( inputValue );
+					var _DataSend = $('#frmDel').serializeArray();
+					$('#frmDel').submit();
+					/*$.post(_servicio, _DataSend , function(data, textStatus, xhr) {
+						document.location.reload();
+					},'json');*/
+				});
+
 			});
 		});
 

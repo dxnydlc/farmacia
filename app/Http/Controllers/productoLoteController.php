@@ -75,7 +75,7 @@ class productoLoteController extends Controller
             'proveedor'     => 'Ninguno'
         ];
         #Log de prodcuto
-        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'V','key'=>$token,'evento'=>'add.ProdLote','content'=>'Nuevo Producto: '.$request['lt_producto'],'res'=>'Agregado']);
+        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$token,'evento'=>'add.ProdLote','content'=>'Nuevo Producto: '.$request['lt_producto'],'res'=>'Agregado']);
         $this->make_lote( $data_lote );
         return $request->all();
     }

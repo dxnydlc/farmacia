@@ -5,7 +5,7 @@
 @stop
 
 @section('losCSS')
-    {!!Html::style('js/alertify/css/alertify.css')!!}
+    {!!Html::style('js/sweet-alert/dist/sweetalert.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
 @endsection
 
@@ -107,17 +107,17 @@
                                     <th scope="row">{{$ve->id}}</th>
                                     <td>
                                         <?php if( $ve->estado == 'Cerrado' ){ 
-                                            echo '<a href="invoice_pe/'.$ve->id.'" >'.$ve->cliente.'</a>';
+                                            echo '<a href="invoice_venta/'.$ve->id.'" >'.$tipo_doc.' '.$ve->serie.' - '.$ve->correlativo.'</a>';
                                         }else{ ?>
-                                        {!!link_to_route('pe.edit', $title  = $tipo_doc.' '.$ve->serie.' - '.$ve->correlativo, $parameters = $ve->id, $attributes = ['class'=>'btn-link '] )!!}
+                                        {!!link_to_route('ventas.edit', $title  = $tipo_doc.' '.$ve->serie.' - '.$ve->correlativo, $parameters = $ve->id, $attributes = ['class'=>'btn-link '] )!!}
                                         <?php } ?>
                                     </td>
                                     <td>{{$ve->cliente}}</td>
                                     <td>{{$ve->fecha}}</td>
                                     <td>{{$ve->estado}}</td>
-                                    <td>{{$ve->user}}</td>
+                                    <td>{{$ve->user_creado}}</td>
                                     <td>
-                                        {!!link_to_route('pe.edit', $title  = 'Anular', $parameters = $ve->id, $attributes = ['class'=>'btn-link delItem ','id'=>$ve->id] )!!}
+                                        {!!link_to_route('ventas.edit', $title  = 'Anular', $parameters = $ve->id, $attributes = ['class'=>'btn-link delItem ','id'=>$ve->id] )!!}
                                     </td>
                                 </tr>
                                 @endforeach
@@ -132,6 +132,15 @@
 
     </div>
 
+<div class="hidden">
+{!!Form::open(['route'=>'delventa.store','method'=>'POST','id'=>'frmDel' ])!!}
+    {!!Form::text('id',null,['class'=>'form-control ','id'=>'id'])!!}
+    {!!Form::text('motivo_anular',null,['class'=>'form-control ','id'=>'motivo_anular'])!!}
+    {!!Form::text('id_user_anula','1',['class'=>'form-control ','id'=>'id_user_anula'])!!}
+    {!!Form::text('user_anula','DDELACRUZ',['class'=>'form-control ','id'=>'user_anula'])!!}
+{!!Form::close()!!}
+</div>
+
     <!-- footer content -->
     @include('layouts.footer')
     <!-- /footer content -->
@@ -139,8 +148,8 @@
 
 @section('scripts')
 
-    <!-- Aletify -->
-    {!!Html::script('js/alertify/alertify.js')!!}
+    <!-- sweet Alert -->
+    {!!Html::script('js/sweet-alert/dist/sweetalert.js')!!}
 
 	<!-- icheck -->
     {!!Html::script('js/icheck/icheck.min.js')!!}

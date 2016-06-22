@@ -85,21 +85,30 @@
                     </div>
                 </div>
                 <?php } ?>
+                <?php
+                switch ($data['venta']->forma_pago) {
+                    case 'E':
+                        $forma_pago = 'Efectivo';
+                    break;
+                }
+                ?>
                 <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}}">
                     <div class="panel panel-default height">
-                        <div class="panel-heading">Creado por</div>
+                        <div class="panel-heading">Forma pago:</div>
                         <div class="panel-body">
-                            <strong>{{ $data['venta']->user_creado }}</strong><br>
-                            {{ $data['venta']->created_at }}
+                            {{ $forma_pago }}
+                            <br/>
+                            <strong>Efectivo:</strong> {{ $data['venta']->pago_efectivo }}
+                            <strong>Vuelto:</strong> {{ $data['venta']->vuelto }}
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}} pull-right">
+                <div class="col-xs-12 col-md-{{$cols}} col-lg-{{$cols}}">
                     <div class="panel panel-default height">
-                        <div class="panel-heading">Cerrado por</div>
+                        <div class="panel-heading">Usuario</div>
                         <div class="panel-body">
-                            <strong>{{ $data['venta']->user }}</strong><br>
-                            {{ $data['venta']->updated_at }}
+                            <strong>{{ $data['venta']->user_creado }}</strong><br>
+                            {{ $data['venta']->created_at }}
                         </div>
                     </div>
                 </div>
@@ -164,42 +173,6 @@
         </div>
     </div>
 
-<?php
-switch ($data['venta']->forma_pago) {
-    case 'E':
-        $forma_pago = 'Efectivo';
-    break;
-}
-?>
-    <div class="row">
-        <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
-            <div class="panel panel-default height">
-                <div class="panel-heading">Forma de Pago</div>
-                <div class="panel-body">
-                    {{ $forma_pago }}
-                    <br/>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
-            <div class="panel panel-default height">
-                <div class="panel-heading">Pago</div>
-                <div class="panel-body">
-                    {{ $data['venta']->pago_efectivo }}
-                    <br/>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-md-4 col-lg-4 pull-left">
-            <div class="panel panel-default height">
-                <div class="panel-heading">Vuelto</div>
-                <div class="panel-body">
-                    {{ $data['venta']->vuelto }}
-                    <br/>
-                </div>
-            </div>
-        </div>
-    </div>
 
 <!-- Seccion de log del documento -->
 <div class="row">

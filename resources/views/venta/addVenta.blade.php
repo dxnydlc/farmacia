@@ -170,7 +170,7 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-sm-6 col-xs-12 ">
-                                <a href="/pe" class="btn btn-default">Cancelar</a>
+                                <a href="/ventas" class="btn btn-default">Cancelar</a>
                                 <?php if( count($data['items']) > 0 ){ ?>
                                 <button  type="submit" class="btn btn-success btn-lg ">Guardar</button>
                                 <?php } ?>
@@ -185,7 +185,7 @@
         
     </div>
 
-<div class="">
+<div class="hidden">
 {!!Form::open(['route'=>'detventa.store','method'=>'post','id'=>'frmDetalle' ])!!}
     <input type="text" name="id_venta" id="id_venta" value="0" placeholder="id_venta" />
     <input type="text" name="producto" id="producto" value="" placeholder="producto" />

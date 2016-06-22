@@ -76,6 +76,8 @@ class ventasController extends Controller
         $data['vuelto']         = '';
 
         return view('venta.addVenta',compact('data'));
+
+
     }
 
     /**
@@ -294,10 +296,16 @@ class ventasController extends Controller
      */
     public function destroy($id)
     {
+        return 'Hola';
         $mytime         = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
         $fecha_mysql    = $mytime->format('d/m/Y');
         $venta          = venta::find( $id );#lo pongo aqui por que mas abajo anulo este doc y ya no ser a visible en "find"
+        #
+        #Actualizando el doc
+        DB::table('detalle_venta')
+            ->where('id', $request['id'])
+            ->update(['motivo_anular' => $request['texto'], 'id_user_anula' => 1, 'user_anula' => 'DDELACRUZ']);
         #
         $data           = venta::where(['id' => $id])->delete();
         #Movimiento de Kadex en almacen
@@ -309,7 +317,7 @@ class ventasController extends Controller
                 $data_last = array();
                 $data_last  = $this->get_lastkardex( $rs->id_producto );
                 if( $data_last != 'no' ){
-                    $saldo_cant       = $data_last['cant'] - $rs->cantidad;
+                    $saldo_cant       = $data_last['cant'] + $rs->cantidad;
                     $saldo_precio     = $data_last['precio'];
                     $saldo_valor_f    = $data_last['valor'];
                 }else{
@@ -348,6 +356,10 @@ class ventasController extends Controller
             unset($rs);
         }
         #/Movimiento de Kadex en almacen
+
+        #Para el caso de log de usuario el key el el id de usuario y el tipo es LogP = Log personal
+        $this->set_logs(['tipo'=>'LogP','tipo_doc'=>'VE','key'=>1,'evento'=>'add.ProdLote','content'=>'Anular Doc Ventas '.$venta->serie.'-'.$venta->correlativo,'res'=>'Anulado']);
+
     }
 
 

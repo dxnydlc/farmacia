@@ -55,5 +55,20 @@ class venta extends Model
             return $fecha.' '.$ar[1];
         }
     }
+
+    public function getEstadoAttribute($valor)
+    {
+        switch ($valor) {
+            case 'ACT':
+                return 'Activo';
+                break;
+            case 'CER':
+                return 'Cerrado';
+                break;
+            case 'DEL':
+                return 'Anulado';
+                break;
+        }
+    }
     
 }

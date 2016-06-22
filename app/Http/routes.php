@@ -48,6 +48,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('cliente','clientesController');
     Route::resource('detventa','detalle_ventaController');
     Route::resource('addProLot','productoLoteController');
+    Route::resource('delventa','delVenta');
     
 });
 
