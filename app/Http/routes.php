@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::resource('/','homeController');
 Route::resource('login','logController');
 
 

@@ -4,15 +4,9 @@ namespace farmacia\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Auth;
-use Session;
-use Redirect;
-
 use farmacia\Http\Requests;
-use farmacia\Http\Requests\loginRequest;
-use farmacia\Http\Controllers\Controller;
 
-class logController extends Controller
+class homeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +15,7 @@ class logController extends Controller
      */
     public function index()
     {
-        return view('login.form');
+        return view('index');
     }
 
     /**
@@ -40,15 +34,9 @@ class logController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(loginRequest $request)
+    public function store(Request $request)
     {
-        return $request->all();
-        
-        if( Auth::attempt( ['email' => $request['email'] , 'password' => $request['password'] ]  ) ){
-            return Redirect::to('home');
-        }
-        Session::flash('message-error','Datos incorrectos');
-        return Redirect::to('/');
+        //
     }
 
     /**

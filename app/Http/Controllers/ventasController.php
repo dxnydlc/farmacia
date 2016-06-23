@@ -190,6 +190,11 @@ class ventasController extends Controller
         #Productos con lote
         $data['productos']      = DB::table('productos')->join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->get();
         $data['venta']          = venta::find( $id_venta );
+        #Ya cerrado?
+        if( $data['venta']->estado == 'Cerrado' )
+        {
+            return redirect::to('/invoice_venta/'.$data['venta']->id);
+        }
         #
         $data['clientes']       = clientes::lists('nombre','id');
         #

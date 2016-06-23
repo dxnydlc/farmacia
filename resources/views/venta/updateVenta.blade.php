@@ -113,7 +113,7 @@
                                         ?>
                                             <tr id="TR{{$items->id}}" >
                                                 <th scope="row">{{$o}}</th>
-                                                <th class="fuente-r tdTabla" id="TD{{$o}}" tdnombre="{{$items->producto}}" tdidProd="{{$items->id}}" >{{$items->producto}}<br><small>Lote:{{$items->lote}}, Vence: {{$fecha}}</small></th>
+                                                <th class="fuente-l tdTabla" id="TD{{$o}}" tdnombre="{{$items->producto}}" tdidProd="{{$items->id}}" >{{$items->producto}}<br><small>Lote:{{$items->lote}}, Vence: {{$fecha}}</small></th>
                                                 <th class="fuente-r tdTabla" >{{$items->precio}}</th>
                                                 <th class="fuente-r tdTabla" >{{$items->cantidad}}</th>
                                                 <th class="fuente-r tdTabla" >{{$items->total}}</th>

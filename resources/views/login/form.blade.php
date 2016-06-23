@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Gentallela Alela! | </title>
+    <title>Farmacia | Ingreso</title>
 
     <!-- Bootstrap core CSS -->
     {!!Html::style('css/bootstrap.min.css')!!}
@@ -41,6 +41,10 @@
         <a class="hiddenanchor" id="tologin"></a>
 
         <div id="wrapper">
+
+        @include('alertas.errors')
+        @include('alertas.userRequest')
+
             <div id="login" class="animate form">
                 <section class="login_content">
                     {!!Form::open(['route'=>'login.store','method'=>'POST','autocomplete'=>'off','id'=>'frmLogin'])!!}
@@ -54,7 +58,7 @@
                             {!!Form::password('password',['class'=>'form-control'])!!}
                         </div>
                         <div>
-                            <input type="submit" class="btn btn-default submit" value="Log in" >
+                            <input type="submit" class="btn btn-default submit" value="Ingresar" >
                             <a class="reset_pass" href="#">Lost your password?</a>
                         </div>
                         <div class="clearfix"></div>
