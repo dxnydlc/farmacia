@@ -13,12 +13,14 @@ use farmacia\logs;
 use farmacia\clientes;
 use farmacia\kardex;
 use farmacia\productos;
-use \farmacia\config;
+use farmacia\config;
+use farmacia\Routing\Route;
 
 use Session;
 use Redirect;
 use Carbon;
 use DB;
+use Auth;
 
 class ventasController extends Controller
 {
@@ -27,6 +29,12 @@ class ventasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth' );
+        #$this->middleware('ventas' , ['only' => ['create','edit','show'] ] );
+    }
     public function index()
     {
         Session::forget( 'token_new_venta' );
@@ -88,7 +96,10 @@ class ventasController extends Controller
      */
     public function store(ventaCreateRequest $request)
     {
-        DB::enableQueryLog();
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $response   = array();
         $data       = array();
         $config     = $this->get_config();
@@ -123,13 +134,15 @@ class ventasController extends Controller
             'pago_efectivo' => $request['pago_efectivo'],
             'vuelto'        => $request['vuelto'],
             'token'         => $dea_token,
-            'id_user_creado'=> 1,
-            'user_creado'   => 'DDELACRUZ',
+            'id_user_creado'=> $id_user,
+            'user_creado'   => $user,
             'estado'        => 'ACT'
         ]);
         $token = Session::get('token_new_venta');
         Session::forget( 'token_new_venta' );
         $id_venta = $venta->id;
+        #Mascara doc
+        $mask_doc = $request['tipo_doc'].' 00'.$serie.' - 000'.$correlativo;
         #
         $response['id_venta'] = $id_venta;
         #uniendo con el detalle de venta
@@ -153,10 +166,9 @@ class ventasController extends Controller
         $data['vuelto']         = $data['venta']->vuelto;
         $data['ruc']            = $data['venta']->ruc;
         $data['razon_social']   = $data['venta']->razon_social;
-        #Logs
-        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$token,'evento'=>'save.VE','content'=>'Guardar','res'=>'Guardado']);
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'VE','key'=>$id_user,'evento'=>'make.VE','content'=>'Crear Doc.Venta '.$mask_doc,'res'=>'Creado', 'link_to' => $id_venta ]);
         #
-        #Session::flash('estado','Parte de entrada guardado');
         return redirect('ventas/'.$id_venta.'/edit')->with('estado', 'Documento de ventas guardado');
 
     }
@@ -226,6 +238,9 @@ class ventasController extends Controller
      */
     public function update(ventaUpdateRequest $request, $id)
     {
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $mytime = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
         $fecha_mysql = $mytime->format('d/m/Y H:m:s');
@@ -237,6 +252,8 @@ class ventasController extends Controller
         $venta = venta::find( $id );
         $venta->fill( $request->all() );
         $venta->save();
+        #Mascara doc
+        $mask_doc = $venta->tipo_doc.' 00'.$venta->serie.' - 000'.$venta->correlativo;
         #Aumentando el correlativo en la serie
         $this->set_correlativo(['tipo'=>$request['tipo_doc'],'corr'=>$request['correlativo']+1]);
         #Movimiento de Kadex en almacen
@@ -280,16 +297,16 @@ class ventasController extends Controller
                     'cantidad_f'    => $saldo_cant,
                     'precio_f'      => $saldo_precio,
                     'valor_f'       => $saldo_valor_f,
-                    'id_user'       => '1',
-                    'usuario'       => 'DDELACRUZ'
+                    'id_user'       => $id_user,
+                    'usuario'       => $user
                 ];
                 $Kardex = kardex::create($data_insert);
             }
             unset($rs);
         }
         #/Movimiento de Kadex en almacen
-        #logs
-        $this->set_logs(['tipo'=>'Docs','tipo_doc'=>'VE','key'=>$request['tokenDoc'],'evento'=>'cerrar.VE','content'=>'Cerrar venta','res'=>'Cerrado']);
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'VE','key'=>$id_user,'evento'=>'close.VE','content'=>'Cerrar Doc.Venta '.$mask_doc,'res'=>'Cerrado', 'link_to' => $id ]);
         return redirect::to('/invoice_venta/'.$id);
     }
 
@@ -385,9 +402,18 @@ class ventasController extends Controller
 
     public function set_logs($param)
     {
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $mytime = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
         $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        $link_to = '';
+        #
+        if( $param['tipo'] == 'PL' )
+        {
+            $link_to = $param['link_to'];
+        }
         #
         $data_insert = [
             'tipo'          => $param['tipo'],
@@ -397,8 +423,9 @@ class ventasController extends Controller
             'contenido'     => $param['content'],
             'resultado'     => $param['res'],
             'fecha'         => $fecha_mysql,
-            'id_user'       => 1,
-            'usuario'       => 'DDELACRUZ'
+            'id_user'       => $id_user,
+            'usuario'       => $user,
+            'link_to'       => $link_to
         ];
         logs::create($data_insert);
     }
@@ -452,6 +479,70 @@ class ventasController extends Controller
         }else{
             return 'no';
         }
+    }
+
+    public function make_boleta()
+    {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $response   = array();
+        $data       = array();
+        $config     = $this->get_config();
+        #fecha
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha = $mytime->format('d/m/Y');
+        #Session
+        $token              = \Hash::make( $mytime->toDateTimeString() );
+        Session::put( 'token_new_venta' , $token );
+        #
+        $serie          = $config->serie_boleta;
+        $correlativo    = $config->correlativo_boleta;
+        #
+        $mask_doc = 'B 00'.$serie.' - 000'.$correlativo;
+        #
+        $venta = venta::create([
+            'tipo_doc'      => 'B',
+            'serie'         => $serie,
+            'correlativo'   => $correlativo,
+            'id_cliente'    => 1,
+            'cliente'       => 'Ninguna',
+            'fecha'         => $fecha,
+            'total'         => 0,
+            'ruc'           => '',
+            'razon_social'  => '',
+            'forma_pago'    => 'E',
+            'pago_efectivo' => 0,
+            'vuelto'        => 0,
+            'token'         => $token,
+            'id_user_creado'=> $id_user,
+            'user_creado'   => $user,
+            'estado'        => 'ACT'
+        ]);
+        Session::forget( 'token_new_venta' );
+        $id_venta = $venta->id;
+        #Productos con lote
+        $data['productos']      = DB::table('productos')->join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->get();
+        $data['venta']          = venta::find( $id_venta );
+        #
+        $data['clientes']       = clientes::lists('nombre','id');
+        #
+        $data['fecha']          = $data['venta']->fecha;
+        $data['token']          = $token;
+        $data['items']          = DB::table('detalle_venta')->where( "id_venta" , $id_venta )->get();
+
+        $data['serie']          = $data['venta']->serie;
+        $data['correlativo']    = $data['venta']->correlativo;
+        $data['efectivo']       = $data['venta']->efectivo;
+        $data['vuelto']         = $data['venta']->vuelto;
+        $data['ruc']            = $data['venta']->ruc;
+        $data['razon_social']   = $data['venta']->razon_social;
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'VE','key'=>$id_user,'evento'=>'make.VE','content'=>'Crear Doc.Venta '.$mask_doc,'res'=>'Creado', 'link_to' => $id_venta ]);
+        #
+        return redirect('ventas/'.$id_venta.'/edit')->with('estado', 'Documento de ventas creado');
     }
 
 }

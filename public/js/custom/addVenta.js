@@ -178,7 +178,7 @@ var $rows = $('table#tblProductos > tbody tr ').keynavigator({
   				var _efectivo = $('#pago_efectivo').val();
   				if( _totalDoc > _efectivo && $('#forma_pago').val() == 'E' )
   				{
-  					swal("Pago Efectivo", "El monto de pago es menor al total", "warning");
+  					swal("Pago Efectivo", "El monto de pago es menor al total", "error");
   					return true;
   				}
 				swal({

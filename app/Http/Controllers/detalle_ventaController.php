@@ -12,6 +12,7 @@ use DB;
 use Carbon;
 use Session;
 use Redirect;
+use Auth;
 
 class detalle_ventaController extends Controller
 {
@@ -43,7 +44,11 @@ class detalle_ventaController extends Controller
      */
     public function store(Request $request)
     {
-        #DB::enableQueryLog();
+        DB::enableQueryLog();
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $response       = array();
         $id_return      = 0;
         $token          = $request->token;
@@ -58,13 +63,14 @@ class detalle_ventaController extends Controller
             'precio'        => $request['precio'],
             'total'         => $request['total'],
             'descuento'     => $request['descuento'],
-            'id_user'       => 1,
-            'usuario'       => 'DDELACRUZ',
+            'id_user'       => $id_user,
+            'usuario'       => $user,
             'token'         => $request['token']
         ];
         $id_return = detalle_venta::create( $data_insert );
         $response['id']     = $id_return->id;
         $response['token']  = $token;
+        $response['data_insert']  = $data_insert;
         #$response['query'] = DB::getQueryLog();
         $response['items'] = DB::table('detalle_venta')->where( "token" , $token )->get();
 
@@ -125,6 +131,10 @@ class detalle_ventaController extends Controller
 
     public function set_logs($param)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $mytime = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
         $fecha_mysql = $mytime->format('d/m/Y H:m:s');
@@ -137,8 +147,8 @@ class detalle_ventaController extends Controller
             'contenido'     => $param['content'],
             'resultado'     => $param['res'],
             'fecha'         => $fecha_mysql,
-            'id_user'       => 1,
-            'usuario'       => 'DDELACRUZ'
+            'id_user'       => $id_user,
+            'usuario'       => $user
         ];
         logs::create($data_insert);
     }

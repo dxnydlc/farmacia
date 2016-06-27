@@ -4,24 +4,37 @@ namespace farmacia\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Auth;
-use Session;
-use Redirect;
+use farmacia\Http\Requests\UserCreateRequest;
+use farmacia\Http\Requests\UserUpdateRequest;
 
 use farmacia\Http\Requests;
-use farmacia\Http\Requests\loginRequest;
-use farmacia\Http\Controllers\Controller;
+use farmacia\User;
 
-class logController extends Controller
+
+use Illuminate\Routing\Route;
+use Session;
+use Redirect;
+use DB;
+
+class UsuarioController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth' );
+        $this->middleware('admin' , ['only' => ['create','edit'] ] );
+    }
+
+
     public function index()
     {
-        return view('login.form');
+        $users = User::paginate(5);
+        return view('usuario.home',compact('users'));
     }
 
     /**
@@ -31,8 +44,18 @@ class logController extends Controller
      */
     public function create()
     {
-        //
+        return view('usuario.create');
     }
+
+
+    public function buscaDNI($valor)
+    {
+        $users = DB::table('users')->where('dni',$valor)->get();
+        return response()->json(
+            $users
+        );
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -40,17 +63,12 @@ class logController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(loginRequest $request)
+    public function store(Request $request)
     {
-        #return $request->all();
-        
-        if( Auth::attempt( ['user' => $request['email'] , 'password' => $request['password'] ]  ) ){
-            return Redirect::to('home');
-            #return "login";
-        }
-        #Session::flash('message-error','Datos incorrectos');
-        #return "error pe";
-        return Redirect::to('login')->with('message-error','Usuario/contraseña incorrectos');
+        User::create( $request->all() );
+        Session::flash('message','Usuario creado correctamente');
+        #return redirect('/usuario')->with('message','store');
+        return redirect::to('/usuario');
     }
 
     /**
@@ -72,7 +90,8 @@ class logController extends Controller
      */
     public function edit($id)
     {
-        //
+        $User = User::find($id);
+        return view('marca.editMarca',["User" => $User ]);
     }
 
     /**
@@ -96,11 +115,5 @@ class logController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function logout()
-    {
-        Auth::logout();
-        return Redirect::to('/login')->with('message-error','Datos incorrectos');
     }
 }

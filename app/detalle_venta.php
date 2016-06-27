@@ -11,7 +11,7 @@ class detalle_venta extends Model
     protected $table = 'detalle_venta';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['producto','id_producto','lote','laboratorio','vencimiento','cantidad','precio','total','descuento','id_user','usuario','token'];
+    protected $fillable = ['id_venta','producto','id_producto','lote','laboratorio','vencimiento','cantidad','precio','total','descuento','id_user','usuario','token'];
     protected $dates = ['deleted_at'];
 
     public function getVencimientoAttribute($valor)

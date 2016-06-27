@@ -4,10 +4,21 @@ namespace farmacia\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
+use Auth;
+use Session;
+use Redirect;
+
+
 use farmacia\Http\Requests;
+use Illuminate\Routing\Route;
 
 class homeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => 'home'] );
+    }
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +26,15 @@ class homeController extends Controller
      */
     public function index()
     {
-        return view('index');
+        try {
+            if( Auth::User()->name != '' )
+            {
+                return view('index');
+            }
+        } catch (Exception $e) {
+            return view('login.form');
+        }
+        
     }
 
     /**

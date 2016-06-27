@@ -39,11 +39,13 @@
     <div class="">
         <a class="hiddenanchor" id="toregister"></a>
         <a class="hiddenanchor" id="tologin"></a>
-
-        <div id="wrapper">
-
+        
         @include('alertas.errors')
         @include('alertas.userRequest')
+        
+        <div id="wrapper">
+
+        
 
             <div id="login" class="animate form">
                 <section class="login_content">

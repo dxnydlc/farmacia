@@ -11,8 +11,6 @@
 |
 */
 
-Route::resource('/','homeController');
-Route::resource('login','logController');
 
 
 /*
@@ -26,10 +24,17 @@ Route::resource('login','logController');
 |
 */
 
-Route::get('invoice_pe/{id}','peController@invoice');
-Route::get('invoice_venta/{id}','ventasController@invoice');
+
+
+Route::get('logout','logController@logout');
 
 Route::group(['middleware' => ['web']], function () {
+    
+    Route::resource('home','homeController');
+    Route::resource('/','homeController');
+    Route::resource('login','logController');
+
+
     Route::resource('categoria','categoriaController');
     Route::resource('marca','marcaController');
     Route::resource('clase','claseController');
@@ -43,10 +48,15 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('pe','peController');
     Route::resource('kardex','kardexController');
     Route::resource('ventas','ventasController');
+    Route::resource('mb','ventasController@make_boleta');
     Route::resource('cliente','clientesController');
     Route::resource('detventa','detalle_ventaController');
     Route::resource('addProLot','productoLoteController');
     Route::resource('delventa','delVenta');
+    Route::resource('usuario','UsuarioController');
+
+    Route::get('invoice_venta/{id}','ventasController@invoice');
+    Route::get('invoice_pe/{id}','peController@invoice');
     
 });
 

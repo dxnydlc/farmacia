@@ -12,8 +12,30 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'last_name', 'dni', 'email', 'type', 'user', 'password',
     ];
+
+    public function getTypeAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            switch ($valor) {
+                case 'admin':
+                    return 'Administrador';
+                break;
+                case 'normal':
+                    return 'Estándar';
+                break;
+            }
+        }
+    }
+
+    public function setPasswordAttribute($valor)
+    {
+        if( !empty($valor) ){
+           $this->attributes['password'] = \Hash::make( $valor);
+        }
+    }
 
     /**
      * The attributes excluded from the model's JSON form.

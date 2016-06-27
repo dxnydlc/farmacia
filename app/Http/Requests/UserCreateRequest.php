@@ -4,7 +4,7 @@ namespace farmacia\Http\Requests;
 
 use farmacia\Http\Requests\Request;
 
-class loginRequest extends Request
+class UserCreateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,9 @@ class loginRequest extends Request
     public function rules()
     {
         return [
-            'email'     => 'required',
-            'password'  => 'required'
+            'nombre'    => 'required' ,
+            'dni'       => 'required|unique:users' ,
+            'apellidos' => 'required'
         ];
     }
 }

@@ -45,7 +45,15 @@
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 	                <div class="x_content">
-	                	<a href="ventas/create" class="btn btn-default">Nueva Venta</a>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="ventas/create" class="btn btn-default">Nueva Venta</a>
+                        </li>
+                        <li>
+                            <a href="/mb" class="btn btn-default">Nueva Boleta</a>
+                        </li>
+                    </ul>
+	                	
 	                </div>
 	            </div>
 			</div>
@@ -123,6 +131,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {!!$venta->render()!!}
 
                     </div>
                 </div>

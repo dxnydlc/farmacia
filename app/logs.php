@@ -11,6 +11,6 @@ class logs extends Model
     protected $table = 'logs';
     protected $primaryKey = 'id';
 
-    protected $fillable = ['tipo','tipo_doc','key','evento','contenido','resultado','fecha','id_user','usuario'];
+    protected $fillable = ['tipo','tipo_doc','key','evento','contenido','resultado','fecha','id_user','usuario','link_to'];
     protected $dates = ['deleted_at'];
 }

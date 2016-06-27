@@ -48,5 +48,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \farmacia\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'admin' => \farmacia\Http\Middleware\Admin::class,
+        'ventas' => \farmacia\Http\Middleware\ventas::class,
     ];
 }
