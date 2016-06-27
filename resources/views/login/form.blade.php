@@ -50,6 +50,7 @@
             <div id="login" class="animate form">
                 <section class="login_content">
                     {!!Form::open(['route'=>'login.store','method'=>'POST','autocomplete'=>'off','id'=>'frmLogin'])!!}
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
                         <h1>Login Form</h1>
                         <div>
                             {!!Form::label('email','Correo (*):')!!}
