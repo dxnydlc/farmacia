@@ -102,7 +102,8 @@
                                 @endforeach
                             </tbody>
                         </table>
-
+                        {!!$dataMarcas->render()!!}
+                        
                     </div>
                 </div>
             </div>

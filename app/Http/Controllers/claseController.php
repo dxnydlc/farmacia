@@ -11,6 +11,11 @@ use farmacia\Http\Requests\ClaseUpdateRequest;
 use farmacia\clase;
 use Session;
 use Redirect;
+use DB;
+
+use Auth;
+use farmacia\logs;
+use Carbon;
 
 class claseController extends Controller
 {
@@ -43,9 +48,15 @@ class claseController extends Controller
      */
     public function store(ClaseCreateRequest $request)
     {
-        clase::create( $request->all() );
-        Session::flash('message','Clase creada correctamente');
-        return redirect::to('/clase');
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $clase = clase::create( $request->all() );
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'CLS','key'=>$id_user,'evento'=>'make.Clase','content'=>'Has creado una clase '.$clase->nombre ,'res'=>'Creado', 'link_to' => $clase->id_clase ]);
+        #
+        return redirect::to('/clase')->with('message','Clase creada correctamente');
     }
 
     /**
@@ -80,12 +91,17 @@ class claseController extends Controller
      */
     public function update(ClaseUpdateRequest $request, $id)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $clase = clase::find( $id );
         $clase->fill( $request->all() );
         $clase->save();
-
-        session::flash('message','Clase editada correctamente');
-        return redirect::to('/clase');
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'CLS','key'=>$id_user,'evento'=>'update.Clase','content'=>'Has editado una clase '.$clase->nombre ,'res'=>'Editado', 'link_to' => $clase->id_clase ]);
+        #
+        return redirect::to('/clase')->with('message','Clase editada correctamente');
     }
 
     /**
@@ -96,7 +112,47 @@ class claseController extends Controller
      */
     public function destroy($id_clase)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $clase = clase::find( $id_clase );
         $data = clase::where(['id_clase' => $id_clase])->delete();
+         #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'CLS','key'=>$id_user,'evento'=>'del.Clase','content'=>'Has eliminado una clase '.$clase->nombre ,'res'=>'Eliminado', 'link_to' => $clase->id_clase ]);
+        #
         return $data;
     }
+
+
+    public function set_logs($param)
+    {
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        $link_to = '';
+        #
+        if( $param['tipo'] == 'PL' )
+        {
+            $link_to = $param['link_to'];
+        }
+        #
+        $data_insert = [
+            'tipo'          => $param['tipo'],
+            'tipo_doc'      => $param['tipo_doc'],
+            'key'           => $param['key'],
+            'evento'        => $param['evento'],
+            'contenido'     => $param['content'],
+            'resultado'     => $param['res'],
+            'fecha'         => $fecha_mysql,
+            'id_user'       => $id_user,
+            'usuario'       => $user,
+            'link_to'       => $link_to
+        ];
+        logs::create($data_insert);
+    }
+
 }

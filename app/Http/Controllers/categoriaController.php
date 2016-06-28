@@ -12,6 +12,10 @@ use farmacia\categoria;
 use Session;
 use Redirect;
 
+use Auth;
+use farmacia\logs;
+use Carbon;
+
 class categoriaController extends Controller
 {
     /**
@@ -19,6 +23,14 @@ class categoriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth' );
+        $this->middleware('categ' , ['only' => ['create','edit','show'] ] );
+    }
+
+
     public function index()
     {
         $dataCategorias = categoria::paginate(5);
@@ -43,9 +55,16 @@ class categoriaController extends Controller
      */
     public function store(CategoriaCreateRequest $request)
     {
-        categoria::create( $request->all() );
-        Session::flash('message','Categoria creada correctamente');
-        return redirect::to('/categoria');
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $categ = categoria::create( $request->all() );
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'CA','key'=>$id_user,'evento'=>'make.Categoria','content'=>'Has creado una categoria '.$categ->nombre ,'res'=>'Creado', 'link_to' => $categ->id_categoria ]);
+        #
+        #Session::flash('message','Categoria creada correctamente');
+        return redirect::to('/categoria')->with('message','Categoria creada correctamente');
     }
 
     /**
@@ -100,4 +119,35 @@ class categoriaController extends Controller
         #$this->categoria->delete();
         return $data;
     }
+
+    public function set_logs($param)
+    {
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        $link_to = '';
+        #
+        if( $param['tipo'] == 'PL' )
+        {
+            $link_to = $param['link_to'];
+        }
+        #
+        $data_insert = [
+            'tipo'          => $param['tipo'],
+            'tipo_doc'      => $param['tipo_doc'],
+            'key'           => $param['key'],
+            'evento'        => $param['evento'],
+            'contenido'     => $param['content'],
+            'resultado'     => $param['res'],
+            'fecha'         => $fecha_mysql,
+            'id_user'       => $id_user,
+            'usuario'       => $user,
+            'link_to'       => $link_to
+        ];
+        logs::create($data_insert);
+    }
+
 }

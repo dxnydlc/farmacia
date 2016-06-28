@@ -44,11 +44,14 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \farmacia\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \farmacia\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'admin' => \farmacia\Http\Middleware\Admin::class,
-        'ventas' => \farmacia\Http\Middleware\ventas::class,
+        'auth'      => \farmacia\Http\Middleware\Authenticate::class,
+        'auth.basic'=> \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'guest'     => \farmacia\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'  => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'admin'     => \farmacia\Http\Middleware\Admin::class,
+        'ventas'    => \farmacia\Http\Middleware\ventas::class,
+        'marcas'    => \farmacia\Http\Middleware\mdwMarca::class,
+        'categ'     => \farmacia\Http\Middleware\mdwCategoria::class,
+        'clase'     => \farmacia\Http\Middleware\mdwClase::class,
     ];
 }

@@ -9,8 +9,16 @@ use farmacia\Http\Requests;
 use farmacia\Http\Requests\MarcaCreateRequest;
 use farmacia\Http\Requests\MarcaUpdateRequest;
 use farmacia\marca;
+
+
 use Session;
 use Redirect;
+use DB;
+
+
+use Auth;
+use farmacia\logs;
+use Carbon;
 
 class marcaController extends Controller
 {
@@ -19,6 +27,13 @@ class marcaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth' );
+        $this->middleware('marcas' , ['only' => ['create','edit','show'] ] );
+    }
+
     public function index()
     {
         $dataMarcas = marca::paginate(5);
@@ -43,9 +58,16 @@ class marcaController extends Controller
      */
     public function store(MarcaCreateRequest $request)
     {
-        marca::create( $request->all() );
-        Session::flash('message','Marca creada correctamente');
-        return redirect::to('/marca');
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $marca = marca::create( $request->all() );
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'MA','key'=>$id_user,'evento'=>'make.Marca','content'=>'Has creado una marca '.$marca->nombre ,'res'=>'Creado', 'link_to' => $marca->id_marca ]);
+        #
+        #Session::flash('message','Marca creada correctamente');
+        return redirect::to('/marca')->with('message','Marca creada correctamente');
     }
 
     /**
@@ -80,10 +102,16 @@ class marcaController extends Controller
      */
     public function update(MarcaUpdateRequest $request, $id)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $marca = marca::find( $id );
         $marca->fill( $request->all() );
         $marca->save();
-
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'MA','key'=>$id_user,'evento'=>'update.Marca','content'=>'Has editado una marca '.$marca->nombre ,'res'=>'Actualizado', 'link_to' => $marca->id_marca ]);
+        #
         session::flash('message','Marca editada correctamente');
         return redirect::to('/marca');
     }
@@ -96,8 +124,46 @@ class marcaController extends Controller
      */
     public function destroy($id_marca)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $marca = marca::find( $id_marca );
         $data = marca::where(['id_marca' => $id_marca])->delete();
-        #$this->categoria->delete();
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'MA','key'=>$id_user,'evento'=>'del.Marca','content'=>'Has eliminado una marca '.$marca->nombre ,'res'=>'Eliminado', 'link_to' => $marca->id_marca ]);
+        #
         return $data;
     }
+
+    public function set_logs($param)
+    {
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        $link_to = '';
+        #
+        if( $param['tipo'] == 'PL' )
+        {
+            $link_to = $param['link_to'];
+        }
+        #
+        $data_insert = [
+            'tipo'          => $param['tipo'],
+            'tipo_doc'      => $param['tipo_doc'],
+            'key'           => $param['key'],
+            'evento'        => $param['evento'],
+            'contenido'     => $param['content'],
+            'resultado'     => $param['res'],
+            'fecha'         => $fecha_mysql,
+            'id_user'       => $id_user,
+            'usuario'       => $user,
+            'link_to'       => $link_to
+        ];
+        logs::create($data_insert);
+    }
+
 }

@@ -102,7 +102,7 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        {!!$users->render()!!}
+                        {!!$dataClases->render()!!}
 
                     </div>
                 </div>
