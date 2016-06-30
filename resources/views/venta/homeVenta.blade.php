@@ -52,6 +52,9 @@
                         <li>
                             <a href="/mb" class="btn btn-default">Nueva Boleta</a>
                         </li>
+                        <li>
+                            <a href="/ex_ventas" class="btn btn-success "><span class="glyphicon glyphicon-floppy-save" ></span> Exportar</a>
+                        </li>
                     </ul>
 	                	
 	                </div>
@@ -102,14 +105,9 @@
                             <tbody>
                                 @foreach($venta as $ve)
                                 <?php
-                                switch ($ve->tipo_doc) {
-                                    case 'B':
-                                        $tipo_doc = 'Boleta';
-                                    break;
-                                    case 'F':
-                                        $tipo_doc = 'Factura';
-                                    break;
-                                }
+
+                                $tipo_doc = $ve->tipo_doc;
+                                
                                 ?>
                                 <tr id="fila_{{$ve->id}}" >
                                     <th scope="row">{{$ve->id}}</th>

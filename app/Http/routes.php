@@ -48,6 +48,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('pe','peController');
     Route::resource('kardex','kardexController');
     Route::resource('ventas','ventasController');
+    Route::resource('allventas','allVentas');
     Route::resource('mb','ventasController@make_boleta');
     Route::resource('cliente','clientesController');
     Route::resource('detventa','detalle_ventaController');
@@ -55,8 +56,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('delventa','delVenta');
     Route::resource('usuario','UsuarioController');
 
+    Route::resource('ex_ventas','exportDocs@all_ventas');
+
     Route::get('invoice_venta/{id}','ventasController@invoice');
     Route::get('invoice_pe/{id}','peController@invoice');
+    Route::get('ventas_fecha/{fecha}','ventasController@venta_fecha');
     
 });
 

@@ -5,6 +5,7 @@ use Illuminate\Contracts\Auth\Guard;
 
 use Closure;
 use Session;
+use Auth;
 
 class ventas
 {
@@ -25,10 +26,8 @@ class ventas
 
     public function handle($request, Closure $next)
     {
-        if( $this->auth->User()->type != 'Administrador'  )
+        if( Auth::check() )
         {
-            #return 'no login';
-            Session::flash('message-error','No tiene privilegios');
             return redirect()->to('/login');
         }
         return $next($request);

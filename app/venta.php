@@ -70,5 +70,17 @@ class venta extends Model
                 break;
         }
     }
+
+    public function getTipodocAttribute($valor)
+    {
+        switch ($valor) {
+            case 'B':
+                return 'Boleta';
+                break;
+            case 'F':
+                return 'Factura';
+                break;
+        }
+    }
     
 }

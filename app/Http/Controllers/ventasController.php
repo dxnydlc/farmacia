@@ -37,8 +37,21 @@ class ventasController extends Controller
     }
     public function index()
     {
+        $tipo       = Auth::User()->type;
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         Session::forget( 'token_new_venta' );
-        $venta = venta::paginate(10);
+        $fecha = $this->fecha_hoy();
+        if( $tipo == 'Administrador' )
+        {
+            $venta = venta::where('fecha',$fecha)->paginate(10);
+        }
+        else
+        {
+            $venta = venta::where([['id_user_creado','=',$id_user],['fecha','=',$fecha]])->paginate(10);
+        }
+        return $venta;
         return view('venta.homeVenta',compact('venta'));
     }
 
@@ -237,7 +250,8 @@ class ventasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(ventaUpdateRequest $request, $id)
-    {
+    {   
+        $request['total'] = $request['totalDoc'];
         $id_user    = Auth::User()->id;
         $user       = Auth::User()->user;
         #
@@ -330,54 +344,57 @@ class ventasController extends Controller
             ->update(['motivo_anular' => $request['texto'], 'id_user_anula' => 1, 'user_anula' => 'DDELACRUZ']);
         #
         $data           = venta::where(['id' => $id])->delete();
-        #Movimiento de Kadex en almacen
-        $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
-        #
-        if( count($productos) > 0 )
+        if( $venta->estado == 'Cerrado' )
         {
-            foreach ($productos as $key => $rs) {
-                $data_last = array();
-                $data_last  = $this->get_lastkardex( $rs->id_producto );
-                if( $data_last != 'no' ){
-                    $saldo_cant       = $data_last['cant'] + $rs->cantidad;
-                    $saldo_precio     = $data_last['precio'];
-                    $saldo_valor_f    = $data_last['valor'];
-                }else{
-                    $saldo_cant       = $rs->cantidad;
-                    $saldo_precio     = $rs->precio;
-                    $saldo_valor_f    = $rs->cantidad * $rs->precio;
+            #Movimiento de Kadex en almacen
+            $productos      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
+            #
+            if( count($productos) > 0 )
+            {
+                foreach ($productos as $key => $rs) {
+                    $data_last = array();
+                    $data_last  = $this->get_lastkardex( $rs->id_producto );
+                    if( $data_last != 'no' ){
+                        $saldo_cant       = $data_last['cant'] + $rs->cantidad;
+                        $saldo_precio     = $data_last['precio'];
+                        $saldo_valor_f    = $data_last['valor'];
+                    }else{
+                        $saldo_cant       = $rs->cantidad;
+                        $saldo_precio     = $rs->precio;
+                        $saldo_valor_f    = $rs->cantidad * $rs->precio;
+                    }
+                    #return $data_last;
+                    $cant       = $rs->cantidad;
+                    $precio     = $rs->precio;
+                    $valor_f    = $rs->cantidad * $rs->precio;
+                    #Valores Kardex anterior
+                    $data_insert = [
+                        'movimiento'    => 'E',
+                        'fecha'         => $fecha_mysql,
+                        'id_producto'   => $rs->id_producto,
+                        'producto'      => $rs->producto,
+                        'id_persona'    => $venta->id_cliente,
+                        'persona'       => $venta->cliente,
+                        'documento'     => 'VE',
+                        'numero_doc'    => $venta->serie.'-'.$venta->correlativo,
+                        'cantidad_e'    => $cant,
+                        'precio_e'      => $precio,
+                        'valor_e'       => $valor_f,
+                        'cantidad_s'    => 0,
+                        'precio_s'      => 0,
+                        'valor_s'       => 0,
+                        'cantidad_f'    => $saldo_cant,
+                        'precio_f'      => $saldo_precio,
+                        'valor_f'       => $saldo_valor_f,
+                        'id_user'       => '1',
+                        'usuario'       => 'DDELACRUZ'
+                    ];
+                    $Kardex = kardex::create($data_insert);
                 }
-                #return $data_last;
-                $cant       = $rs->cantidad;
-                $precio     = $rs->precio;
-                $valor_f    = $rs->cantidad * $rs->precio;
-                #Valores Kardex anterior
-                $data_insert = [
-                    'movimiento'    => 'E',
-                    'fecha'         => $fecha_mysql,
-                    'id_producto'   => $rs->id_producto,
-                    'producto'      => $rs->producto,
-                    'id_persona'    => $venta->id_cliente,
-                    'persona'       => $venta->cliente,
-                    'documento'     => 'VE',
-                    'numero_doc'    => $venta->serie.'-'.$venta->correlativo,
-                    'cantidad_e'    => $cant,
-                    'precio_e'      => $precio,
-                    'valor_e'       => $valor_f,
-                    'cantidad_s'    => 0,
-                    'precio_s'      => 0,
-                    'valor_s'       => 0,
-                    'cantidad_f'    => $saldo_cant,
-                    'precio_f'      => $saldo_precio,
-                    'valor_f'       => $saldo_valor_f,
-                    'id_user'       => '1',
-                    'usuario'       => 'DDELACRUZ'
-                ];
-                $Kardex = kardex::create($data_insert);
+                unset($rs);
             }
-            unset($rs);
+            #/Movimiento de Kadex en almacen
         }
-        #/Movimiento de Kadex en almacen
 
         #Para el caso de log de usuario el key el el id de usuario y el tipo es LogP = Log personal
         $this->set_logs(['tipo'=>'LogP','tipo_doc'=>'VE','key'=>1,'evento'=>'add.ProdLote','content'=>'Anular Doc Ventas '.$venta->serie.'-'.$venta->correlativo,'res'=>'Anulado']);
@@ -392,10 +409,11 @@ class ventasController extends Controller
         $data['venta']      = venta::find( $id );
         $data['items']      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
         $data['logs']       = $this->get_logs( $data['venta']->token );
+        $data['empresa']    = config::find( 1 );
         #
         #return DB::getQueryLog();
         #
-        #return $data['logs'];
+        #return $data;
         return view('venta.invoice', ['data' => $data] );
     }
 
@@ -543,6 +561,59 @@ class ventasController extends Controller
         $this->set_logs(['tipo'=>'PL','tipo_doc'=>'VE','key'=>$id_user,'evento'=>'make.VE','content'=>'Crear Doc.Venta '.$mask_doc,'res'=>'Creado', 'link_to' => $id_venta ]);
         #
         return redirect('ventas/'.$id_venta.'/edit')->with('estado', 'Documento de ventas creado');
+    }
+
+
+
+    public function venta_fecha($fecha)
+    {
+        #DB::enableQueryLog();
+        $tipo_user      = Auth::User()->type;
+        $id_user        = Auth::User()->id;
+        $user           = Auth::User()->user;
+        #
+        $response = array();
+        if( $tipo_user == 'Administrador' )
+        {
+            $data = venta::where('fecha','=',$fecha)->get();
+        }
+        else
+        {
+            $data = venta::where( [['user_creado','=',$user],['fecha','=',$fecha]] )->get();
+        }
+        #
+        #return DB::getQueryLog();
+        if( count($data) <= 0 )
+        {
+            return redirect('/home')->with('message-error','No se puede procesar la fecha');
+        }
+        else
+        {
+            list($anio,$mes,$dia) = explode('-', $fecha );
+            $fecha = $dia.'/'.$mes.'/'.$anio;
+            #
+            $response['data']   = $data;
+            $response['fecha']  = $fecha;
+            #
+            return view('venta.ventaFecha',compact('response'));
+        }
+    }
+
+    public function fecha_hoy($tipo='fecha')
+    {
+        #
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        if( $tipo == 'fecha' )
+        {
+            $fecha_mysql = $mytime->format('Y-m-d');
+        }
+        else
+        {
+            $fecha_mysql = $mytime->format('Y-m-d H:m:s');
+        }
+        #
+        return $fecha_mysql;
     }
 
 }

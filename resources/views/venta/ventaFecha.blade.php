@@ -1,11 +1,11 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | Marca productos
+    Farmacia | Ventas
 @stop
 
 @section('losCSS')
-    {!!Html::style('js/alertify/css/alertify.css')!!}
+    {!!Html::style('js/sweet-alert/dist/sweetalert.css')!!}
     {!!Html::style('js/alertify/css/themes/bootstrap.css')!!}
 @endsection
 
@@ -17,9 +17,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        Marca
+			        Ventas {{$response['fecha']}}
 			        <small>
-			            Marcas para los productos
+			            Registros del usuario en la fecha actual
 			        </small>
 			    </h3>
             </div>
@@ -37,14 +37,23 @@
         </div>
         <div class="clearfix"></div>
 	   
-        @include('alertas.success')
+       @include('alertas.success')
         @include('alertas.errors')
+        @include('alertas.mensaje')
 		
-		<div class="row">
+		<div class="row hidden ">
 			<div class="col-md-12 col-sm-12 col-xs-12">
 				<div class="x_panel">
 	                <div class="x_content">
-	                	<a href="marca/create" class="btn btn-default">Agregar Marca</a>
+                    <ul class="list-inline">
+                        <li>
+                            <a href="ventas/create" class="btn btn-default">Nueva Venta</a>
+                        </li>
+                        <li>
+                            <a href="/mb" class="btn btn-default">Nueva Boleta</a>
+                        </li>
+                    </ul>
+	                	
 	                </div>
 	            </div>
 			</div>
@@ -58,7 +67,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Marcas <small>mostrando todos los registros activos</small></h2>
+                        <h2>Ventas <small>mostrando todos los registros activos</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -82,28 +91,43 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Nombre</th>
-                                    <th>Creado</th>
-                                    <th></th>
+                                    <th>Documento</th>
+                                    <th>Cliente</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Usuario</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($dataMarcas as $marca)
-                                <tr>
-                                    <th scope="row">{{$marca->id_marca}}</th>
+                                @foreach($response['data'] as $ve)
+                                <?php
+                                switch ($ve->tipo_doc) {
+                                    case 'B':
+                                        $tipo_doc = 'Boleta';
+                                    break;
+                                    case 'F':
+                                        $tipo_doc = 'Factura';
+                                    break;
+                                }
+                                ?>
+                                <tr id="fila_{{$ve->id}}" >
+                                    <th scope="row">{{$ve->id}}</th>
                                     <td>
-                                        {!!link_to_route('marca.edit', $title  = $marca->nombre, $parameters =$marca->id_marca, $attributes = ['class'=>'btn-link '] )!!}
+                                        <?php if( $ve->estado == 'Cerrado' ){ 
+                                            echo '<a href="/invoice_venta/'.$ve->id.'" >'.$tipo_doc.' '.$ve->serie.' - '.$ve->correlativo.'</a>';
+                                        }else{
+                                            echo $tipo_doc.' '.$ve->serie.' - '.$ve->correlativo;
+                                        } ?>
                                     </td>
-                                    <td>{{$marca->created_at}}</td>
-                                    <td>
-                                        {!!link_to_route('marca.edit', $title  = 'Anular', $parameters =$marca->id_marca, $attributes = ['class'=>'btn-link delItem ','id'=>$marca->id_marca] )!!}
-                                    </td>
+                                    <td>{{$ve->cliente}}</td>
+                                    <td>{{$ve->fecha}}</td>
+                                    <td>{{$ve->estado}}</td>
+                                    <td>{{$ve->user_creado}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        {!!$dataMarcas->render()!!}
-                        
+
                     </div>
                 </div>
             </div>
@@ -112,6 +136,8 @@
 
     </div>
 
+
+
     <!-- footer content -->
     @include('layouts.footer')
     <!-- /footer content -->
@@ -119,8 +145,8 @@
 
 @section('scripts')
 
-    <!-- Aletify -->
-    {!!Html::script('js/alertify/alertify.js')!!}
+    <!-- sweet Alert -->
+    {!!Html::script('js/sweet-alert/dist/sweetalert.js')!!}
 
 	<!-- icheck -->
     {!!Html::script('js/icheck/icheck.min.js')!!}
@@ -131,7 +157,6 @@
 
     {!!Html::script('js/custom.js')!!}
 
-    {!!Html::script('js/custom/marca.js')!!}
 
 @endsection
 
