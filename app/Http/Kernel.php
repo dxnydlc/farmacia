@@ -53,5 +53,6 @@ class Kernel extends HttpKernel
         'marcas'    => \farmacia\Http\Middleware\mdwMarca::class,
         'categ'     => \farmacia\Http\Middleware\mdwCategoria::class,
         'clase'     => \farmacia\Http\Middleware\mdwClase::class,
+        'isAdmin'   => \farmacia\Http\Middleware\mdwAdmin::class,
     ];
 }

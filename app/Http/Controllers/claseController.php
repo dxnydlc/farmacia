@@ -11,11 +11,12 @@ use farmacia\Http\Requests\ClaseUpdateRequest;
 use farmacia\clase;
 use Session;
 use Redirect;
-use DB;
+
 
 use Auth;
 use farmacia\logs;
 use Carbon;
+use DB;
 
 class claseController extends Controller
 {
@@ -24,6 +25,14 @@ class claseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth' );
+        $this->middleware('marcas' , ['only' => ['create','edit','show'] ] );
+    }
+
+    
     public function index()
     {
         $dataClases = clase::paginate(5);
