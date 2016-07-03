@@ -45,3 +45,6 @@ body, label, td, th, input[type='text'], select, option, h1, h2, h3, h4, h5, a, 
 .fuente-l{
 	text-align:left !important;
 }
+.nav-md-pdf .container{
+	padding: 15px;
+}

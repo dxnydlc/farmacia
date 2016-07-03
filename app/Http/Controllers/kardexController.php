@@ -19,7 +19,7 @@ class kardexController extends Controller
      */
     public function index()
     {
-        $dataKarex = kardex::paginate(5);
+        $dataKarex = kardex::orderBy('id','DESC')->paginate(20);
         return view('kardex.homeKardex',compact('dataKarex'));
     }
 

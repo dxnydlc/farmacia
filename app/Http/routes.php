@@ -57,8 +57,11 @@ Route::group(['middleware' => ['web']], function () {
     Route::resource('usuario','UsuarioController');
 
     Route::resource('ex_ventas','exportDocs@all_ventas');
+    Route::resource('ex_kardex','exportDocs@all_kardex');
+    Route::resource('ex_prodlote','exportDocs@all_prodlote');
 
     Route::get('invoice_venta/{id}','ventasController@invoice');
+    Route::get('invoice_venta_pdf/{id}','ventasController@invoice_pdf');
     Route::get('invoice_pe/{id}','peController@invoice');
     Route::get('ventas_fecha/{fecha}','ventasController@venta_fecha');
     

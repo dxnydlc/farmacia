@@ -23,6 +23,7 @@ use DB;
 use Auth;
 use Excel;
 
+
 class exportDocs extends Controller
 {
     /**
@@ -52,6 +53,48 @@ class exportDocs extends Controller
         })->download("xls");
         return redirect('/ventas')->with('estado', 'Documento exportado a Excel');
     }
+
+
+    public function all_kardex()
+    {
+        $tipo       = Auth::User()->type;
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $data = kardex::orderBy('id','DESC')->get()->toArray();
+        return Excel::create('itsolutionstuff_example', function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+        })->download("xls");
+        return redirect('/kardex')->with('estado', 'Documento exportado a Excel');
+    }
+
+
+
+
+    public function all_prodlote()
+    {
+        $tipo       = Auth::User()->type;
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $data = productos::join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->orderBy('id','DESC')->get()->toArray();
+        #
+        return Excel::create('itsolutionstuff_example', function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+        })->download("xls");
+        return redirect('/addProLot')->with('estado', 'Documento exportado a Excel');
+    }
+
+
+
+
+
 
     public function fecha_hoy($tipo='fecha')
     {

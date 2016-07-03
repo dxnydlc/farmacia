@@ -54,7 +54,7 @@ class delVenta extends Controller
         #Anular el doc de ventas
         $mytime         = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
-        $fecha_mysql    = $mytime->format('d/m/Y H:m:s');
+        $fecha_mysql    = $mytime->format('Y-m-d H:m:s');
         $id             = $request['id'];
         #
         #Movimiento de Kadex en almacen
@@ -82,14 +82,14 @@ class delVenta extends Controller
                 $valor_f    = $rs->cantidad * $rs->precio;
                 #Valores Kardex anterior
                 $data_insert = [
-                    'movimiento'    => 'S',
+                    'movimiento'    => 'E',
                     'fecha'         => $fecha_mysql,
                     'id_producto'   => $rs->id_producto,
                     'producto'      => $rs->producto,
                     'id_persona'    => $venta->id_cliente,
                     'persona'       => $venta->cliente,
                     'documento'     => 'VE',
-                    'numero_doc'    => $venta->serie.'-'.$venta->correlativo,
+                    'numero_doc'    => $venta->tipo_doc.' '.$venta->serie.'-'.$venta->correlativo,
                     'cantidad_e'    => $cant,
                     'precio_e'      => $precio,
                     'valor_e'       => $valor_f,

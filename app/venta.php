@@ -24,6 +24,26 @@ class venta extends Model
         }
     }
 
+
+    public function setTipodocAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            switch ($valor) {
+                case 'Boleta':
+                    $this->attributes['tipo_doc'] = 'B';
+                    break;
+                case 'Factura':
+                    $this->attributes['tipo_doc'] = 'F';
+                    break;
+                default:
+                    $this->attributes['tipo_doc'] = $valor;
+                break;
+            }
+            
+        }
+    }
+
     public function getFechaAttribute($valor)
     {
         if( $valor != '' )

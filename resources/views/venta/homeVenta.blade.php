@@ -19,7 +19,7 @@
                 <h3>
 			        Ventas
 			        <small>
-			            Todas las ventas hasta el momento
+			            Ventas del usuario {{Auth::User()->user}} el día de hoy
 			        </small>
 			    </h3>
             </div>

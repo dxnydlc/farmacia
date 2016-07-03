@@ -19,9 +19,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        productos
+			        Productos
 			        <small>
-			            productos activos
+			            Productos sin lote
 			        </small>
 			    </h3>
             </div>

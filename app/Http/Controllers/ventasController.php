@@ -22,6 +22,9 @@ use Carbon;
 use DB;
 use Auth;
 
+use Excel;
+use PDF;
+
 class ventasController extends Controller
 {
     /**
@@ -51,7 +54,7 @@ class ventasController extends Controller
         {
             $venta = venta::where([['id_user_creado','=',$id_user],['fecha','=',$fecha]])->paginate(10);
         }
-        return $venta;
+        #return $venta;
         return view('venta.homeVenta',compact('venta'));
     }
 
@@ -238,7 +241,7 @@ class ventasController extends Controller
         $data['razon_social']   = $data['venta']->razon_social;
         $data['forma_pago']     = $data['venta']->forma_pago;
         #
-        #return $data;
+        #return $data['venta'];
         return view('venta.updateVenta', ['data' => $data] );
     }
 
@@ -262,6 +265,15 @@ class ventasController extends Controller
         $config                 = $this->get_config();
         $request['serie']       = $config->serie_boleta;
         $request['correlativo'] = $config->correlativo_boleta;
+        #Tipo Doc
+        switch ($request['tipo_doc']) {
+            case 'Boleta':
+                $request['tipo_doc'] = 'B';
+                break;
+            case 'Factura':
+                $request['tipo_doc'] = 'F';
+                break;
+        }
         #
         $venta = venta::find( $id );
         $venta->fill( $request->all() );
@@ -294,7 +306,7 @@ class ventasController extends Controller
                 $valor_f    = $rs->cantidad * $rs->precio;
                 #Valores Kardex anterior
                 $data_insert = [
-                    'movimiento'    => 'S',
+                    'movimiento'    => 'E',
                     'fecha'         => $fecha_mysql,
                     'id_producto'   => $rs->id_producto,
                     'producto'      => $rs->producto,
@@ -332,7 +344,7 @@ class ventasController extends Controller
      */
     public function destroy($id)
     {
-        return 'Hola';
+        #return 'Hola';
         $mytime         = Carbon\Carbon::now('America/Lima');
         $mytime->toDateString();
         $fecha_mysql    = $mytime->format('d/m/Y');
@@ -522,7 +534,7 @@ class ventasController extends Controller
         $mask_doc = 'B 00'.$serie.' - 000'.$correlativo;
         #
         $venta = venta::create([
-            'tipo_doc'      => 'B',
+            'tipo_doc'      => 'Boleta',
             'serie'         => $serie,
             'correlativo'   => $correlativo,
             'id_cliente'    => 1,
@@ -614,6 +626,23 @@ class ventasController extends Controller
         }
         #
         return $fecha_mysql;
+    }
+
+    public function invoice_pdf( $id )
+    {
+        #DB::enableQueryLog();
+        $data = array();
+        $data['venta']      = venta::find( $id );
+        $data['items']      = DB::table('detalle_venta')->where( "id_venta" , $id )->whereNull('deleted_at')->get();
+        $data['logs']       = $this->get_logs( $data['venta']->token );
+        $data['empresa']    = config::find( 1 );
+        #
+        #return DB::getQueryLog();
+        #
+        #return $data;
+        #return view('venta.pdfInvoice', ['data' => $data] );
+        #$invoice = PDF::loadView('venta.pdfInvoice',['data' => $data]);
+        #return $invoice->stream();
     }
 
 }

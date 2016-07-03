@@ -1,7 +1,7 @@
 @extends('layouts.principal')
 
 @section('titulo')
-    Farmacia | Kardex
+    Farmacia | Producto Lote
 @stop
 
 @section('losCSS')
@@ -17,9 +17,9 @@
         <div class="page-title">
             <div class="title_left">
                 <h3>
-			        Kardex
+			        Producto
 			        <small>
-			            Movimiento de productos del almacen
+			            Producto que contienen un lote asignado
 			        </small>
 			    </h3>
             </div>
@@ -46,7 +46,7 @@
                     <div class="x_content">
                     <ul class="list-inline">
                         <li>
-                            <a href="/ex_kardex" class="btn btn-success "><span class="glyphicon glyphicon-floppy-save" ></span> Exportar</a>
+                            <a href="/ex_prodlote" class="btn btn-success "><span class="glyphicon glyphicon-floppy-save" ></span> Exportar</a>
                         </li>
                     </ul>
                         
@@ -64,7 +64,7 @@
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Kardex <small>mostrando todos los registros activos</small></h2>
+                        <h2>Producto Lote <small>mostrando todos los registros activos</small></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -87,50 +87,38 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th colspan="5" class="text-primary text-center" >Detalle</th>
-                                    <th colspan="3" class="text-success text-center" >Entrada</th>
-                                    <th colspan="3" class="text-muted text-center" >Salida</th>
-                                    <th colspan="3" class="text-info text-center" >Saldos</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-primary" >#</th>
-                                    <th class="text-primary" >M</th>
-                                    <th class="text-primary" >Fecha</th>
-                                    <th class="text-primary" >Producto</th>
-                                    <th class="text-primary" >Documento</th>
-                                    <th class="text-success" >Cantidad</th>
-                                    <th class="text-success" >Precio</th>
-                                    <th class="text-success" >Total</th>
-                                    <th class="text-muted" >Cantidad</th>
-                                    <th class="text-muted" >Precio</th>
-                                    <th class="text-muted" >Total</th>
-                                    <th class="text-info" >Cantidad</th>
-                                    <th class="text-info" >Precio</th>
-                                    <th class="text-info" >Total</th>
+                                    <th>#</th>
+	                                <th>Nombre</th>
+	                                <th>Lote</th>
+	                                <th>Lab.</th>
+	                                <th>Vencimiento</th>
+	                                <th>Precio</th>
+	                                <th>Stock</th>
+	                                <th>Tipo</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($dataKarex as $kdx)
-                                <tr id="fila_{{$kdx->id}}" >
-                                    <th class="text-primary"  scope="row">{{$kdx->id}}</th>
-                                    <td class="text-primary" >{{$kdx->movimiento}}</td>
-                                    <td class="text-primary" >{{$kdx->fecha}}</td>
-                                    <td class="text-primary" >{{$kdx->producto}}</td>
-                                    <td class="text-primary" >{{$kdx->documento.' '.$kdx->numero_doc}}</td>
-                                    <td class="text-success" >{{$kdx->cantidad_e}}</td>
-                                    <td class="text-success" >{{$kdx->precio_e}}</td>
-                                    <td class="text-success" >{{$kdx->valor_e}}</td>
-                                    <td class="text-muted" >{{$kdx->cantidad_s}}</td>
-                                    <td class="text-muted" >{{$kdx->precio_s}}</td>
-                                    <td class="text-muted" >{{$kdx->valor_s}}</td>
-                                    <td class="text-info" >{{$kdx->cantidad_f}}</td>
-                                    <td class="text-info" >{{$kdx->precio_f}}</td>
-                                    <td class="text-info" >{{$kdx->valor_f}}</td>
-                                </tr>
-                                @endforeach
+                                @foreach($data as $producto)
+	                            <?php
+	                            list($anio,$mes,$dia) = explode('-', $producto->vencimiento );
+	                            $fecha = $dia.'/'.$mes.'/'.$anio;
+	                            ?>
+	                            <tr tdnombre="{{$producto->nombre}}" tdid="{{$producto->id_producto}}" tdlab="{{$producto->laboratorio}}" tdfecha="{{$fecha}}" tdprecio="{{$producto->precio}}" tdlote="{{$producto->lote}}" class=" deaPrecio " >
+	                                <th scope="row">{{$producto->id_producto}}</th>
+	                                <td class="CRUD"  >
+	                                    {{$producto->nombre}}
+	                                </td>
+	                                <td>{{$producto->lote}}</td>
+	                                <td>{{$producto->laboratorio}}</td>
+	                                <td>{{$fecha}}</td>
+	                                <td class="text-right" >{{$producto->precio}}</td>
+	                                <td class="text-right" >{{$producto->stock}}</td>
+	                                <td>{{$producto->clase}}</td>
+	                            </tr>
+	                            @endforeach
                             </tbody>
                         </table>
-                        {{$dataKarex->render()}}
+                        {{$data->render()}}
 
                     </div>
                 </div>

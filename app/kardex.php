@@ -25,17 +25,7 @@ class kardex extends Model
     	}
     }
 
-    public function getMovimientoAttribute($valor)
-    {
-        if( $valor != '' )
-        {
-            switch ($valor) {
-                case 'E':
-                    return 'Entradas';
-                    break;
-            }
-        }
-    }
+    
 
     public function getDocumentoAttribute($valor)
     {
@@ -49,6 +39,9 @@ class kardex extends Model
         }
     }
 
+
+
+
     public function setFechaAttribute($valor)
     {
         if( $valor != '' )
@@ -58,5 +51,25 @@ class kardex extends Model
             $this->attributes['fecha'] = $fecha;
         }
     }
+
+
+
+    public function getMovimientoAttribute($valor)
+    {
+        if( $valor != '' )
+        {
+            switch ($valor) {
+                case 'E':
+                    return 'Entrada';
+                break;
+                case 'S':
+                    return 'Salida';
+                break;
+            }
+        }
+    }
+
+
+
 
 }

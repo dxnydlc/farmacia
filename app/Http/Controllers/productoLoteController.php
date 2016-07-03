@@ -25,7 +25,8 @@ class productoLoteController extends Controller
      */
     public function index()
     {
-        //
+        $data = productos::join('producto_lote', 'productos.id_producto', '=', 'producto_lote.id_producto')->orderBy('id','DESC')->paginate(20);
+        return view('productolote.homeProductoLote',compact('data'));
     }
 
     /**

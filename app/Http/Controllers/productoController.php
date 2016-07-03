@@ -17,7 +17,12 @@ use farmacia\proveedores;
 use Session;
 use Redirect;
 use Carbon;
+
+
+use Auth;
+use farmacia\logs;
 use DB;
+
 
 class productoController extends Controller
 {
@@ -26,6 +31,15 @@ class productoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    public function __construct()
+    {
+        $this->middleware('auth' );
+        $this->middleware('isAdmin' , ['only' => ['create','edit','show'] ] );
+    }
+
+
     public function index( Request $request )
     {
         #dd( $request->get('nombre') );
@@ -60,9 +74,15 @@ class productoController extends Controller
      */
     public function store(ProductoCreateRequest $request)
     {
-        productos::create( $request->all() );
-        Session::flash('message','Producto creado correctamente');
-        return redirect::to('/producto');
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $producto = productos::create( $request->all() );
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'PRD','key'=>$id_user,'evento'=>'make.Producto','content'=>'Has agregado un producto '.$producto->nombre ,'res'=>'Creado', 'link_to' => $producto->id_producto ]);
+        #
+        return redirect::to('/producto')->with('message','Producto creado correctamente');
     }
 
     /**
@@ -104,12 +124,17 @@ class productoController extends Controller
      */
     public function update(ProductoUpdateRequest $request, $id)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $producto = productos::find( $id );
         $producto->fill( $request->all() );
         $producto->save();
-
-        session::flash('message','Producto editado correctamente');
-        return redirect::to('/producto');
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'PRD','key'=>$id_user,'evento'=>'update.Producto','content'=>'Has editado un producto '.$producto->nombre ,'res'=>'Editado', 'link_to' => $producto->id_producto ]);
+        #
+        return redirect::to('/producto')->with('message','Producto editado correctamente');
     }
 
     /**
@@ -120,7 +145,14 @@ class productoController extends Controller
      */
     public function destroy($id)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $data = productos::where(['id_producto' => $id])->delete();
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'PRD','key'=>$id_user,'evento'=>'del.Producto','content'=>'Has eliminado un producto '.$data->nombre ,'res'=>'Eliminado', 'link_to' => $data->id_producto ]);
+        #
         return $data;
     }
 
@@ -128,5 +160,37 @@ class productoController extends Controller
     {
         return $q;
     }
+
+
+    public function set_logs($param)
+    {
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
+        $mytime = Carbon\Carbon::now('America/Lima');
+        $mytime->toDateString();
+        $fecha_mysql = $mytime->format('d/m/Y H:m:s');
+        $link_to = '';
+        #
+        if( $param['tipo'] == 'PL' )
+        {
+            $link_to = $param['link_to'];
+        }
+        #
+        $data_insert = [
+            'tipo'          => $param['tipo'],
+            'tipo_doc'      => $param['tipo_doc'],
+            'key'           => $param['key'],
+            'evento'        => $param['evento'],
+            'contenido'     => $param['content'],
+            'resultado'     => $param['res'],
+            'fecha'         => $fecha_mysql,
+            'id_user'       => $id_user,
+            'usuario'       => $user,
+            'link_to'       => $link_to
+        ];
+        logs::create($data_insert);
+    }
+
 
 }

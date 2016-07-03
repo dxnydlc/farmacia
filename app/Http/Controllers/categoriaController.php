@@ -99,12 +99,17 @@ class categoriaController extends Controller
      */
     public function update(CategoriaUpdateRequest $request, $id)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $categoria = categoria::find( $id );
         $categoria->fill( $request->all() );
         $categoria->save();
-
-        session::flash('message','Categoria editada correctamente');
-        return redirect::to('/categoria');
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'CA','key'=>$id_user,'evento'=>'update.Categoria','content'=>'Has editado una categoria '.$categoria->nombre ,'res'=>'Editado', 'link_to' => $categoria->id_categoria ]);
+        #
+        return redirect::to('/categoria')->with('message','Categoria editada correctamente');;
     }
 
     /**
@@ -115,8 +120,14 @@ class categoriaController extends Controller
      */
     public function destroy($id_categoria)
     {
+        #User data
+        $id_user    = Auth::User()->id;
+        $user       = Auth::User()->user;
+        #
         $data = categoria::where(['id_categoria' => $id_categoria])->delete();
-        #$this->categoria->delete();
+        #Personal Log
+        $this->set_logs(['tipo'=>'PL','tipo_doc'=>'CA','key'=>$id_user,'evento'=>'del.Categoria','content'=>'Has eliminado una categoria '.$data->nombre ,'res'=>'Eliminado', 'link_to' => $data->id_categoria ]);
+        #
         return $data;
     }
 

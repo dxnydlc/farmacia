@@ -1,4 +1,4 @@
-@extends('layouts.principal')
+@extends('layouts.white')
 
 @section('titulo')
     Farmacia | invoice Ventas
@@ -209,13 +209,7 @@ switch ($data['venta']->tipo_doc) {
                                 <!-- /.row -->
 
                                 <!-- this row will not appear when printing -->
-                                <div class="row no-print">
-                                    <div class="col-xs-12">
-                                        <!--<button class="btn btn-default" onclick="window.print();"><i class="fa fa-print"></i> Print</button>-->
-                                        <!--<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>-->
-                                        <a href="/invoice_venta_pdf/{{ $data['venta']->id }}" class="btn btn-success pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</a>
-                                    </div>
-                                </div>
+                                
                             </section>
                         </div>
                     </div>
@@ -225,43 +219,7 @@ switch ($data['venta']->tipo_doc) {
 
 
 <!-- Seccion de log del documento -->
-<div class="row">
-    <div class=" col-lg-12 col-md-10 col-sm-10 col-xs-10 ">    
-        <div class="x_panel">
-            <div class="x_title"><p>Registro de eventos</p></div>
-            <div class="x_content">
-                <table class="table table-condensed">
-                    <thead>
-                        <tr>
-                            <th>Evento</th>
-                            <th>Contenido</th>
-                            <th>Resultado</th>
-                            <th>Fecha</th>
-                            <th>Usuario</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($data['logs'] as $items)
-                        <tr>
-                            <td>{{$items->evento}}</td>
-                            <td>{{$items->contenido}}</td>
-                            <td>{{$items->resultado}}</td>
-                            <td>{{$items->fecha}}</td>
-                            <td>{{$items->usuario}}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-lg-2 col-lg-offset-1 " >
-        <a href="/ventas" class="btn btn-default btn-lg btn-block" >Regresar</a>
-    </div>
-</div>
 
                 </div>
 

@@ -135,15 +135,27 @@ class homeController extends Controller
                 }
                 #
                 switch ($rs->evento) {
-                    case 'del.Clase': $evento = 'Eliminar Clase'; break;
-                    case 'update.Clase': $evento = 'Actualizar Clase'; break;
-                    case 'make.Clase': $evento = 'Crear Clase'; break;
-                    case 'del.Marca': $evento = 'Eliminar Marca'; break;
-                    case 'make.Clase': $evento = 'Crear Clase'; break;
-                    case 'make.Categoria': $evento = 'Crear Categoria'; break;
-                    case 'make.Marca': $evento = 'Crear Marca'; break;
-                    case 'make.VE': $evento = 'Crear Doc. Ventas'; break;
-                    case 'close.VE': $evento = 'Cerrar Doc. Ventas'; break;
+                    case 'del.Clase': $evento       = 'Eliminar Clase'; break;
+                    case 'update.Clase': $evento    = 'Actualizar Clase'; break;
+                    case 'make.Clase': $evento      = 'Crear Clase'; break;
+                    case 'del.Marca': $evento       = 'Eliminar Marca'; break;
+                    case 'make.Clase': $evento      = 'Crear Clase'; break;
+                    case 'make.Categoria': $evento  = 'Crear Categoria'; break;
+                    case 'update.Categoria': $evento= 'Actualizar Categoria'; break;
+                    case 'make.Marca': $evento      = 'Crear Categoria'; break;
+                    case 'del.Categoria': $evento   = 'Eliminar Categoria'; break;
+                    case 'make.VE': $evento         = 'Crear Doc. Ventas'; break;
+                    case 'close.VE': $evento        = 'Cerrar Doc. Ventas'; break;
+                    case 'make.Proveedor': $evento  = 'Crear Proveedor'; break;
+                    case 'update.Proveedor': $evento= 'Crear Proveedor'; break;
+                    case 'del.Proveedor': $evento   = 'Eliminar Proveedor'; break;
+                    case 'make.Cliente': $evento    = 'Crear Cliente'; break;
+                    case 'update.Cliente': $evento  = 'Actualizar Cliente'; break;
+                    case 'del.Proveedor': $evento   = 'Eliminar Cliente'; break;
+                    case 'close.VE': $evento        = 'Cerrar Doc. Ventas'; break;
+                    case 'make.Producto': $evento   = 'Crear Producto'; break;
+                    case 'update.Producto': $evento = 'Actualizar Producto'; break;
+                    case 'del.Producto': $evento    = 'Eliminar Producto'; break;
                     default: $evento = ''; break;
                 }
                 $o['link_to']   = $link_to;
